@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+ext {
+    lite = project.hasProperty("lite") ? project.property("lite") : false
+}
+
+dependencies {
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    if (lite) {
+        compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+        compileOnly 'com.fly.aar:alipaySdk:15.6.2'
+    } else {
+        implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+        implementation 'com.fly.aar:alipaySdk:15.6.2'
+    }
+}
+
+publish {
+    userOrg = 'fly-zhu189'
+    groupId = 'com.fly.sdk'
+    artifactId = lite ? "yuansfer-pay-lite" : 'yuansfer-pay'
+    publishVersion = '0.9.0'
+    desc = 'yuansfer pay, contain alipay and wechat pay'
+    website = 'https://github.com/fengyupianzhou/Yuansfer-Mobile-Pay-SDK-Android'
+}
+
+tasks.withType(org.gradle.api.tasks.javadoc.Javadoc) {
+    options {
+        links "http://docs.oracle.com/javase/7/docs/api/"
+        linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+        encoding 'utf-8'
+        charSet 'utf-8'
+        tags 'date:t:Date:'
+        tags 'sample:t:Sample:'
+        tags 'attr:a:Attribute:'
+        exclude '**/*'
+    }
+}

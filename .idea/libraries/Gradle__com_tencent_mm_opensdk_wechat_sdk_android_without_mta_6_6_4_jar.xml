@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tencent.mm.opensdk/wechat-sdk-android-without-mta/6.6.4/2d94fbc9367821beaa119711b917de347fe104cb/wechat-sdk-android-without-mta-6.6.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tencent.mm.opensdk/wechat-sdk-android-without-mta/6.6.4/ca05fed08c5525671c254b82f243d88e1c05f162/wechat-sdk-android-without-mta-6.6.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

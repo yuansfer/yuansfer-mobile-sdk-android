@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Yuansfer-Mobile-Pay-SDK-Android</string>
+    <string name="alipay">alipay</string>
+    <string name="wechatpay">wechatpay</string>
+    <string name="order_status">order status</string>
+    <string name="refund">refund</string>
+    <string name="reference">reference</string>
+    <string name="operate_note">Note：When performing each function, please enter the reference number on the right</string>
+</resources>

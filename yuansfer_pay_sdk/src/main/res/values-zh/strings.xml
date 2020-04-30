@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">圆支付SDK</string>
+    <string name="pay_type_not_support">不支持该支付类型</string>
+    <string name="wx_not_support">未安装微信应用或版本过低</string>
+    <string name="wx_not_register">没有注册微信sdk实例</string>
+    <string name="pay_item_wrong">参数payteItem不正确</string>
+    <string name="token_not_empty">token为空</string>
+    <string name="wx_pay_not_init">请先调用YSAppPay的supportWxPay方法</string>
+    <string name="wx_pay_no_appid">调用微信支付需要appid</string>
+    <string name="target_param_no_error">查询订单状态只需要reference或transactionNo两参数中的一个</string>
+    <string name="refund_params_error">退款操作只需要reference或transactionNo两参数中的一个</string>
+    <string name="refund_amount_error">退款操作只需要amount或rmbAmount两参数中的一个</string>
+</resources>

@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.fly.sdk:yuansfer-pay:0.9.0@aar">
+    <ANNOTATIONS>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/yuansfer-pay-0.9.0.aar/663486e4b7d8e834db62c4eaa92464a6/annotations.zip!/" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/yuansfer-pay-0.9.0.aar/663486e4b7d8e834db62c4eaa92464a6/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/yuansfer-pay-0.9.0.aar/663486e4b7d8e834db62c4eaa92464a6/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fly.sdk/yuansfer-pay/0.9.0/d2910b07983f76f7e16fe512d640d30414740ee3/yuansfer-pay-0.9.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
