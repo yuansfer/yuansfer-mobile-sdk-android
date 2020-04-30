@@ -37,7 +37,7 @@ protected void onDestroy() {
 YSAppPay.getInstance().startPay(activity,payItem)
 ```
 
-### other instructions
+### Other instructions
 
 * AppID registration is required when initiating WeChat payment
 
