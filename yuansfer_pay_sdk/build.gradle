@@ -40,7 +40,7 @@ publish {
     artifactId = lite ? "yuansfer-pay-lite" : 'yuansfer-pay'
     publishVersion = '0.9.0'
     desc = 'yuansfer pay, contain alipay and wechat pay'
-    website = 'https://github.com/fengyupianzhou/Yuansfer-Mobile-Pay-SDK-Android'
+    website = 'https://github.com/yuansfer/Yuansfer-Mobile-Pay-SDK-Android'
 }
 
 tasks.withType(org.gradle.api.tasks.javadoc.Javadoc) {
