@@ -9,14 +9,31 @@ dependencies {
         implementation 'com.fly.sdk:yuansfer-pay:1.0.0'
 }
 ```
-* The Lite version does not depend on the payment platform SDK, You can add WeChat Alipay or Alipay SDK separately, please refer to the comments section of dependencies in app/build.gradle for details
+* The Lite version does not depend on the payment platform SDK, You can add WeChat Alipay or Alipay SDK separately
 ```
 dependencies {
         ...
         implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.0'
+        //wechat pay
+        implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+        //alipay
+        implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 }
 ```
+* If you want to add Alipay payment SDK, please copy the Alipay SDK aar file to the app/libs directory and declare the location of aar in project build.gradle
+````
+allprojects {
+    repositories {
 
+        // alipay arr location
+        flatDir {
+            dirs 'libs'
+        }
+
+        // ... jcenter() 
+    }
+}
+````
 ### How to use
 1. Register and remove payment callbacks and receive order payment results
 ```
