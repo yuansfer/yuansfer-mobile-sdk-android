@@ -1,5 +1,5 @@
 ## Yuansfer-Mobile-Pay-SDK-Android
-Yuansfer-Mobile-Pay-SDK-Android is a project that aggregates WeChat and Alipay payments. It mainly provides apps to quickly access APIs for WeChat and Alipay payments. In addition, it includes some other API interfaces with payment. Full-featured and lightweight (lite) versions. The lightweight version mainly does not directly refer to WeChat and Alipay SDK. In some cases, the app has already relied on the WeChat and Alipay SDK Lite.
+Yuansfer-Mobile-Pay-SDK-Android is a project that aggregates WeChat and Alipay payments, It mainly provides apps to quickly access APIs for WeChat and Alipay payments. In addition, it includes some other API interfaces with payment. Full-featured and lightweight (lite) versions. The lightweight version mainly does not directly refer to WeChat and Alipay SDK. In some cases, the app has already relied on the WeChat and Alipay SDK Lite.
 
 ### Quick integration
 * Full version, already dependent on payment platform SDK
