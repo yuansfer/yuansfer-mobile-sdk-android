@@ -45,12 +45,15 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         etWechatRef = findViewById(R.id.edt_wx);
         etStatusRef = findViewById(R.id.edt_order_status);
         etRefundRef = findViewById(R.id.edt_order_refund);
-        //设置测试服务器
-        ApiUrl.setTestMode();
-        //设置测试模式，支付宝支付启用沙箱模式
-        YSAppPay.setTestMode();
         YSAppPay.initialize(getApplicationContext());
         YSAppPay.registerPayResultCallback(this);
+        //以下是设定测试相应配置,生产环境无需设置
+        //设置测试服务器
+        ApiUrl.setTestMode();
+        //设置调试模式
+        YSAppPay.setDebugMode();
+        //启用支付宝沙箱模式,注意要已集成了支付宝sdk
+        YSAppPay.setAliSandboxEnv();
     }
 
     public void onViewClick(View view) {

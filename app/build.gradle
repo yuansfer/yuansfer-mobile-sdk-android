@@ -49,6 +49,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation project(':yuansfer_pay_sdk')
-//    implementation 'com.fly.sdk:yuansfer-pay:0.9.0'
+
+    //同时集成微信和支付宝支付sdk
+    implementation 'com.fly.sdk:yuansfer-pay:1.0.0'
+
+    //轻量集成，可单独添加微信或支付宝sdk
+    //implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.0'
+    //implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 }

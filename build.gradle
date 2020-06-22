@@ -15,6 +15,10 @@ buildscript {
 
 allprojects {
     repositories {
+        //支付宝aar位置
+        flatDir {
+            dirs 'libs'
+        }
         google()
         jcenter()
     }

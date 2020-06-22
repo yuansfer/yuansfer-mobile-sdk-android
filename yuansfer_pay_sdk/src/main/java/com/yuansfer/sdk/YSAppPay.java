@@ -24,7 +24,7 @@ import com.yuansfer.sdk.util.ResStringGet;
  */
 public class YSAppPay {
 
-    public static final String SDK_TAG = "ysapppay";
+    public static final String SDK_TAG = "YSAppPay";
     public static boolean sDebug;
     private static YSAppPay sInstance;
     private Context mContext;
@@ -64,10 +64,16 @@ public class YSAppPay {
     }
 
     /**
-     * set test env
+     * set debug mode
      */
-    public static void setTestMode() {
+    public static void setDebugMode() {
         sDebug = true;
+    }
+
+    /**
+     * set alipay sandbox env
+     */
+    public static void setAliSandboxEnv() {
         EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
     }
 

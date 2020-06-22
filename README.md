@@ -6,14 +6,14 @@ Yuansfer-Mobile-Pay-SDK-Android is a project that aggregates WeChat and Alipay p
 ```
 dependencies {
         ...
-        implementation 'com.fly.sdk:yuansfer-pay:0.9.0'
+        implementation 'com.fly.sdk:yuansfer-pay:1.0.0'
 }
 ```
-* The Lite version does not depend on the payment platform SDK, which can avoid the conflict problem when the app introduces WeChat to share the SDK. At this time, the app module needs to rely on WeChat or Alipay SDK, otherwise the program will crash
+* The Lite version does not depend on the payment platform SDK, You can add WeChat Alipay or Alipay SDK separately, please refer to the comments section of dependencies in app/build.gradle for details
 ```
 dependencies {
         ...
-        implementation 'com.fly.sdk:yuansfer-pay-lite:0.9.0'
+        implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.0'
 }
 ```
 
@@ -54,6 +54,6 @@ YSAppPay.getInstance().supportWxPay(appid)
 
 ### Version log
 
-#### 0.9.0
+#### 1.0.0
 - Project initialization
 - Simplify the launch of Alipay or WeChat Pay
