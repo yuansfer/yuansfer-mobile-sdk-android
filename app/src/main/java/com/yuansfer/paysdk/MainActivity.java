@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
     private static final String TEST_MERCHANT_NO = "200043";
     private static final String TEST_STORE_NO = "300014";
     private TextView tvApiResult, tvApiTitle;
-    private EditText etWechatRef, etStatusRef, etRefundRef;
+    private EditText etAlipayRef, etWechatRef, etStatusRef, etRefundRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         setContentView(R.layout.activity_main);
         tvApiTitle = findViewById(R.id.tv_result_title);
         tvApiResult = findViewById(R.id.tv_result_value);
+        etAlipayRef = findViewById(R.id.edt_ali);
         etWechatRef = findViewById(R.id.edt_wx);
         etStatusRef = findViewById(R.id.edt_order_status);
         etRefundRef = findViewById(R.id.edt_order_refund);
@@ -133,9 +134,9 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         info.setPayType(PayType.ALIPAY);
         info.setAmount(0.01);
         info.setIpnUrl("https://wx.yuansfer.yunkeguan.com/wx");
-        info.setReference(System.currentTimeMillis() + "");
         info.setDescription("description");
         info.setNote("note");
+        info.setReference(etAlipayRef.getText().toString());
         prepay(TEST_TOKEN, info, new GsonResponseHandler<AlipayResultInfo>() {
 
             @Override
@@ -165,9 +166,9 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         info.setPayType(PayType.WXPAY);
         info.setAmount(0.01);
         info.setIpnUrl("https://wx.yuansfer.yunkeguan.com/wx");
-        info.setReference(etWechatRef.getText().toString());
         info.setDescription("description");
         info.setNote("note");
+        info.setReference(etWechatRef.getText().toString());
         prepay(TEST_TOKEN, info, new GsonResponseHandler<WechatResultInfo>() {
 
             @Override
