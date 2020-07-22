@@ -6,4 +6,6 @@
     <string name="refund">退款</string>
     <string name="reference">商户流水号</string>
     <string name="operate_note">提醒：执行每个功能时请在右边输入商户流水号</string>
+    <string name="test_env">测试环境</string>
+    <string name="release_env">生产环境</string>
 </resources>

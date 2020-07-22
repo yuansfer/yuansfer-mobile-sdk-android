@@ -25,10 +25,11 @@ public class ApiUrl {
     }
 
     /**
-     * 设置测试模式环境
+     * 设置环境
+     * @param release true生产false测试
      */
-    public static void setTestMode() {
-        ApiUrl.API_SERVER_CURRENT = ApiUrl.API_SERVER_TEST;
+    public static void setEnvMode(boolean release) {
+        ApiUrl.API_SERVER_CURRENT = release ? API_SERVER : API_SERVER_TEST;
     }
 
     /**

@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.EnvUtils;
 import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.api.ApiUrl;
 import com.yuansfer.paysdk.okhttp.GsonResponseHandler;
@@ -30,16 +34,19 @@ import com.yuansfer.sdk.util.ResStringGet;
 
 public class MainActivity extends AppCompatActivity implements PayResultMgr.IPayResultCallback {
 
-    private static final String TEST_TOKEN = "5cbfb079f15b150122261c8537086d77a";
+    //测试token
+    private static String TEST_TOKEN;
     private static final String TEST_MERCHANT_NO = "200043";
     private static final String TEST_STORE_NO = "300014";
     private TextView tvApiResult, tvApiTitle;
     private EditText etAlipayRef, etWechatRef, etStatusRef, etRefundRef;
+    private RadioGroup rgEnv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        rgEnv = findViewById(R.id.rg_env);
         tvApiTitle = findViewById(R.id.tv_result_title);
         tvApiResult = findViewById(R.id.tv_result_value);
         etAlipayRef = findViewById(R.id.edt_ali);
@@ -48,13 +55,29 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         etRefundRef = findViewById(R.id.edt_order_refund);
         YSAppPay.initialize(getApplicationContext());
         YSAppPay.registerPayResultCallback(this);
-        //以下是设定测试相应配置,生产环境无需设置
-        //设置测试服务器
-        ApiUrl.setTestMode();
-        //设置调试模式
         YSAppPay.setDebugMode();
-        //启用支付宝沙箱模式,注意要已集成了支付宝sdk
-        YSAppPay.setAliSandboxEnv();
+        setEnvListener();
+    }
+
+    private void setEnvListener() {
+        rgEnv.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rb_release) {
+                Log.e("MainActivity", "当前为生产环境");
+                TEST_TOKEN = "8fca880f7fe434597625535c7834769d";
+                //设置生产服务器
+                ApiUrl.setEnvMode(true);
+                //启用支付宝沙箱模式,注意要已集成了支付宝sdk
+                EnvUtils.setEnv(EnvUtils.EnvEnum.ONLINE);
+            } else {
+                Log.e("MainActivity", "当前为测试环境");
+                TEST_TOKEN = "5cbfb079f15b150122261c8537086d77a";
+                //设置测试服务器
+                ApiUrl.setEnvMode(false);
+                //启用支付宝沙箱模式,注意要已集成了支付宝sdk
+                EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
+            }
+        });
+        ((RadioButton)rgEnv.findViewById(R.id.rb_test)).setChecked(true);
     }
 
     public void onViewClick(View view) {

@@ -6,4 +6,6 @@
     <string name="refund">refund</string>
     <string name="reference">reference</string>
     <string name="operate_note">Note：When performing each function, please enter the reference number on the right</string>
+    <string name="test_env">Test Env</string>
+    <string name="release_env">Release Env</string>
 </resources>
