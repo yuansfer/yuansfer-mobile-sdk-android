@@ -38,7 +38,7 @@ publish {
     userOrg = 'fly-zhu189'
     groupId = 'com.fly.sdk'
     artifactId = lite ? "yuansfer-pay-lite" : 'yuansfer-pay'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     desc = 'yuansfer pay, contain alipay and wechat pay'
     website = 'https://github.com/yuansfer/Yuansfer-Mobile-Pay-SDK-Android'
 }

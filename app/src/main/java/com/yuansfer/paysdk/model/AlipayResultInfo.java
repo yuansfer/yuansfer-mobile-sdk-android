@@ -1,12 +1,10 @@
-package com.yuansfer.paysdk;
+package com.yuansfer.paysdk.model;
 
-import com.yuansfer.paysdk.WechatInfo;
-
-public class WechatResultInfo {
+public class AlipayResultInfo {
 
     private String ret_msg;
     private String ret_code;
-    private WechatInfo result;
+    private AlipayInfo result;
 
     public String getRet_msg() {
         return ret_msg;
@@ -24,12 +22,11 @@ public class WechatResultInfo {
         this.ret_code = ret_code;
     }
 
-    public WechatInfo getResult() {
+    public AlipayInfo getResult() {
         return result;
     }
 
-    public void setResult(WechatInfo result) {
+    public void setResult(AlipayInfo result) {
         this.result = result;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.yuansfer.sdk.model;
+package com.yuansfer.paysdk.model;
 
 import java.util.HashMap;
 /**

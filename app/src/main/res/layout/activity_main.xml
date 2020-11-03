@@ -31,7 +31,7 @@
 
     <Button
         android:id="@+id/btn_ali"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:onClick="onViewClick"
         android:text="@string/alipay"
@@ -44,15 +44,14 @@
         android:id="@+id/edt_ali"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:hint="@string/reference"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_ali"
         app:layout_constraintLeft_toRightOf="@id/btn_ali"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rg_env" />
 
     <Button
         android:id="@+id/btn_wx"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:onClick="onViewClick"
         android:text="@string/wechatpay"
@@ -64,15 +63,14 @@
         android:id="@+id/edt_wx"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:hint="@string/reference"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_wx"
         app:layout_constraintLeft_toRightOf="@id/btn_wx"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edt_ali" />
 
     <Button
         android:id="@+id/btn_order_status"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:onClick="onViewClick"
         android:text="@string/order_status"
@@ -84,15 +82,14 @@
         android:id="@+id/edt_order_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:hint="@string/reference"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_order_status"
         app:layout_constraintLeft_toRightOf="@id/btn_order_status"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edt_wx" />
 
     <Button
         android:id="@+id/btn_refund"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:onClick="onViewClick"
         android:text="@string/refund"
@@ -104,22 +101,39 @@
         android:id="@+id/edt_order_refund"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:hint="@string/reference"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_refund"
         app:layout_constraintLeft_toRightOf="@id/btn_refund"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edt_order_status" />
 
-    <TextView
+    <Button
+        android:id="@+id/btn_secure_pay"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/secure_pay"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
+
+    <EditText
+        android:id="@+id/edt_secure_pay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_secure_pay"
+        app:layout_constraintLeft_toRightOf="@id/btn_secure_pay"
+        app:layout_constraintRight_toLeftOf="@id/sp_multi_currency"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
+
+    <Spinner
+        android:id="@+id/sp_multi_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/operate_note"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_refund" />
+        android:entries="@array/multi_alipay_currency"
+        app:layout_constraintBaseline_toBaselineOf="@id/edt_secure_pay"
+        app:layout_constraintLeft_toRightOf="@id/edt_secure_pay"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
 
     <TextView
         android:id="@+id/tv_result_value"
@@ -136,7 +150,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Api Result:"
+        android:text="接口返回"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tv_result_value" />
 </android.support.constraint.ConstraintLayout>

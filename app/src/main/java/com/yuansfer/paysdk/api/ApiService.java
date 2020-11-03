@@ -2,17 +2,19 @@ package com.yuansfer.paysdk.api;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.yuansfer.paysdk.model.SecurePayInfo;
 import com.yuansfer.paysdk.okhttp.IResponseHandler;
 import com.yuansfer.paysdk.okhttp.LoggerInterceptor;
 import com.yuansfer.paysdk.okhttp.OkHttpUtils;
 import com.yuansfer.paysdk.okhttp.UnsafeSSLFactory;
 import com.yuansfer.sdk.YSAppPay;
-import com.yuansfer.sdk.model.DetailInfo;
-import com.yuansfer.sdk.model.ParamInfo;
-import com.yuansfer.sdk.model.PrepayInfo;
-import com.yuansfer.sdk.model.RefundInfo;
+import com.yuansfer.paysdk.model.DetailInfo;
+import com.yuansfer.paysdk.model.ParamInfo;
+import com.yuansfer.paysdk.model.PrepayInfo;
+import com.yuansfer.paysdk.model.RefundInfo;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,7 +47,7 @@ public class ApiService {
                 .writeTimeout(RW_TIMEOUT, TimeUnit.SECONDS)
                 .sslSocketFactory(UnsafeSSLFactory.createTrustAllSSLFactory(trustAllManager), trustAllManager)
                 .hostnameVerifier(UnsafeSSLFactory.createTrustAllHostnameVerifier())
-                .addInterceptor(new LoggerInterceptor("app-http", YSAppPay.sDebug))
+                .addInterceptor(new LoggerInterceptor("Yuansfer-Mobile-Pay-SDK-Android", YSAppPay.sDebug))
                 .build());
     }
 
@@ -61,12 +63,15 @@ public class ApiService {
         Arrays.sort(keyArrays);
         StringBuffer psb = new StringBuffer();
         for (String key : keyArrays) {
-            psb.append(key).append("=")
-                    .append(paramMap.get(key)).append("&");
+            String value = paramMap.get(key);
+            if (!TextUtils.isEmpty(value)) {
+                psb.append(key).append("=")
+                        .append(value).append("&");
+            }
         }
         psb.append(MD5.encrypt(token));
         paramMap.put("verifySign", MD5.encrypt(psb.toString()));
-        Log.e("kkk,verifySign:", paramMap.get("verifySign"));
+        Log.e("ApiService verifySign:", paramMap.get("verifySign"));
         return paramMap;
     }
 
@@ -95,6 +100,19 @@ public class ApiService {
      */
     public static void refund(Context context, String token, RefundInfo refundInfo, IResponseHandler responseHandler) {
         OkHttpUtils.get().post(context, ApiUrl.getRefundUrl(), generateSignatureMap(token, refundInfo), responseHandler);
+    }
+
+    /**
+     * 多币种支付
+     *
+     * @param context
+     * @param token
+     * @param secureInfo
+     * @param responseCallback
+     */
+    public static void securePay(Context context, String token, SecurePayInfo secureInfo, IResponseHandler responseCallback) {
+        OkHttpUtils.get().post(context, ApiUrl.getSecurePayUrl()
+                , generateSignatureMap(token, secureInfo), responseCallback);
     }
 
 }

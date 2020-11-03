@@ -4,8 +4,8 @@
     <string name="wechatpay">微信支付</string>
     <string name="order_status">订单状态</string>
     <string name="refund">退款</string>
+    <string name="secure_pay">在线支付</string>
     <string name="reference">商户流水号</string>
-    <string name="operate_note">提醒：执行每个功能时请在右边输入商户流水号</string>
     <string name="test_env">测试环境</string>
     <string name="release_env">生产环境</string>
 </resources>

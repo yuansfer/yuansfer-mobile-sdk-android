@@ -22,6 +22,8 @@ public class ApiUrl {
         String ORDER_STATUS = "micropay/v2/reference-query";
         //退款
         String REFUND = "micropay/v2/refund";
+        //线上支付宝多币种接口
+        String ONLINE_SECURE_PAY = "online/v3/secure-pay";
     }
 
     /**
@@ -39,6 +41,14 @@ public class ApiUrl {
      */
     static String getPrePayUrl() {
         return API_SERVER_CURRENT + ApiPath.PRE_PAY;
+    }
+
+    /**
+     * 线上支付宝多币种接口
+     * @return
+     */
+    static String getSecurePayUrl() {
+        return API_SERVER_CURRENT + ApiPath.ONLINE_SECURE_PAY;
     }
 
     /**

@@ -71,10 +71,11 @@ public class YSAppPay {
     }
 
     /**
-     * set alipay sandbox env
+     * set alipay env
+     * @param release 是否正式版
      */
-    public static void setAliSandboxEnv() {
-        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
+    public static void setAliEnv(boolean release) {
+        EnvUtils.setEnv(release ? EnvUtils.EnvEnum.ONLINE : EnvUtils.EnvEnum.SANDBOX);
     }
 
     /**

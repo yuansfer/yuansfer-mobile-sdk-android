@@ -6,14 +6,14 @@ Yuansfer-Mobile-Pay-SDK-Android is a project that aggregates WeChat and Alipay p
 ````
 dependencies {
         ...
-        implementation 'com.fly.sdk:yuansfer-pay:1.0.0'
+        implementation 'com.fly.sdk:yuansfer-pay:1.0.1'
 }
 ````
 * The Lite version does not depend on the payment platform SDK, You can add WeChat Alipay or Alipay SDK separately
 ````
 dependencies {
         ...
-        implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.0'
+        implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.1'
         //wechat pay
         implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
         //alipay
@@ -70,6 +70,9 @@ YSAppPay.getInstance().supportWxPay(appid)
 
 
 ### Version log
+
+#### 1.0.1
+- Add secure-pay api
 
 #### 1.0.0
 - Project initialization

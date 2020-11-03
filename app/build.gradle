@@ -52,10 +52,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     //同时集成微信和支付宝支付sdk
-    implementation 'com.fly.sdk:yuansfer-pay:1.0.0'
+    implementation 'com.fly.sdk:yuansfer-pay:1.0.1'
+//    implementation project(':yuansfer_pay_sdk')
 
     //轻量集成，可单独添加微信或支付宝sdk
-    //implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.0'
+    //implementation 'com.fly.sdk:yuansfer-pay-lite:1.0.1'
     //implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
     //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 }

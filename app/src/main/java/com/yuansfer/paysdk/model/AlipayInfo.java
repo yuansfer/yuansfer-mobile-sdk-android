@@ -1,4 +1,4 @@
-package com.yuansfer.paysdk;
+package com.yuansfer.paysdk.model;
 
 public class AlipayInfo {
 
