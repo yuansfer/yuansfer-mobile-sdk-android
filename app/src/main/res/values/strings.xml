@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yuansfer-Mobile-Pay-SDK-Android</string>
+    <string name="app_name">yuansfer-payment-android</string>
     <string name="alipay">Alipay</string>
     <string name="wechatpay">Wechat Pay</string>
     <string name="order_status">Order status</string>

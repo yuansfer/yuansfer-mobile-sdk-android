@@ -41,7 +41,7 @@ public class ApiService {
                 .writeTimeout(RW_TIMEOUT, TimeUnit.SECONDS)
                 .sslSocketFactory(UnsafeSSLFactory.createTrustAllSSLFactory(trustAllManager), trustAllManager)
                 .hostnameVerifier(UnsafeSSLFactory.createTrustAllHostnameVerifier())
-                .addInterceptor(new LoggerInterceptor("Yuansfer-Mobile-Pay-SDK-Android", LogUtils.logEnable))
+                .addInterceptor(new LoggerInterceptor("yuansfer-payment-android", LogUtils.logEnable))
                 .build());
     }
 
