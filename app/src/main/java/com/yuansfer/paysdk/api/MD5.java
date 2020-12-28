@@ -5,11 +5,6 @@ import android.util.Log;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * @Author Fly-Android
- * @CreateDate 2019/5/27 9:31
- * @Desciption MD5加密
- */
 public class MD5 {
     private static final String TAG = "MD5";
     private static final String[] strDigits = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};

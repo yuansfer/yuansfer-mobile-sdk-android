@@ -2,7 +2,7 @@ package com.yuansfer.paysdk.api;
 
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/27 9:29
  * @Desciption api接口地址
  */
@@ -12,9 +12,6 @@ public class ApiUrl {
     private static final String API_SERVER_TEST = "https://mapi.yuansfer.yunkeguan.com/";
     private static String API_SERVER_CURRENT = API_SERVER;
 
-    /**
-     * 功能接口Path
-     */
     public interface ApiPath {
         //预下单
         String PRE_PAY = "micropay/v2/prepay";

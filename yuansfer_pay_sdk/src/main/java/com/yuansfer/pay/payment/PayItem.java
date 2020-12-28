@@ -1,8 +1,8 @@
-package com.yuansfer.sdk.pay;
+package com.yuansfer.pay.payment;
 
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 14:20
  * @Desciption 支付实体
  */

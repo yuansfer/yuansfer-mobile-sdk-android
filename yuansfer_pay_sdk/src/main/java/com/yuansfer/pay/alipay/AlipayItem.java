@@ -1,10 +1,10 @@
-package com.yuansfer.sdk.pay.alipay;
+package com.yuansfer.pay.alipay;
 
-import com.yuansfer.sdk.pay.PayItem;
-import com.yuansfer.sdk.pay.PayType;
+import com.yuansfer.pay.payment.PayItem;
+import com.yuansfer.pay.payment.PayType;
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 14:53
  * @Desciption 支付宝请求实体
  */

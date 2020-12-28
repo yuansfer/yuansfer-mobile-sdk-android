@@ -1,11 +1,11 @@
-package com.yuansfer.sdk.pay.alipay;
+package com.yuansfer.pay.alipay;
 
 import android.text.TextUtils;
 
 import java.util.Map;
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 14:59
  * @Desciption 支付宝支付结果实体
  */

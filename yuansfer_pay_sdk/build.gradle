@@ -19,27 +19,24 @@ android {
 
 }
 
-ext {
-    lite = project.hasProperty("lite") ? project.property("lite") : false
-}
-
 dependencies {
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    if (lite) {
-        compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-        compileOnly 'com.fly.aar:alipaySdk:15.6.2'
-    } else {
-        implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-        implementation 'com.fly.aar:alipaySdk:15.6.2'
-    }
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    // Wechat Pay dependencies
+    compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    // Alipay dependencies
+    compileOnly 'com.fly.aar:alipaySdk:15.6.2'
+    // Braintree dependencies
+    compileOnly 'com.google.android.gms:play-services-wallet:16.0.1'
+    compileOnly 'com.braintreepayments.api:braintree:3.14.2'
+    compileOnly 'com.braintreepayments.api:drop-in:4.6.0'
 }
 
 publish {
     userOrg = 'fly-zhu189'
-    groupId = 'com.fly.sdk'
-    artifactId = lite ? "yuansfer-pay-lite" : 'yuansfer-pay'
-    publishVersion = '1.0.1'
-    desc = 'yuansfer pay, contain alipay and wechat pay'
+    groupId = 'com.yuansfer.pay'
+    artifactId = 'payment'
+    publishVersion = '1.1.0'
+    desc = 'yuansfer mobile pay'
     website = 'https://github.com/yuansfer/Yuansfer-Mobile-Pay-SDK-Android'
 }
 
@@ -53,5 +50,16 @@ tasks.withType(org.gradle.api.tasks.javadoc.Javadoc) {
         tags 'sample:t:Sample:'
         tags 'attr:a:Attribute:'
         exclude '**/*'
+    }
+}
+
+repositories {
+    //drop-in UI配置
+    maven {
+        url  "https://cardinalcommerce.bintray.com/android"
+        credentials {
+            username 'braintree-team-sdk@cardinalcommerce'
+            password '220cc9476025679c4e5c843666c27d97cfb0f951'
+        }
     }
 }

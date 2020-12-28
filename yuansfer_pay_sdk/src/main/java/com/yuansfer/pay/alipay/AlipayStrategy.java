@@ -1,4 +1,4 @@
-package com.yuansfer.sdk.pay.alipay;
+package com.yuansfer.pay.alipay;
 
 
 import android.annotation.SuppressLint;
@@ -6,24 +6,24 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.alipay.sdk.app.PayTask;
-import com.yuansfer.sdk.YSAppPay;
-import com.yuansfer.sdk.pay.IPayStrategy;
-import com.yuansfer.sdk.pay.PayResultMgr;
-import com.yuansfer.sdk.pay.PayType;
+import com.yuansfer.pay.payment.ErrStatus;
+import com.yuansfer.pay.payment.IPayStrategy;
+import com.yuansfer.pay.payment.PayResultMgr;
+import com.yuansfer.pay.payment.PayType;
+import com.yuansfer.pay.util.LogUtils;
 
 import java.util.Map;
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 12:01
  * @Desciption 支付宝支付
  */
 public class AlipayStrategy implements IPayStrategy<AlipayItem> {
 
-    private static final int PAY_RESULT = 189;
+    private static final int PAY_RESULT = 1379;
 
     @SuppressLint("HandlerLeak")
     private static Handler sHandler = new Handler() {
@@ -32,9 +32,7 @@ public class AlipayStrategy implements IPayStrategy<AlipayItem> {
             switch (msg.what) {
                 case PAY_RESULT: {
                     AliPayResult payResult = new AliPayResult((Map<String, String>) msg.obj);
-                    if (YSAppPay.sDebug) {
-                        Log.d(YSAppPay.SDK_TAG, "alipya result=" + payResult);
-                    }
+                    LogUtils.d("alipay result=" + payResult);
                     String resultStatus = payResult.getResultStatus();
                     // 状态码详见：https://global.alipay.com/doc/global/mobile_securitypay_pay_cn
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档:
@@ -49,7 +47,8 @@ public class AlipayStrategy implements IPayStrategy<AlipayItem> {
                         } else {
                             // "8000"代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                             // 其他值就可以判断为支付失败，或者系统返回的错误
-                            PayResultMgr.getInstance().dispatchPayFail(PayType.ALIPAY, payResult.getMemo());
+                            PayResultMgr.getInstance().dispatchPayFail(PayType.ALIPAY
+                                    , ErrStatus.getInstance("A" + resultStatus, payResult.getMemo()));
                         }
                     }
                     break;
@@ -78,10 +77,7 @@ public class AlipayStrategy implements IPayStrategy<AlipayItem> {
         // 必须异步调用
         Thread payThread = new Thread(payRunnable);
         payThread.start();
-        if (YSAppPay.sDebug) {
-            Log.d(YSAppPay.SDK_TAG, "alipay started");
-        }
+        LogUtils.d("Alipay started");
     }
-
 
 }

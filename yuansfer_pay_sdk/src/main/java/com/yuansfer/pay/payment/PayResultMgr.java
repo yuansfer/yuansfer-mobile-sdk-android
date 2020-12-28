@@ -1,11 +1,11 @@
-package com.yuansfer.sdk.pay;
+package com.yuansfer.pay.payment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 9:36
  * @Description 支付结果管理器
  */
@@ -30,10 +30,10 @@ public final class PayResultMgr {
         /**
          * 支付失败
          *
-         * @param payType 支付类型
-         * @param msg     失败原因
+         * @param payType   支付类型
+         * @param errStatus 错误状态
          */
-        void onPayFail(@PayType int payType, String msg);
+        void onPayFail(@PayType int payType, ErrStatus errStatus);
 
         /**
          * 支付取消
@@ -101,14 +101,14 @@ public final class PayResultMgr {
     /**
      * 通知支付失败
      *
-     * @param payType 支付类型
-     * @param msg     失败原因
+     * @param payType   支付类型
+     * @param errStatus 错误状态
      */
-    public void dispatchPayFail(@PayType int payType, String msg) {
+    public void dispatchPayFail(@PayType int payType, ErrStatus errStatus) {
         Object[] callbacks = collectPayResultCallbacks();
         if (callbacks != null) {
             for (Object callback : callbacks) {
-                ((IPayResultCallback) callback).onPayFail(payType, msg);
+                ((IPayResultCallback) callback).onPayFail(payType, errStatus);
             }
         }
     }

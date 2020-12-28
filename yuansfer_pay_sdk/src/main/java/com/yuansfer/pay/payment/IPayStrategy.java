@@ -1,9 +1,9 @@
-package com.yuansfer.sdk.pay;
+package com.yuansfer.pay.payment;
 
 import android.app.Activity;
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 14:21
  * @Desciption 支付Strategy
  */

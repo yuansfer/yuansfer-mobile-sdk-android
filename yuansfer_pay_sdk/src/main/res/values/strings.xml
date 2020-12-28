@@ -1,13 +1,3 @@
 <resources>
-    <string name="app_name">yuanser_pay_sdk</string>
-    <string name="pay_type_not_support">payType not supported</string>
-    <string name="wx_not_support">wechat is not installed or version too low</string>
-    <string name="wx_not_register">wechat is not register</string>
-    <string name="pay_item_wrong">parameter payItem is not right</string>
-    <string name="token_not_empty">token is empty</string>
-    <string name="wx_pay_not_init">please call the function supportWxPay of YSAppPay first time</string>
-    <string name="wx_pay_no_appid">using wechat pay without appid</string>
-    <string name="target_param_no_error">query the order status as long as one of the reference or the transactionNo parameter</string>
-    <string name="refund_params_error">the refund operation is only one of the reference or transactionNo parameter</string>
-    <string name="refund_amount_error">the refund operation is only one of the amount or rmbAmount parameter</string>
+    <string name="app_name">Yuansfer Pay Demo</string>
 </resources>

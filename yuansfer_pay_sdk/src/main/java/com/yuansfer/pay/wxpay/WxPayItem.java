@@ -1,8 +1,8 @@
-package com.yuansfer.sdk.pay.wxpay;
+package com.yuansfer.pay.wxpay;
 
 import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.yuansfer.sdk.pay.PayItem;
-import com.yuansfer.sdk.pay.PayType;
+import com.yuansfer.pay.payment.PayItem;
+import com.yuansfer.pay.payment.PayType;
 
 /**
  * 微信支付请求实体
@@ -46,7 +46,7 @@ public class WxPayItem extends PayItem {
     @Override
     @PayType
     public int getPayType() {
-        return PayType.WXPAY;
+        return PayType.WECHAT_PAY;
     }
 
     public static class Builder {

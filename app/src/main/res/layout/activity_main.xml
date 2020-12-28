@@ -1,11 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
     tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btn_ali"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/alipay"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/edt_ali"
+        app:layout_constraintTop_toBottomOf="@id/rg_env" />
+
+    <Button
+        android:id="@+id/btn_wx"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/wechatpay"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_ali" />
+
+    <Button
+        android:id="@+id/btn_order_status"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/order_status"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_wx" />
+
+    <Button
+        android:id="@+id/btn_refund"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/refund"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_order_status" />
+
+    <Button
+        android:id="@+id/btn_secure_pay"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/secure_pay"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
+
+    <Button
+        android:id="@+id/btn_google_pay"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:onClick="onViewClick"
+        android:text="@string/google_pay"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_secure_pay" />
+
+    <Button
+        android:id="@+id/btn_dropin_ui"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/dropin_ui"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_google_pay" />
+
+    <EditText
+        android:id="@+id/edt_ali"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_ali"
+        app:layout_constraintLeft_toRightOf="@id/btn_ali"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rg_env" />
+
+    <EditText
+        android:id="@+id/edt_wx"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_wx"
+        app:layout_constraintLeft_toRightOf="@id/btn_wx"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_ali" />
+
+    <EditText
+        android:id="@+id/edt_order_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_order_status"
+        app:layout_constraintLeft_toRightOf="@id/btn_order_status"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_wx" />
+
+    <EditText
+        android:id="@+id/edt_order_refund"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_refund"
+        app:layout_constraintLeft_toRightOf="@id/btn_refund"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_status" />
+
+    <EditText
+        android:id="@+id/edt_secure_pay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_secure_pay"
+        app:layout_constraintLeft_toRightOf="@id/btn_secure_pay"
+        app:layout_constraintRight_toLeftOf="@id/sp_multi_currency"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
+
+    <EditText
+        android:id="@+id/edt_google_pay_amount"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:text="0.01"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_google_pay"
+        app:layout_constraintLeft_toRightOf="@id/btn_refund" />
 
     <RadioGroup
         android:id="@+id/rg_env"
@@ -29,102 +155,6 @@
             android:text="@string/release_env" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/btn_ali"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:onClick="onViewClick"
-        android:text="@string/alipay"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/edt_ali"
-        app:layout_constraintTop_toBottomOf="@id/rg_env" />
-
-    <EditText
-        android:id="@+id/edt_ali"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_ali"
-        app:layout_constraintLeft_toRightOf="@id/btn_ali"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rg_env" />
-
-    <Button
-        android:id="@+id/btn_wx"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:onClick="onViewClick"
-        android:text="@string/wechatpay"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_ali" />
-
-    <EditText
-        android:id="@+id/edt_wx"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_wx"
-        app:layout_constraintLeft_toRightOf="@id/btn_wx"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_ali" />
-
-    <Button
-        android:id="@+id/btn_order_status"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:onClick="onViewClick"
-        android:text="@string/order_status"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_wx" />
-
-    <EditText
-        android:id="@+id/edt_order_status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_order_status"
-        app:layout_constraintLeft_toRightOf="@id/btn_order_status"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_wx" />
-
-    <Button
-        android:id="@+id/btn_refund"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:onClick="onViewClick"
-        android:text="@string/refund"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_order_status" />
-
-    <EditText
-        android:id="@+id/edt_order_refund"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_refund"
-        app:layout_constraintLeft_toRightOf="@id/btn_refund"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_order_status" />
-
-    <Button
-        android:id="@+id/btn_secure_pay"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:onClick="onViewClick"
-        android:text="@string/secure_pay"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
-
-    <EditText
-        android:id="@+id/edt_secure_pay"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_secure_pay"
-        app:layout_constraintLeft_toRightOf="@id/btn_secure_pay"
-        app:layout_constraintRight_toLeftOf="@id/sp_multi_currency"
-        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
-
     <Spinner
         android:id="@+id/sp_multi_currency"
         android:layout_width="wrap_content"
@@ -136,21 +166,30 @@
         app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
 
     <TextView
-        android:id="@+id/tv_result_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="USD"
+        app:layout_constraintBaseline_toBaselineOf="@id/btn_google_pay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/edt_google_pay_amount"
+        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
+
+    <TextView
+        android:id="@+id/tv_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/black"
-        android:minHeight="100dp"
+        android:minHeight="120dp"
         android:padding="5dp"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
-        android:id="@+id/tv_result_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="接口返回"
+        android:text="返回结果"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tv_result_value" />
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintBottom_toTopOf="@id/tv_result" />
+</androidx.constraintlayout.widget.ConstraintLayout>

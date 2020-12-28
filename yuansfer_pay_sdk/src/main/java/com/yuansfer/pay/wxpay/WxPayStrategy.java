@@ -1,24 +1,22 @@
-package com.yuansfer.sdk.pay.wxpay;
+package com.yuansfer.pay.wxpay;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AndroidRuntimeException;
-import android.util.Log;
 
 import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.yuansfer.sdk.R;
-import com.yuansfer.sdk.pay.PayType;
-import com.yuansfer.sdk.pay.IPayStrategy;
-import com.yuansfer.sdk.pay.PayResultMgr;
-import com.yuansfer.sdk.YSAppPay;
-import com.yuansfer.sdk.util.ResStringGet;
+import com.yuansfer.pay.payment.ErrStatus;
+import com.yuansfer.pay.payment.PayType;
+import com.yuansfer.pay.payment.IPayStrategy;
+import com.yuansfer.pay.payment.PayResultMgr;
+import com.yuansfer.pay.util.LogUtils;
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/23 12:01
  * @Desciption 微信支付
  */
@@ -41,7 +39,6 @@ public class WxPayStrategy implements IPayStrategy<WxPayItem> {
      * @return WxPayStrategy实例
      */
     public static WxPayStrategy getInstance() {
-        requireNonNull(sInstance, ResStringGet.getString(R.string.wx_pay_not_init));
         return sInstance;
     }
 
@@ -68,7 +65,7 @@ public class WxPayStrategy implements IPayStrategy<WxPayItem> {
      * @param eventHandler 事件handler
      */
     public void handleIntent(Intent intent, IWXAPIEventHandler eventHandler) {
-        requireNonNull(sWxAPI, ResStringGet.getString(R.string.wx_not_register));
+        requireNonNull(sWxAPI, "Wechat app is not register");
         sWxAPI.handleIntent(intent, eventHandler);
     }
 
@@ -104,18 +101,14 @@ public class WxPayStrategy implements IPayStrategy<WxPayItem> {
      */
     @Override
     public void startPay(Activity activity, WxPayItem request) {
-        requireNonNull(sWxAPI, ResStringGet.getString(R.string.wx_not_register));
+        requireNonNull(sWxAPI, "Wechat app is not register");
         if (!isSupportWxPay()) {
-            if (YSAppPay.sDebug) {
-                Log.d(YSAppPay.SDK_TAG, ResStringGet.getString(R.string.wx_not_support));
-            }
-            PayResultMgr.getInstance().dispatchPayFail(PayType.WXPAY, ResStringGet.getString(R.string.wx_not_support));
+            PayResultMgr.getInstance().dispatchPayFail(PayType.WECHAT_PAY
+                    , ErrStatus.getInstance("W003", "Wechat is not installed or version too low"));
             return;
         }
         boolean ret = sWxAPI.sendReq(request.getPayReq());
-        if (YSAppPay.sDebug) {
-            Log.d(YSAppPay.SDK_TAG, "wxpay started:" + ret);
-        }
+        LogUtils.d("Wechat Pay started:" + ret);
     }
 
 }

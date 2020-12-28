@@ -4,18 +4,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.braintreepayments.api.models.CardNonce;
+import com.braintreepayments.api.models.GooglePaymentCardNonce;
+import com.braintreepayments.api.models.LocalPaymentResult;
+import com.braintreepayments.api.models.PayPalAccountNonce;
+import com.braintreepayments.api.models.VenmoAccountNonce;
+import com.braintreepayments.api.models.VisaCheckoutNonce;
+import com.yuansfer.pay.payment.YSAppPay;
 import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.api.ApiUrl;
 import com.yuansfer.paysdk.model.AlipayResultInfo;
@@ -26,67 +35,88 @@ import com.yuansfer.paysdk.model.WechatResultInfo;
 import com.yuansfer.paysdk.okhttp.GsonResponseHandler;
 import com.yuansfer.paysdk.okhttp.IResponseHandler;
 import com.yuansfer.paysdk.okhttp.RawResponseHandler;
-import com.yuansfer.sdk.YSAppPay;
 import com.yuansfer.paysdk.model.DetailInfo;
 import com.yuansfer.paysdk.model.PrepayInfo;
 import com.yuansfer.paysdk.model.RefundInfo;
-import com.yuansfer.sdk.pay.PayItem;
-import com.yuansfer.sdk.pay.PayResultMgr;
-import com.yuansfer.sdk.pay.PayType;
-import com.yuansfer.sdk.pay.alipay.AlipayItem;
-import com.yuansfer.sdk.pay.wxpay.WxPayItem;
-import com.yuansfer.sdk.util.ResStringGet;
+import com.yuansfer.pay.payment.ErrStatus;
+import com.yuansfer.pay.payment.PayResultMgr;
+import com.yuansfer.pay.payment.PayType;
+import com.yuansfer.pay.alipay.AlipayItem;
+import com.yuansfer.pay.googlepay.YSGooglePayActivity;
+import com.yuansfer.pay.googlepay.YSGooglePayItem;
+import com.yuansfer.pay.wxpay.WxPayItem;
 
 
-public class MainActivity extends AppCompatActivity implements PayResultMgr.IPayResultCallback {
+public class MainActivity extends YSGooglePayActivity implements PayResultMgr.IPayResultCallback {
 
-    String mToken;
-    String mMerchantNo = "200043";
-    String mStoreNo = "300014";
-    TextView tvApiResult, tvApiTitle;
-    EditText etAlipayRef, etWechatRef, etStatusRef, etRefundRef, etOnlineRef;
-    RadioGroup rgEnv;
-    Spinner spCurrency;
+    private String mToken;
+    private String mAuthorization;
+    private String mMerchantNo = "200043";
+    private String mStoreNo = "300014";
+    private TextView mResultTxt;
+    private EditText mAlipayEdt, mWechatPayEdt, mOrderEdt, mRefundEdt, mMultiEdt, mGooglePayEdt;
+    private Button mGooglePayBtn;
+    private RadioGroup mEvnRG;
+    private Spinner mCurrencySpn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        rgEnv = findViewById(R.id.rg_env);
-        tvApiTitle = findViewById(R.id.tv_result_title);
-        tvApiResult = findViewById(R.id.tv_result_value);
-        etAlipayRef = findViewById(R.id.edt_ali);
-        etWechatRef = findViewById(R.id.edt_wx);
-        etStatusRef = findViewById(R.id.edt_order_status);
-        etRefundRef = findViewById(R.id.edt_order_refund);
-        etOnlineRef = findViewById(R.id.edt_secure_pay);
-        spCurrency = findViewById(R.id.sp_multi_currency);
-        setDefaultEditRef(etAlipayRef);
-        setDefaultEditRef(etRefundRef);
-        setDefaultEditRef(etStatusRef);
-        setDefaultEditRef(etWechatRef);
-        setDefaultEditRef(etOnlineRef);
-        YSAppPay.initialize(getApplicationContext());
-        YSAppPay.registerPayResultCallback(this);
-        YSAppPay.setDebugMode();
-        setEnvListener();
+        initViews();
+        setEnvSwitch();
+        YSAppPay.setLogEnable(true);
     }
 
-    private void setEnvListener() {
-        rgEnv.setOnCheckedChangeListener((group, checkedId) -> {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        YSAppPay.registerPayResultCallback(this);
+        YSAppPay.getInstance().bindGooglePay(this, mAuthorization);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        YSAppPay.unregisterPayResultCallback(this);
+        YSAppPay.getInstance().unbindGooglePay(this);
+    }
+
+    private void initViews() {
+        mEvnRG = findViewById(R.id.rg_env);
+        mResultTxt = findViewById(R.id.tv_result);
+        mAlipayEdt = findViewById(R.id.edt_ali);
+        mWechatPayEdt = findViewById(R.id.edt_wx);
+        mOrderEdt = findViewById(R.id.edt_order_status);
+        mRefundEdt = findViewById(R.id.edt_order_refund);
+        mMultiEdt = findViewById(R.id.edt_secure_pay);
+        mCurrencySpn = findViewById(R.id.sp_multi_currency);
+        mGooglePayEdt = findViewById(R.id.edt_google_pay_amount);
+        mGooglePayBtn = findViewById(R.id.btn_google_pay);
+        setDefaultEditRef(mAlipayEdt);
+        setDefaultEditRef(mRefundEdt);
+        setDefaultEditRef(mOrderEdt);
+        setDefaultEditRef(mWechatPayEdt);
+        setDefaultEditRef(mMultiEdt);
+    }
+
+    private void setEnvSwitch() {
+        mEvnRG.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rb_release) {
                 //生产配置
                 mToken = "8fca880f7fe434597625535c7834769d";
+                mAuthorization = "production authorization";
                 ApiUrl.setEnvMode(true);
                 YSAppPay.setAliEnv(true);
             } else {
                 //测试配置
                 mToken = "5cbfb079f15b150122261c8537086d77a";
+                mAuthorization = "sandbox_ktnjwfdk_wfm342936jkm7dg6";
                 ApiUrl.setEnvMode(false);
                 YSAppPay.setAliEnv(false);
             }
         });
-        ((RadioButton) rgEnv.findViewById(R.id.rb_test)).setChecked(true);
+        ((RadioButton) mEvnRG.findViewById(R.id.rb_test)).setChecked(true);
     }
 
     public void onViewClick(View view) {
@@ -111,7 +141,23 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
             case R.id.btn_secure_pay:
                 callSecurePay();
                 break;
+            case R.id.btn_google_pay:
+                callGooglePay();
+                break;
+            case R.id.btn_dropin_ui:
+                callDropInUI();
+                break;
         }
+    }
+
+    private void callDropInUI() {
+        DropInPayActivity.launchActivity(this, mAuthorization);
+    }
+
+    private void callGooglePay() {
+        YSGooglePayItem googlePayItem = new YSGooglePayItem();
+        googlePayItem.setTotalPrice(Double.parseDouble(mGooglePayEdt.getText().toString()));
+        YSAppPay.getInstance().startGooglePay(this, googlePayItem);
     }
 
     private void hideKeyboard() {
@@ -125,17 +171,17 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         DetailInfo info = new DetailInfo();
         info.setMerchantNo(mMerchantNo);
         info.setStoreNo(mStoreNo);
-        info.setReference(getEditRef(etStatusRef));
+        info.setReference(getEditRef(mOrderEdt));
         queryOrder(mToken, info, new RawResponseHandler() {
             @Override
             public void onSuccess(int statusCode, String result) {
-                setDefaultEditRef(etStatusRef);
-                tvApiResult.setText(result);
+                setDefaultEditRef(mOrderEdt);
+                mResultTxt.setText(result);
             }
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
-                tvApiResult.setText(errorMsg);
+                mResultTxt.setText(errorMsg);
             }
         });
     }
@@ -145,17 +191,17 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         info.setMerchantNo(mMerchantNo);
         info.setStoreNo(mStoreNo);
         info.setAmount(0.01);
-        info.setReference(getEditRef(etRefundRef));
+        info.setReference(getEditRef(mRefundEdt));
         refund(mToken, info, new RawResponseHandler() {
             @Override
             public void onSuccess(int statusCode, String result) {
-                setDefaultEditRef(etRefundRef);
-                tvApiResult.setText(result);
+                setDefaultEditRef(mRefundEdt);
+                mResultTxt.setText(result);
             }
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
-                tvApiResult.setText(errorMsg);
+                mResultTxt.setText(errorMsg);
             }
         });
     }
@@ -166,10 +212,10 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         info.setMerchantNo(mMerchantNo);
         info.setStoreNo(mStoreNo);
         info.setAmount(13);
-        info.setCurrency(spCurrency.getSelectedItem().toString());
+        info.setCurrency(mCurrencySpn.getSelectedItem().toString());
         info.setVendor("alipay");
         info.setTimeout(30);
-        info.setReference(getEditRef(etOnlineRef));
+        info.setReference(getEditRef(mMultiEdt));
         info.setIpnUrl("http://alipay.yunkeguan.com/ttest/test");
         info.setCallbackUrl("http://alipay.yunkeguan.com/ttest/test2");
         info.setDescription("test+description");
@@ -178,17 +224,17 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
-                tvApiResult.setText(errorMsg);
+                mResultTxt.setText(errorMsg);
             }
 
             @Override
             public void onSuccess(int statusCode, SecureResultInfo response) {
-                setDefaultEditRef(etOnlineRef);
+                setDefaultEditRef(mMultiEdt);
                 if ("000100".equals(response.getRet_code())) {
-                    tvApiResult.setText("跳转WAP:" + response.getResult().getCashierUrl());
+                    mResultTxt.setText("跳转WAP:" + response.getResult().getCashierUrl());
                     launchCashierUrl(response.getResult().getCashierUrl());
                 } else {
-                    tvApiResult.setText(response.getRet_msg());
+                    mResultTxt.setText(response.getRet_msg());
                 }
             }
 
@@ -213,23 +259,23 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         info.setIpnUrl("https://alipay.yuansfer.yunkeguan.com/wx");
         info.setDescription("description");
         info.setNote("note");
-        info.setReference(getEditRef(etAlipayRef));
+        info.setReference(getEditRef(mAlipayEdt));
         prepay(mToken, info, new GsonResponseHandler<AlipayResultInfo>() {
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
-                tvApiResult.setText(errorMsg);
+                mResultTxt.setText(errorMsg);
             }
 
             @Override
             public void onSuccess(int statusCode, AlipayResultInfo response) {
-                setDefaultEditRef(etAlipayRef);
+                setDefaultEditRef(mAlipayEdt);
                 if ("000100".equals(response.getRet_code())) {
-                    tvApiResult.setText(response.getResult().getPayInfo());
-                    YSAppPay.getInstance().startPay(MainActivity.this
+                    mResultTxt.setText(response.getResult().getPayInfo());
+                    YSAppPay.getInstance().startAlipay(MainActivity.this
                             , new AlipayItem(response.getResult().getPayInfo()));
                 } else {
-                    tvApiResult.setText(response.getRet_msg());
+                    mResultTxt.setText(response.getRet_msg());
                 }
             }
         });
@@ -239,106 +285,71 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
         PrepayInfo info = new PrepayInfo();
         info.setMerchantNo(mMerchantNo);
         info.setStoreNo(mStoreNo);
-        info.setPayType(PayType.WXPAY);
+        info.setPayType(PayType.WECHAT_PAY);
         info.setAmount(0.01);
         info.setIpnUrl("https://wx.yuansfer.yunkeguan.com/wx");
         info.setDescription("description");
         info.setNote("note");
-        info.setReference(getEditRef(etWechatRef));
+        info.setReference(getEditRef(mWechatPayEdt));
         prepay(mToken, info, new GsonResponseHandler<WechatResultInfo>() {
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
-                tvApiResult.setText(errorMsg);
+                mResultTxt.setText(errorMsg);
             }
 
             @Override
             public void onSuccess(int statusCode, WechatResultInfo response) {
-                setDefaultEditRef(etWechatRef);
+                setDefaultEditRef(mWechatPayEdt);
                 if ("000100".equals(response.getRet_code())) {
-                    tvApiResult.setText(response.getResult().toString());
-                    YSAppPay.getInstance().supportWxPay(response.getResult().getAppid());
+                    mResultTxt.setText(response.getResult().toString());
                     launchWechat(response.getResult());
                 } else {
-                    tvApiResult.setText(response.getRet_msg());
+                    mResultTxt.setText(response.getRet_msg());
                 }
             }
         });
     }
 
-    /**
-     * order prepay
-     *
-     * @param token
-     * @param prepayInfo
-     * @param responseCallback
-     */
     private void prepay(@NonNull String token
             , @NonNull PrepayInfo prepayInfo, @NonNull IResponseHandler responseCallback) {
         ApiService.prepay(this.getApplicationContext(), token, prepayInfo, responseCallback);
     }
 
-    /**
-     * excute order refund
-     *
-     * @param token
-     * @param refundInfo
-     * @param responseCallback
-     */
     private void refund(@NonNull String token
             , @NonNull RefundInfo refundInfo, @NonNull IResponseHandler responseCallback) {
-        if (!TextUtils.isEmpty(refundInfo.getReference()) && !TextUtils.isEmpty(refundInfo.getTransactionNo())) {
-            responseCallback.onFailure(ApiService.ApiStatusCode.API_PARAM_ERROR, ResStringGet.getString(com.yuansfer.sdk.R.string.refund_params_error));
-            return;
-        }
-        if (refundInfo.getAmount() > 0.00D && refundInfo.getRmbAmount() > 0.00D) {
-            responseCallback.onFailure(ApiService.ApiStatusCode.API_PARAM_ERROR, ResStringGet.getString(com.yuansfer.sdk.R.string.refund_amount_error));
-            return;
-        }
         ApiService.refund(this.getApplicationContext(), token, refundInfo, responseCallback);
     }
 
-    /**
-     * query order detail
-     *
-     * @param token
-     * @param orderInfo
-     * @param responseCallback
-     */
     private void queryOrder(@NonNull String token
             , @NonNull DetailInfo orderInfo, @NonNull IResponseHandler responseCallback) {
-        if (!TextUtils.isEmpty(orderInfo.getReference()) && !TextUtils.isEmpty(orderInfo.getTransactionNo())) {
-            responseCallback.onFailure(ApiService.ApiStatusCode.API_PARAM_ERROR, ResStringGet.getString(com.yuansfer.sdk.R.string.target_param_no_error));
-            return;
-        }
         ApiService.orderStatus(this.getApplicationContext(), token, orderInfo, responseCallback);
     }
 
     private void launchWechat(WechatInfo wechatInfo) {
-        PayItem payItem = new WxPayItem.Builder()
+        YSAppPay.getInstance().startWechatPay(MainActivity.this, new WxPayItem.Builder()
                 .setAppId(wechatInfo.getAppid())
                 .setPackageValue(wechatInfo.getPackageName())
                 .setPrepayId(wechatInfo.getPrepayid())
                 .setPartnerId(wechatInfo.getPartnerid())
                 .setNonceStr(wechatInfo.getNoncestr())
                 .setSign(wechatInfo.getSign())
-                .setTimestamp(wechatInfo.getTimestamp()).build();
-        YSAppPay.getInstance().startPay(MainActivity.this, payItem);
+                .setTimestamp(wechatInfo.getTimestamp()).build());
     }
 
     @Override
     public void onPaySuccess(int payType) {
-        Toast.makeText(this, "pay success, type=" + payType, Toast.LENGTH_LONG).show();
+        mResultTxt.setText("支付成功");
     }
 
     @Override
-    public void onPayFail(int payType, String msg) {
-        Toast.makeText(this, "pay fail=" + msg, Toast.LENGTH_LONG).show();
+    public void onPayFail(@PayType int payType, ErrStatus errStatus) {
+        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override
     public void onPayCancel(int payType) {
-        Toast.makeText(this, "pay cancelled，type=" + payType, Toast.LENGTH_LONG).show();
+        mResultTxt.setText("支付取消");
     }
 
     private String getEditRef(EditText editText) {
@@ -351,9 +362,13 @@ public class MainActivity extends AppCompatActivity implements PayResultMgr.IPay
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        YSAppPay.unregisterPayResultCallback(this);
+    public void onReadyToPay() {
+        mGooglePayBtn.setEnabled(true);
+    }
+
+    @Override
+    public void onPaymentMethodResult(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
+        mResultTxt.setText(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
     }
 
 }

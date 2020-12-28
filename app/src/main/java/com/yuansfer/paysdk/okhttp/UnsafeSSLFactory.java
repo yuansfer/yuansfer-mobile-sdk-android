@@ -12,7 +12,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * @Author Fly-Android
+ * @Author Fly
  * @CreateDate 2019/5/29 12:00
  * @Desciption https忽略证书
  */
