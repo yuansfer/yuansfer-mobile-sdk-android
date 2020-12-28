@@ -1,5 +1,5 @@
 ## yuansfer-payment-android
-yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for WeChat and Alipay payments. In addition, it includes some other API interfaces with payment.
+yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments. In addition, it includes some other API interfaces with payment.
 
 ### Quick integration
 * Add the following dependencies in the app's build.gradle file, the payment method is optional
@@ -74,7 +74,7 @@ YSAppPay.getInstance().startAlipay(Activity activity, AlipayItem alipayItem)
 YSAppPay.getInstance().startWechatPay(Activity activity, WxPayItem wxPayItem)
 ````
 
-* If you want to integrate Braintree’s Drop-in UI, Activity must inherit YSDropinPayActivity and implement the methods of IBrainTreeCallback that need to be overridden.
+* If you want to integrate Braintree’s Drop-in UI, Your Activity must inherit YSDropinPayActivity and implement the methods of IBrainTreeCallback that need to be overridden.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
@@ -88,7 +88,7 @@ YSAppPay.getInstance().startWechatPay(Activity activity, WxPayItem wxPayItem)
 
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
-* If you need to add a separate Google Pay, you should check whether the Google Pay service and configuration are available. If it is available, the Google Pay button is usually displayed.
+* If you need to add a separate Google Pay, you should check whether the Google Pay service and configuration are available. If it is available, the Google Pay button is usually displayed, Your Activity must inherit YSGooglePayActivity and implement the methods of it.
 ````
     public void onReadyToPay() {
         //Google Pay service is available, usually showing the payment button
@@ -126,16 +126,11 @@ YSAppPay.getInstance().startDropInPayment(T activity, String authorization
 * WeChat payment needs to determine the client appid, package name, package signature, and server parameters and signature to be the same to pull up the WeChat client
 
 * ErrorStatus Code of payment result:
-  Wechat Pay, Start with the character 'W'
-  Alipay, Start with the character 'A'
-  Google Pay, Start with the character 'G'
-  Dropin Pay, Start with the character 'D'
+  - Wechat Pay, Start with the character 'W'
+  - Alipay, Start with the character 'A'
+  - Google Pay, Start with the character 'G'
+  - Dropin Pay, Start with the character 'D'
   
-* 
-````
-> Could not create an instance of type com.novoda.release.internal.compat.gradle5_3.AndroidSoftwareComponentCompat_Gradle_5_3.
-    > org/gradle/api/internal/java/usagecontext/LazyConfigurationUsageContext
-````
 ### Version log
 
 #### 1.1.0
