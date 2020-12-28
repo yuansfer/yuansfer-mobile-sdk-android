@@ -5,7 +5,8 @@ yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintr
 * Add the following dependencies in the app's build.gradle file, the payment method is optional
 ````
 dependencies {
-        ... Necessary
+        ... 
+        // Necessary
         implementation 'com.yuansfer.pay:payment:1.1.0'
 
         // Alipay (optional)
@@ -36,6 +37,7 @@ repositories {
 }
 ````
 * If you want to add Alipay payment SDK, please copy the Alipay SDK aar file to the app/libs directory and declare the location of aar in project build.gradle
+````
 allprojects {
     repositories {
 
