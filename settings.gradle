@@ -1,1 +1,1 @@
-include ':app', ':yuansfer_pay_sdk'
+include ':app', ':payment'

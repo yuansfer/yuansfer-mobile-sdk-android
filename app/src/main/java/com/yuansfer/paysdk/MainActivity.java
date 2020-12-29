@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 
 import com.braintreepayments.api.models.CardNonce;
 import com.braintreepayments.api.models.GooglePaymentCardNonce;
@@ -25,6 +27,7 @@ import com.braintreepayments.api.models.PayPalAccountNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
 import com.yuansfer.pay.payment.YSAppPay;
+import com.yuansfer.pay.util.LogUtils;
 import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.api.ApiUrl;
 import com.yuansfer.paysdk.model.AlipayResultInfo;
@@ -46,17 +49,24 @@ import com.yuansfer.pay.googlepay.YSGooglePayActivity;
 import com.yuansfer.pay.googlepay.YSGooglePayItem;
 import com.yuansfer.pay.wxpay.WxPayItem;
 
+import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends YSGooglePayActivity implements PayResultMgr.IPayResultCallback {
 
-    private String mToken;
-    private String mAuthorization;
+public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNavigationListener
+        , PayResultMgr.IPayResultCallback {
+
+    private static final String TEST_TOKEN = "5cbfb079f15b150122261c8537086d77a";
+    private static final String PRODUCTION_TOKEN = "8fca880f7fe434597625535c7834769d";
+    private static final String TEST_AUTHORIZATION = "sandbox_ktnjwfdk_wfm342936jkm7dg6";
+    private static final String PRODUCTION_AUTHORIZATION = "sandbox_ktnjwfdk_wfm342936jkm7dg6";
+    private String mToken = TEST_TOKEN;
+    private String mAuthorization = TEST_AUTHORIZATION;
     private String mMerchantNo = "200043";
     private String mStoreNo = "300014";
     private TextView mResultTxt;
     private EditText mAlipayEdt, mWechatPayEdt, mOrderEdt, mRefundEdt, mMultiEdt, mGooglePayEdt;
     private Button mGooglePayBtn;
-    private RadioGroup mEvnRG;
     private Spinner mCurrencySpn;
 
     @Override
@@ -64,7 +74,7 @@ public class MainActivity extends YSGooglePayActivity implements PayResultMgr.IP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        setEnvSwitch();
+        setupActionBar();
         YSAppPay.setLogEnable(true);
     }
 
@@ -83,7 +93,6 @@ public class MainActivity extends YSGooglePayActivity implements PayResultMgr.IP
     }
 
     private void initViews() {
-        mEvnRG = findViewById(R.id.rg_env);
         mResultTxt = findViewById(R.id.tv_result);
         mAlipayEdt = findViewById(R.id.edt_ali);
         mWechatPayEdt = findViewById(R.id.edt_wx);
@@ -100,23 +109,32 @@ public class MainActivity extends YSGooglePayActivity implements PayResultMgr.IP
         setDefaultEditRef(mMultiEdt);
     }
 
-    private void setEnvSwitch() {
-        mEvnRG.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rb_release) {
-                //生产配置
-                mToken = "8fca880f7fe434597625535c7834769d";
-                mAuthorization = "production authorization";
-                ApiUrl.setEnvMode(true);
-                YSAppPay.setAliEnv(true);
-            } else {
-                //测试配置
-                mToken = "5cbfb079f15b150122261c8537086d77a";
-                mAuthorization = "sandbox_ktnjwfdk_wfm342936jkm7dg6";
-                ApiUrl.setEnvMode(false);
-                YSAppPay.setAliEnv(false);
-            }
-        });
-        ((RadioButton) mEvnRG.findViewById(R.id.rb_test)).setChecked(true);
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.environments,
+                android.R.layout.simple_spinner_dropdown_item);
+        actionBar.setListNavigationCallbacks(adapter, this);
+        actionBar.setSelectedNavigationItem(0);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        String env = getResources().getStringArray(R.array.environments)[itemPosition];
+        if ("TEST".equals(env)) {
+            mToken = TEST_TOKEN;
+            mAuthorization = TEST_AUTHORIZATION;
+            ApiUrl.setEnvMode(false);
+            YSAppPay.setAliEnv(false);
+        } else {
+            mToken = PRODUCTION_TOKEN;
+            mAuthorization = PRODUCTION_AUTHORIZATION;
+            ApiUrl.setEnvMode(true);
+            YSAppPay.setAliEnv(true);
+        }
+        return true;
     }
 
     public void onViewClick(View view) {

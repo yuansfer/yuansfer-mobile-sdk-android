@@ -1,6 +1,9 @@
 package com.yuansfer.pay.payment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.alipay.sdk.app.EnvUtils;
 import com.braintreepayments.api.BraintreeFragment;
@@ -18,6 +21,7 @@ import com.yuansfer.pay.googlepay.YSGooglePayItem;
 import com.yuansfer.pay.wxpay.WxPayItem;
 import com.yuansfer.pay.wxpay.WxPayStrategy;
 import com.yuansfer.pay.util.LogUtils;
+import com.yuansfer.sdk.BuildConfig;
 
 
 /**
@@ -40,6 +44,13 @@ public class YSAppPay {
             }
         }
         return sInstance;
+    }
+
+    /**
+     * 获取SDK版本
+     */
+    public static String getSDKVersion() {
+        return BuildConfig.VERSION_NAME;
     }
 
     /**

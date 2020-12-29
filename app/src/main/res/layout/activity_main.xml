@@ -16,7 +16,7 @@
         android:textAllCaps="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/edt_ali"
-        app:layout_constraintTop_toBottomOf="@id/rg_env" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_wx"
@@ -85,8 +85,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/btn_ali"
         app:layout_constraintLeft_toRightOf="@id/btn_ali"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rg_env" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <EditText
         android:id="@+id/edt_wx"
@@ -133,27 +132,6 @@
         app:layout_constraintBaseline_toBaselineOf="@id/btn_google_pay"
         app:layout_constraintLeft_toRightOf="@id/btn_refund" />
 
-    <RadioGroup
-        android:id="@+id/rg_env"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <RadioButton
-            android:id="@+id/rb_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/test_env" />
-
-        <RadioButton
-            android:id="@+id/rb_release"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/release_env" />
-    </RadioGroup>
 
     <Spinner
         android:id="@+id/sp_multi_currency"

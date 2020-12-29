@@ -39,7 +39,15 @@ public class DropInPayActivity extends YSDropInPayActivity implements PayResultM
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropin);
+        setUpAsBack();
         mResultTxt = findViewById(R.id.tv_result);
+    }
+
+    private void setUpAsBack() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     public void onViewClick(View v) {
