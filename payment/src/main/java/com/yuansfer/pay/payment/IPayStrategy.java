@@ -7,7 +7,7 @@ import android.app.Activity;
  * @CreateDate 2019/5/23 14:21
  * @Desciption 支付Strategy
  */
-public interface IPayStrategy<T extends PayItem> {
+public interface IPayStrategy<T> {
 
     /**
      * 发起支付

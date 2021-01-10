@@ -62,7 +62,6 @@
         android:id="@+id/btn_google_pay"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:onClick="onViewClick"
         android:text="@string/google_pay"
         android:textAllCaps="false"
@@ -123,14 +122,6 @@
         app:layout_constraintRight_toLeftOf="@id/sp_multi_currency"
         app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
 
-    <EditText
-        android:id="@+id/edt_google_pay_amount"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:text="0.01"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_google_pay"
-        app:layout_constraintLeft_toRightOf="@id/btn_refund" />
 
 
     <Spinner
@@ -141,16 +132,6 @@
         app:layout_constraintBaseline_toBaselineOf="@id/edt_secure_pay"
         app:layout_constraintLeft_toRightOf="@id/edt_secure_pay"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="USD"
-        app:layout_constraintBaseline_toBaselineOf="@id/btn_google_pay"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/edt_google_pay_amount"
         app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
 
     <TextView

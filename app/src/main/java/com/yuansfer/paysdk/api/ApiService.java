@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.yuansfer.paysdk.model.PayProcessInfo;
 import com.yuansfer.paysdk.model.SecurePayInfo;
 import com.yuansfer.paysdk.okhttp.IResponseHandler;
 import com.yuansfer.paysdk.okhttp.LoggerInterceptor;
@@ -41,7 +42,7 @@ public class ApiService {
                 .writeTimeout(RW_TIMEOUT, TimeUnit.SECONDS)
                 .sslSocketFactory(UnsafeSSLFactory.createTrustAllSSLFactory(trustAllManager), trustAllManager)
                 .hostnameVerifier(UnsafeSSLFactory.createTrustAllHostnameVerifier())
-                .addInterceptor(new LoggerInterceptor("yuansfer-payment-android", LogUtils.logEnable))
+                .addInterceptor(new LoggerInterceptor("YSAppPay", LogUtils.logEnable))
                 .build());
     }
 
@@ -91,6 +92,14 @@ public class ApiService {
     public static void securePay(Context context, String token, SecurePayInfo secureInfo, IResponseHandler responseCallback) {
         OkHttpUtils.get().post(context, ApiUrl.getSecurePayUrl()
                 , generateSignatureMap(token, secureInfo), responseCallback);
+    }
+
+    /**
+     * Braintree支付
+     */
+    public static void braintreePay(Context context, String token, PayProcessInfo processInfo, IResponseHandler responseCallback) {
+        OkHttpUtils.get().post(context, ApiUrl.getPayProcessUrl()
+                , generateSignatureMap(token, processInfo), responseCallback);
     }
 
 }

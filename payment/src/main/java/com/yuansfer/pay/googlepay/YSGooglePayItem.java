@@ -1,13 +1,11 @@
 package com.yuansfer.pay.googlepay;
 
 import com.google.android.gms.wallet.WalletConstants;
-import com.yuansfer.pay.payment.PayItem;
-import com.yuansfer.pay.payment.PayType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class YSGooglePayItem extends PayItem {
+public class YSGooglePayItem {
 
     private String currency = "USD";
     private double totalPrice;
@@ -21,11 +19,6 @@ public class YSGooglePayItem extends PayItem {
     private String googleMerchantId;
     private int totalPriceStatus = WalletConstants.TOTAL_PRICE_STATUS_FINAL;
     private int billingAddressFormat = WalletConstants.BILLING_ADDRESS_FORMAT_FULL;
-
-    @Override
-    public int getPayType() {
-        return PayType.GOOGLE_PAY;
-    }
 
     public String getCurrency() {
         return currency;

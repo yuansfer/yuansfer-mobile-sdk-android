@@ -5,29 +5,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.braintreepayments.api.models.CardNonce;
-import com.braintreepayments.api.models.GooglePaymentCardNonce;
-import com.braintreepayments.api.models.LocalPaymentResult;
-import com.braintreepayments.api.models.PayPalAccountNonce;
-import com.braintreepayments.api.models.VenmoAccountNonce;
-import com.braintreepayments.api.models.VisaCheckoutNonce;
 import com.yuansfer.pay.payment.YSAppPay;
-import com.yuansfer.pay.util.LogUtils;
 import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.api.ApiUrl;
 import com.yuansfer.paysdk.model.AlipayResultInfo;
@@ -53,7 +44,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNavigationListener
+public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener
         , PayResultMgr.IPayResultCallback {
 
     private static final String TEST_TOKEN = "5cbfb079f15b150122261c8537086d77a";
@@ -65,7 +56,7 @@ public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNav
     private String mMerchantNo = "200043";
     private String mStoreNo = "300014";
     private TextView mResultTxt;
-    private EditText mAlipayEdt, mWechatPayEdt, mOrderEdt, mRefundEdt, mMultiEdt, mGooglePayEdt;
+    private EditText mAlipayEdt, mWechatPayEdt, mOrderEdt, mRefundEdt, mMultiEdt;
     private Button mGooglePayBtn;
     private Spinner mCurrencySpn;
 
@@ -82,14 +73,12 @@ public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNav
     protected void onStart() {
         super.onStart();
         YSAppPay.registerPayResultCallback(this);
-        YSAppPay.getInstance().bindGooglePay(this, mAuthorization);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         YSAppPay.unregisterPayResultCallback(this);
-        YSAppPay.getInstance().unbindGooglePay(this);
     }
 
     private void initViews() {
@@ -100,7 +89,6 @@ public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNav
         mRefundEdt = findViewById(R.id.edt_order_refund);
         mMultiEdt = findViewById(R.id.edt_secure_pay);
         mCurrencySpn = findViewById(R.id.sp_multi_currency);
-        mGooglePayEdt = findViewById(R.id.edt_google_pay_amount);
         mGooglePayBtn = findViewById(R.id.btn_google_pay);
         setDefaultEditRef(mAlipayEdt);
         setDefaultEditRef(mRefundEdt);
@@ -168,14 +156,12 @@ public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNav
         }
     }
 
-    private void callDropInUI() {
-        DropInPayActivity.launchActivity(this, mAuthorization);
+    private void callGooglePay() {
+        startActivity(new Intent(this, GooglePayActivity.class));
     }
 
-    private void callGooglePay() {
-        YSGooglePayItem googlePayItem = new YSGooglePayItem();
-        googlePayItem.setTotalPrice(Double.parseDouble(mGooglePayEdt.getText().toString()));
-        YSAppPay.getInstance().startGooglePay(this, googlePayItem);
+    private void callDropInUI() {
+        DropInPayActivity.launchActivity(this, mAuthorization);
     }
 
     private void hideKeyboard() {
@@ -377,16 +363,6 @@ public class MainActivity extends YSGooglePayActivity implements ActionBar.OnNav
 
     private void setDefaultEditRef(EditText editRef) {
         editRef.setHint(System.currentTimeMillis() + "");
-    }
-
-    @Override
-    public void onReadyToPay() {
-        mGooglePayBtn.setEnabled(true);
-    }
-
-    @Override
-    public void onPaymentMethodResult(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
     }
 
 }

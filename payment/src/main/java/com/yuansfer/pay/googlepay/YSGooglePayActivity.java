@@ -1,6 +1,8 @@
 package com.yuansfer.pay.googlepay;
 
 
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.braintreepayments.api.BraintreeFragment;

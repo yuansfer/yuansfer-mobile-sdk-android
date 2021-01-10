@@ -1,14 +1,11 @@
 package com.yuansfer.pay.alipay;
 
-import com.yuansfer.pay.payment.PayItem;
-import com.yuansfer.pay.payment.PayType;
-
 /**
  * @Author Fly
  * @CreateDate 2019/5/23 14:53
  * @Desciption 支付宝请求实体
  */
-public class AlipayItem extends PayItem {
+public class AlipayItem {
 
     private String orderInfo;
 
@@ -21,12 +18,6 @@ public class AlipayItem extends PayItem {
 
     public String getOrderInfo() {
         return orderInfo;
-    }
-
-    @Override
-    @PayType
-    public int getPayType() {
-        return PayType.ALIPAY;
     }
 
 }

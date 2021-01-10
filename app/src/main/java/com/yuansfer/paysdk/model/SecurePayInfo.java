@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class SecurePayInfo extends SignInfo {
 
     private double amount;
-    private String currency;
+    private String currency = "USD";
     private String settleCurrency = "USD";
     private String vendor;
     private String ipnUrl;
@@ -15,7 +15,7 @@ public class SecurePayInfo extends SignInfo {
     private String description;
     private String note;
     private String osType = "ANDROID";
-    private int timeout;
+    private int timeout = 120;
     private String goodsInfo;
     private String creditType;
     private int paymentCount;

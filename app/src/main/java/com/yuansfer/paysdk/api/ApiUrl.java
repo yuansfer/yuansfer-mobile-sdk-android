@@ -21,6 +21,8 @@ public class ApiUrl {
         String REFUND = "micropay/v2/refund";
         //线上支付宝多币种接口
         String ONLINE_SECURE_PAY = "online/v3/secure-pay";
+        //braintree支付
+        String PAY_PROCESS = "creditpay/v3/process";
     }
 
     /**
@@ -46,6 +48,14 @@ public class ApiUrl {
      */
     static String getSecurePayUrl() {
         return API_SERVER_CURRENT + ApiPath.ONLINE_SECURE_PAY;
+    }
+
+    /**
+     * 线上支付宝多币种接口
+     * @return
+     */
+    static String getPayProcessUrl() {
+        return API_SERVER_CURRENT + ApiPath.PAY_PROCESS;
     }
 
     /**
