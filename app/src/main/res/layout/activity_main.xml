@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <Button
         android:id="@+id/btn_ali"
@@ -59,16 +59,6 @@
         app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
 
     <Button
-        android:id="@+id/btn_google_pay"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:onClick="onViewClick"
-        android:text="@string/google_pay"
-        android:textAllCaps="false"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_secure_pay" />
-
-    <Button
         android:id="@+id/btn_dropin_ui"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
@@ -76,7 +66,47 @@
         android:text="@string/dropin_ui"
         android:textAllCaps="false"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_google_pay" />
+        app:layout_constraintTop_toBottomOf="@id/edt_secure_pay" />
+
+    <Button
+        android:id="@+id/btn_google_pay"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/google_pay"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toRightOf="@id/btn_dropin_ui"
+        app:layout_constraintTop_toBottomOf="@id/edt_secure_pay" />
+
+    <Button
+        android:id="@+id/btn_paypal"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/paypal"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toRightOf="@id/btn_google_pay"
+        app:layout_constraintTop_toBottomOf="@id/edt_secure_pay" />
+
+    <Button
+        android:id="@+id/btn_venmo"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/venmo"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_dropin_ui" />
+
+    <Button
+        android:id="@+id/btn_creditcard"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/creditcard"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toRightOf="@id/btn_venmo"
+        app:layout_constraintTop_toBottomOf="@id/btn_dropin_ui" />
 
     <EditText
         android:id="@+id/edt_ali"
@@ -121,7 +151,6 @@
         app:layout_constraintLeft_toRightOf="@id/btn_secure_pay"
         app:layout_constraintRight_toLeftOf="@id/sp_multi_currency"
         app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
-
 
 
     <Spinner

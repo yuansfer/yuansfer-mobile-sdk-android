@@ -10,10 +10,10 @@
         android:id="@+id/btn_pay_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:onClick="onViewClick"
-        android:textAllCaps="false"
-        android:text="Drop-In UI" />
-
+        android:text="Drop-In UI"
+        android:textAllCaps="false" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,13 +22,19 @@
         android:text="返回结果"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tv_result" />
-
-    <TextView
-        android:id="@+id/tv_result"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@android:color/black"
-        android:textColor="@android:color/white" />
+        android:fillViewport="true">
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:textColor="@android:color/white" />
+    </ScrollView>
+
 
 </LinearLayout>

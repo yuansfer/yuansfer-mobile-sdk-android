@@ -13,8 +13,8 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
 public @interface PayType {
+    int BRAIN_TREE = 0;
     int ALIPAY = 1;
     int WECHAT_PAY = 2;
     int GOOGLE_PAY = 3;
-    int DROP_IN = 4;
 }

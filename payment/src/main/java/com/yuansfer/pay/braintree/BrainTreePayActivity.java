@@ -1,7 +1,6 @@
-package com.yuansfer.pay.googlepay;
+package com.yuansfer.pay.braintree;
 
 
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,13 +15,12 @@ import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
 import com.braintreepayments.api.models.BraintreePaymentResult;
 import com.braintreepayments.api.models.CardNonce;
 import com.braintreepayments.api.models.Configuration;
+import com.braintreepayments.api.models.GooglePaymentCardNonce;
 import com.braintreepayments.api.models.LocalPaymentResult;
 import com.braintreepayments.api.models.PayPalAccountNonce;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
-import com.yuansfer.pay.braintree.IBrainTreeCallback;
-import com.yuansfer.pay.braintree.YSBrainTreeListenerHandler;
 import com.yuansfer.pay.payment.PayResultMgr;
 import com.yuansfer.pay.payment.PayType;
 import com.yuansfer.pay.util.LogUtils;
@@ -30,44 +28,44 @@ import com.yuansfer.pay.util.LogUtils;
 /**
  * @author fly
  * @date 2020/12/21
- * @desc 子类Activity需继承此类，覆盖处理Google Pay的多个支付流程
+ * @desc 集成Braintree自定义支付时可继承此类，处理相应渠道的支付流程，如Google Pay, PayPal, Venmo等
  */
-public abstract class YSGooglePayActivity extends AppCompatActivity implements BraintreeCancelListener, BraintreeErrorListener
+public abstract class BrainTreePayActivity extends AppCompatActivity implements BraintreeCancelListener, BraintreeErrorListener
         , PaymentMethodNonceCreatedListener, ConfigurationListener, BraintreePaymentResultListener, IBrainTreeCallback {
 
-    private static final String TAG = "YSGooglePayActivity";
+    private static final String TAG = "YSBrainTreePayActivity";
     private BraintreeFragment mBrainTreeFragment;
     private String mDeviceData;
 
     @Override
-    public void onCancel(int i) {
-        LogUtils.d(TAG, "Google Pay canceled");
+    public final void onCancel(int i) {
+        LogUtils.d(TAG, "BrainTree Pay canceled");
         PayResultMgr.getInstance().dispatchPayCancel(PayType.GOOGLE_PAY);
     }
 
     @Override
-    public void onError(Exception error) {
-        LogUtils.d(TAG, "Google Pay error:" + error.getMessage());
-        YSBrainTreeListenerHandler.handleError(error);
+    public final void onError(Exception error) {
+        LogUtils.d(TAG, "BrainTree Pay error:" + error.getMessage());
+        BrainTreeListenerHandler.handleError(error);
     }
 
     @Override
-    public void onConfigurationFetched(Configuration configuration) {
+    public final void onConfigurationFetched(Configuration configuration) {
         LogUtils.d(TAG, "onConfigurationFetched");
         collectDeviceData();
-        YSBrainTreeListenerHandler.handleConfigurationFetched(mBrainTreeFragment, configuration, this);
+        onPaymentConfigurationFetched(configuration);
     }
 
     @Override
-    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+    public final void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
         LogUtils.d(TAG, "onPaymentMethodNonceCreated");
-        YSBrainTreeListenerHandler.handlerPaymentMethodNonceCreated(paymentMethodNonce, mDeviceData, this);
+        BrainTreeListenerHandler.handlerPaymentMethodNonceCreated(paymentMethodNonce, mDeviceData, this);
     }
 
     @Override
-    public void onBraintreePaymentResult(BraintreePaymentResult braintreePaymentResult) {
+    public final void onBraintreePaymentResult(BraintreePaymentResult braintreePaymentResult) {
         LogUtils.d(TAG, "onBrainTreePaymentResult");
-        YSBrainTreeListenerHandler.handleBrainTreePaymentResult(braintreePaymentResult);
+        BrainTreeListenerHandler.handleBrainTreePaymentResult(braintreePaymentResult);
     }
 
     private void collectDeviceData() {
@@ -89,27 +87,32 @@ public abstract class YSGooglePayActivity extends AppCompatActivity implements B
     }
 
     @Override
-    public void onPaymentMethodResult(CardNonce cardNonce, String deviceData) {
+    public void onPaymentNonceFetched(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
 
     }
 
     @Override
-    public void onPaymentMethodResult(VisaCheckoutNonce visaCheckoutNonce, String deviceData) {
+    public void onPaymentNonceFetched(CardNonce cardNonce, String deviceData) {
 
     }
 
     @Override
-    public void onPaymentMethodResult(VenmoAccountNonce venmoAccountNonce, String deviceData) {
+    public void onPaymentNonceFetched(VisaCheckoutNonce visaCheckoutNonce, String deviceData) {
 
     }
 
     @Override
-    public void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData) {
+    public void onPaymentNonceFetched(VenmoAccountNonce venmoAccountNonce, String deviceData) {
 
     }
 
     @Override
-    public void onPaymentMethodResult(PayPalAccountNonce payPalAccountNonce, String deviceData) {
+    public void onPaymentNonceFetched(LocalPaymentResult localPaymentResult, String deviceData) {
+
+    }
+
+    @Override
+    public void onPaymentNonceFetched(PayPalAccountNonce payPalAccountNonce, String deviceData) {
 
     }
 

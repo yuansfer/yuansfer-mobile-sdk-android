@@ -1,4 +1,4 @@
-package com.yuansfer.paysdk;
+package com.yuansfer.paysdk.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,17 +8,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.braintreepayments.api.dropin.DropInActivity;
 import com.yuansfer.pay.payment.YSAppPay;
+import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.api.ApiUrl;
 import com.yuansfer.paysdk.model.AlipayResultInfo;
@@ -36,12 +38,7 @@ import com.yuansfer.pay.payment.ErrStatus;
 import com.yuansfer.pay.payment.PayResultMgr;
 import com.yuansfer.pay.payment.PayType;
 import com.yuansfer.pay.alipay.AlipayItem;
-import com.yuansfer.pay.googlepay.YSGooglePayActivity;
-import com.yuansfer.pay.googlepay.YSGooglePayItem;
 import com.yuansfer.pay.wxpay.WxPayItem;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener
@@ -57,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     private String mStoreNo = "300014";
     private TextView mResultTxt;
     private EditText mAlipayEdt, mWechatPayEdt, mOrderEdt, mRefundEdt, mMultiEdt;
-    private Button mGooglePayBtn;
     private Spinner mCurrencySpn;
 
     @Override
@@ -89,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         mRefundEdt = findViewById(R.id.edt_order_refund);
         mMultiEdt = findViewById(R.id.edt_secure_pay);
         mCurrencySpn = findViewById(R.id.sp_multi_currency);
-        mGooglePayBtn = findViewById(R.id.btn_google_pay);
         setDefaultEditRef(mAlipayEdt);
         setDefaultEditRef(mRefundEdt);
         setDefaultEditRef(mOrderEdt);
@@ -121,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             mAuthorization = PRODUCTION_AUTHORIZATION;
             ApiUrl.setEnvMode(true);
             YSAppPay.setAliEnv(true);
+            Toast.makeText(this, "Braintree等支付Demo中均有沙箱账号，后期添加生产账号进行测试", Toast.LENGTH_LONG).show();
         }
         return true;
     }
@@ -153,7 +149,28 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             case R.id.btn_dropin_ui:
                 callDropInUI();
                 break;
+            case R.id.btn_paypal:
+                callPayPal();
+                break;
+            case R.id.btn_venmo:
+                callVenmo();
+                break;
+            case R.id.btn_creditcard:
+                callCredit();
+                break;
         }
+    }
+
+    private void callCredit() {
+        startActivity(new Intent(this, CardActivity.class));
+    }
+
+    private void callVenmo() {
+        startActivity(new Intent(this, VenmoActivity.class));
+    }
+
+    private void callPayPal() {
+        startActivity(new Intent(this, PayPalActivity.class));
     }
 
     private void callGooglePay() {
@@ -161,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     }
 
     private void callDropInUI() {
-        DropInPayActivity.launchActivity(this, mAuthorization);
+        startActivity(new Intent(this, DropInPayActivity.class));
     }
 
     private void hideKeyboard() {
@@ -276,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
                 setDefaultEditRef(mAlipayEdt);
                 if ("000100".equals(response.getRet_code())) {
                     mResultTxt.setText(response.getResult().getPayInfo());
-                    YSAppPay.getInstance().startAlipay(MainActivity.this
+                    YSAppPay.getInstance().requestAliPayment(MainActivity.this
                             , new AlipayItem(response.getResult().getPayInfo()));
                 } else {
                     mResultTxt.setText(response.getRet_msg());
@@ -331,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     }
 
     private void launchWechat(WechatInfo wechatInfo) {
-        YSAppPay.getInstance().startWechatPay(MainActivity.this, new WxPayItem.Builder()
+        YSAppPay.getInstance().requestWechatPayment(MainActivity.this, new WxPayItem.Builder()
                 .setAppId(wechatInfo.getAppid())
                 .setPackageValue(wechatInfo.getPackageName())
                 .setPrepayId(wechatInfo.getPrepayid())

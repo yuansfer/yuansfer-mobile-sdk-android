@@ -1,23 +1,22 @@
 package com.yuansfer.pay.payment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 
 import com.alipay.sdk.app.EnvUtils;
 import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.Card;
 import com.braintreepayments.api.GooglePayment;
+import com.braintreepayments.api.PayPal;
+import com.braintreepayments.api.Venmo;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
+import com.braintreepayments.api.models.CardBuilder;
 import com.braintreepayments.api.models.GooglePaymentRequest;
-import com.google.android.gms.wallet.ShippingAddressRequirements;
-import com.google.android.gms.wallet.TransactionInfo;
+import com.braintreepayments.api.models.PayPalRequest;
 import com.yuansfer.pay.alipay.AlipayItem;
 import com.yuansfer.pay.alipay.AlipayStrategy;
-import com.yuansfer.pay.dropin.YSDropInPayActivity;
-import com.yuansfer.pay.googlepay.YSGooglePayActivity;
-import com.yuansfer.pay.googlepay.YSGooglePayItem;
+import com.yuansfer.pay.braintree.BrainTreeDropInActivity;
+import com.yuansfer.pay.braintree.BrainTreePayActivity;
 import com.yuansfer.pay.wxpay.WxPayItem;
 import com.yuansfer.pay.wxpay.WxPayStrategy;
 import com.yuansfer.pay.util.LogUtils;
@@ -82,37 +81,21 @@ public class YSAppPay {
     }
 
     /**
-     * 发起支付宝支付
+     * 绑定Braintree
      */
-    public void startAlipay(Activity activity, AlipayItem alipayItem) {
-        new AlipayStrategy().startPay(activity, alipayItem);
-    }
-
-    /**
-     * 发起微信支付
-     */
-    public void startWechatPay(Activity activity, WxPayItem wxPayItem) {
-        WxPayStrategy.initWxAppId(activity.getApplicationContext(), wxPayItem.getPayReq().appId);
-        WxPayStrategy wxPayStrategy = WxPayStrategy.getInstance();
-        wxPayStrategy.startPay(activity, wxPayItem);
-    }
-
-    /**
-     * 绑定并启动google pay校验
-     */
-    public <T extends YSGooglePayActivity> void bindGooglePay(T activity, String authorization) {
+    public <T extends BrainTreePayActivity> void bindBrainTree(T activity, String authorization) {
         try {
             activity.setBrainTreeFragment(BraintreeFragment.newInstance(activity, authorization));
         } catch (InvalidArgumentException e) {
-            PayResultMgr.getInstance().dispatchPayFail(PayType.GOOGLE_PAY
-                    , ErrStatus.getInstance("G10", e.getMessage()));
+            PayResultMgr.getInstance().dispatchPayFail(PayType.BRAIN_TREE
+                    , ErrStatus.getInstance("B10", e.getMessage()));
         }
     }
 
     /**
-     * 解绑google pay
+     * 解绑Braintree
      */
-    public <T extends YSGooglePayActivity> void unbindGooglePay(T activity) {
+    public <T extends BrainTreePayActivity> void unbindBrainTree(T activity) {
         BraintreeFragment braintreeFragment = activity.getBrainTreeFragment();
         if (braintreeFragment != null) {
             activity.getSupportFragmentManager().beginTransaction()
@@ -121,61 +104,63 @@ public class YSAppPay {
     }
 
     /**
-     * 发起Google Pay
+     * 发起支付宝支付
      */
-    public <T extends YSGooglePayActivity> void startGooglePay(T activity, YSGooglePayItem googlePayItem) {
-        GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
-                .transactionInfo(TransactionInfo.newBuilder()
-                        .setCurrencyCode(googlePayItem.getCurrency())
-                        .setTotalPrice(String.valueOf(googlePayItem.getTotalPrice()))
-                        .setTotalPriceStatus(googlePayItem.getTotalPriceStatus())
-                        .build())
-                .allowPrepaidCards(googlePayItem.isAllowPrepaidCards())
-                .billingAddressFormat(googlePayItem.getBillingAddressFormat())
-                .billingAddressRequired(googlePayItem.isBillingAddressRequired())
-                .emailRequired(googlePayItem.isEmailRequired())
-                .phoneNumberRequired(googlePayItem.isPhoneNumberRequired())
-                .shippingAddressRequired(googlePayItem.isShippingAddressRequired())
-                .shippingAddressRequirements(ShippingAddressRequirements.newBuilder()
-                        .addAllowedCountryCodes(googlePayItem.getAddAllowedCountryCodes())
-                        .build())
-                .googleMerchantId(googlePayItem.getGoogleMerchantId());
+    public void requestAliPayment(Activity activity, AlipayItem alipayItem) {
+        new AlipayStrategy().startPay(activity, alipayItem);
+    }
+
+    /**
+     * 发起微信支付
+     */
+    public void requestWechatPayment(Activity activity, WxPayItem wxPayItem) {
+        WxPayStrategy.initWxAppId(activity.getApplicationContext(), wxPayItem.getPayReq().appId);
+        WxPayStrategy wxPayStrategy = WxPayStrategy.getInstance();
+        wxPayStrategy.startPay(activity, wxPayItem);
+    }
+
+    /**
+     * 发送Google Pay
+     */
+    public <T extends BrainTreePayActivity> void requestGooglePayment(T activity, GooglePaymentRequest googlePaymentRequest) {
         GooglePayment.requestPayment(activity.getBrainTreeFragment(), googlePaymentRequest);
     }
 
     /**
-     * 发起Drop-in UI多钱包支付
+     * 发送PayPal支付，已安装App会自动启动，否则将打开H5
      */
-    public <T extends YSDropInPayActivity> void startDropInPayment(T activity, String authorization
-            , DropInRequest dropInRequest) {
-        dropInRequest.clientToken(authorization);
-        activity.startActivityForResult(dropInRequest.getIntent(activity), YSDropInPayActivity.REQUEST_CODE);
+    public <T extends BrainTreePayActivity> void requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest) {
+        PayPal.requestOneTimePayment(activity.getBrainTreeFragment(), payPalRequest);
+    }
+
+    /**
+     * 发送PayPal支付，已安装App会自动启动，否则将打开H5
+     */
+    public <T extends BrainTreePayActivity> void requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest) {
+        PayPal.requestBillingAgreement(activity.getBrainTreeFragment(), payPalRequest);
+    }
+
+    /**
+     * 发起Venmo支付
+     */
+    public <T extends BrainTreePayActivity> void requestVenmoPayment(T activity, boolean vault) {
+        Venmo.authorizeAccount(activity.getBrainTreeFragment(), vault);
+    }
+
+    /**
+     * 发起卡片支付,信用卡/借记卡
+     */
+    public <T extends BrainTreePayActivity> void requestCardPayment(T activity, CardBuilder cardBuilder) {
+        Card.tokenize(activity.getBrainTreeFragment(), cardBuilder);
     }
 
     /**
      * 发起Drop-in UI多钱包支付
      */
-    public <T extends YSDropInPayActivity> void startDropInPayment(T activity, String authorization
-            , DropInRequest dropInRequest, YSGooglePayItem googlePayItem) {
-        GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
-                .transactionInfo(TransactionInfo.newBuilder()
-                        .setCurrencyCode(googlePayItem.getCurrency())
-                        .setTotalPrice(String.valueOf(googlePayItem.getTotalPrice()))
-                        .setTotalPriceStatus(googlePayItem.getTotalPriceStatus())
-                        .build())
-                .allowPrepaidCards(googlePayItem.isAllowPrepaidCards())
-                .billingAddressFormat(googlePayItem.getBillingAddressFormat())
-                .billingAddressRequired(googlePayItem.isBillingAddressRequired())
-                .emailRequired(googlePayItem.isEmailRequired())
-                .phoneNumberRequired(googlePayItem.isPhoneNumberRequired())
-                .shippingAddressRequired(googlePayItem.isShippingAddressRequired())
-                .shippingAddressRequirements(ShippingAddressRequirements.newBuilder()
-                        .addAllowedCountryCodes(googlePayItem.getAddAllowedCountryCodes())
-                        .build())
-                .googleMerchantId(googlePayItem.getGoogleMerchantId());
+    public <T extends BrainTreeDropInActivity> void requestDropInPayment(T activity, String authorization
+            , DropInRequest dropInRequest) {
         dropInRequest.clientToken(authorization);
-        dropInRequest.googlePaymentRequest(googlePaymentRequest);
-        activity.startActivityForResult(dropInRequest.getIntent(activity), YSDropInPayActivity.REQUEST_CODE);
+        activity.startActivityForResult(dropInRequest.getIntent(activity), BrainTreeDropInActivity.REQUEST_CODE);
     }
 
 }

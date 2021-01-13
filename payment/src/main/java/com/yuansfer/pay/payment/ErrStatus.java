@@ -10,6 +10,7 @@ import android.os.Parcelable;
  * 微信->W开头
  * 支付宝->A开头
  * Google Pay->G开头
+ * Braintree->B开头
  */
 public class ErrStatus implements Parcelable {
 

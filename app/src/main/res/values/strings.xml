@@ -9,6 +9,9 @@
     <string name="release_env">Release Env</string>
     <string name="google_pay" translatable="false">Google Pay</string>
     <string name="dropin_ui" translatable="false">Drop-in UI</string>
+    <string name="paypal" translatable="false">PayPal</string>
+    <string name="venmo" translatable="false">Venmo</string>
+    <string name="creditcard" translatable="false">Card Pay</string>
 
     <string-array name="multi_alipay_currency">
         <item>PHP</item>

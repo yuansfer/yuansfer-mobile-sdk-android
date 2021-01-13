@@ -7,7 +7,7 @@ yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintr
 dependencies {
         ... 
         // Necessary
-        implementation 'com.yuansfer.pay:payment:1.1.0'
+        implementation 'com.yuansfer.pay:payment:1.1.5'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -132,6 +132,11 @@ YSAppPay.getInstance().startDropInPayment(T activity, String authorization
   - Dropin Pay, Start with the character 'D'
   
 ### Version log
+
+#### 1.1.5
+- Add Braintree Card Payment
+- Add Braintree PayPal Payment
+- Add Braintree Venmo Payment
 
 #### 1.1.0
 - Add Braintree Drop-in Payment
