@@ -68,10 +68,10 @@ protected void onStop() {
 * Start payment after obtaining WeChat or Alipay data from the backend server
 ````
 // Alipay
-YSAppPay.getInstance().startAlipay(Activity activity, AlipayItem alipayItem)
+YSAppPay.getInstance().requestAliPayment(Activity activity, AlipayItem alipayItem)
 
 // Wechat Pay
-YSAppPay.getInstance().startWechatPay(Activity activity, WxPayItem wxPayItem)
+YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayItem)
 ````
 
 * If you want to integrate Braintree’s Drop-in UI, Your Activity must inherit YSDropinPayActivity and implement the methods of IBrainTreeCallback that need to be overridden.
@@ -88,30 +88,37 @@ YSAppPay.getInstance().startWechatPay(Activity activity, WxPayItem wxPayItem)
 
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
-* If you need to add a separate Google Pay, you should check whether the Google Pay service and configuration are available. If it is available, the Google Pay button is usually displayed, Your Activity must inherit YSGooglePayActivity and implement the methods of it.
+* If you need to add a separate Braintree Pay, you should check whether the Pay service and configuration are available or not. If it is available, the Pay button is usually displayed, Your Activity must inherit YSBrainTreePayActivity and implement the methods of it.
 ````
-    public void onReadyToPay() {
-        //Google Pay service is available, usually showing the payment button
+    public void onPaymentConfigurationFetched(Configuration configuration) {
+        //configuration is available
     }
 
-    public void onPaymentMethodResult(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
-        //Upload the nonce and deviceData to the server
-    }
 ````
 * Braintree payment can be initiated by obtaining the client token from the backend server or using a constant merchant authorization code，But before google pay payment is started, it needs to check whether google pay service is available
 ````
-// Bind Google Pay, check whether google pay service is available
-YSAppPay.getInstance().bindGooglePay(T activity, String authorization)
+// Bind Braintree
+YSAppPay.getInstance().bindBrainTree(T activity, String authorization)
 
-// Unbind Google Pay
-YSAppPay.getInstance().unbindGooglePay(T activity)
-
-// Start Google Pay
-YSAppPay.getInstance().startGooglePay(T activity, YSGooglePayItem googlePayItem)
+// Unbind Braintree
+YSAppPay.getInstance().unbindBrainTree(T activity)
 
 // Start Drop-in UI Payment
-YSAppPay.getInstance().startDropInPayment(T activity, String authorization
+YSAppPay.getInstance().requestDropInPayment(T activity, String authorization
             , DropInRequest dropInRequest)
+
+// Start Google Pay
+YSAppPay.getInstance().requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
+
+// Start PayPal
+YSAppPay.getInstance().requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
+YSAppPay.getInstance().requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
+
+// Start Venmo
+YSAppPay.getInstance().requestVenmoPayment(T activity, boolean vault)
+
+// Start Card Pay
+YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
 
 ````
 * For detailed instructions, please refer to Demo usage examples.
@@ -130,6 +137,7 @@ YSAppPay.getInstance().startDropInPayment(T activity, String authorization
   - Alipay, Start with the character 'A'
   - Google Pay, Start with the character 'G'
   - Dropin Pay, Start with the character 'D'
+  - Braintree, Start with the character 'B'
   
 ### Version log
 
