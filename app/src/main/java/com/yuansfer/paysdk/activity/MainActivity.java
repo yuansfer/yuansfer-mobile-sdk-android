@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             mAuthorization = PRODUCTION_AUTHORIZATION;
             ApiUrl.setEnvMode(true);
             YSAppPay.setAliEnv(true);
-            Toast.makeText(this, "Braintree等支付Demo中均有沙箱账号，后期添加生产账号进行测试", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Braintree等支付Demo中均使用的沙箱账号，后期再添加生产账号进行测试", Toast.LENGTH_LONG).show();
         }
         return true;
     }

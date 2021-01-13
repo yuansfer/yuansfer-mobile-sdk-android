@@ -92,8 +92,8 @@ public class CardActivity extends BrainTreePayActivity implements PayResultMgr.I
     }
 
     private void callPayProcess(String transactionNo, String nonce, String deviceData) {
-        YSTestApi.callTestProcess(getApplicationContext(), nonce
-                , transactionNo, BrainTreePaymentMethod.CREDIT_CARD, deviceData, new GsonResponseHandler<CommonResultInfo>() {
+        YSTestApi.callTestProcess(getApplicationContext(), BrainTreePaymentMethod.CREDIT_CARD
+                , transactionNo, nonce, deviceData, new GsonResponseHandler<CommonResultInfo>() {
 
                     @Override
                     public void onFailure(int statusCode, String errorMsg) {
