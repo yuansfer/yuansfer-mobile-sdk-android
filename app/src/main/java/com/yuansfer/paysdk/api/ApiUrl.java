@@ -16,7 +16,7 @@ public class ApiUrl {
         //预下单
         String PRE_PAY = "micropay/v2/prepay";
         //查询订单状态
-        String ORDER_STATUS = "micropay/v2/reference-query";
+        String ORDER_STATUS = "app-data-search/v3/tran-query";
         //退款
         String REFUND = "micropay/v2/refund";
         //线上支付宝多币种接口
