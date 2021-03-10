@@ -21,6 +21,7 @@ public class PrepayInfo extends SignInfo {
     private String description;
     private String note;
     private String appid;
+    private String settleCurrency = "USD";
     private String terminal = "APP";
     private String currency = "USD";
 
@@ -38,6 +39,15 @@ public class PrepayInfo extends SignInfo {
         setAppid(in.readString());
         setTerminal(in.readString());
         setCurrency(in.readString());
+        setSettleCurrency(in.readString());
+    }
+
+    public String getSettleCurrency() {
+        return settleCurrency;
+    }
+
+    public void setSettleCurrency(String settleCurrency) {
+        this.settleCurrency = settleCurrency;
     }
 
     public int getPayType() {
@@ -124,6 +134,7 @@ public class PrepayInfo extends SignInfo {
         paramMap.put("note", note);
         paramMap.put("terminal", terminal);
         paramMap.put("currency", currency);
+        paramMap.put("settleCurrency", settleCurrency);
         if (payType == PayType.WECHAT_PAY && !TextUtils.isEmpty(appid)) {
             paramMap.put("appid", appid);
         }
@@ -150,6 +161,7 @@ public class PrepayInfo extends SignInfo {
         dest.writeString(getNote());
         dest.writeString(getTerminal());
         dest.writeString(getCurrency());
+        dest.writeString(getSettleCurrency());
     }
 
     @Override
@@ -162,6 +174,7 @@ public class PrepayInfo extends SignInfo {
                 ", description='" + description + '\'' +
                 ", note='" + note + '\'' +
                 ", appid='" + appid + '\'' +
+                ", settleCurrency='" + settleCurrency + '\'' +
                 ", terminal='" + terminal + '\'' +
                 ", currency='" + currency + '\'' +
                 '}';

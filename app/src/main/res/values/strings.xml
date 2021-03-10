@@ -14,12 +14,15 @@
     <string name="creditcard" translatable="false">Card Pay</string>
 
     <string-array name="multi_alipay_currency">
-        <item>PHP</item>
-        <item>IDR</item>
-        <item>KRW</item>
-        <item>HKD</item>
-        <item>USD</item>
-        <item>CNY</item>
+        <item>gcash</item>
+        <item>kakaopay</item>
+        <item>alipay</item>
+        <item>alipay_hk</item>
+        <item>dana</item>
+        <item>truemoney</item>
+        <item>tng</item>
+        <item>easypaisa</item>
+        <item>bkash</item>
     </string-array>
     <string-array name="environments">
         <item>TEST</item>

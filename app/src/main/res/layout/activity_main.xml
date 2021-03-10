@@ -149,6 +149,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/btn_secure_pay"
         app:layout_constraintLeft_toRightOf="@id/btn_secure_pay"
+        android:singleLine="true"
         app:layout_constraintRight_toLeftOf="@id/sp_multi_currency"
         app:layout_constraintTop_toBottomOf="@id/edt_order_refund" />
 
@@ -158,6 +159,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:entries="@array/multi_alipay_currency"
+        android:gravity="center"
         app:layout_constraintBaseline_toBaselineOf="@id/edt_secure_pay"
         app:layout_constraintLeft_toRightOf="@id/edt_secure_pay"
         app:layout_constraintRight_toRightOf="parent"

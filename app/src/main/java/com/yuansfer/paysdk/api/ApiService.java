@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.yuansfer.paysdk.model.AutoDebitInfo;
 import com.yuansfer.paysdk.model.PayProcessInfo;
 import com.yuansfer.paysdk.model.SecurePayInfo;
 import com.yuansfer.paysdk.okhttp.IResponseHandler;
@@ -100,6 +101,18 @@ public class ApiService {
     public static void braintreePay(Context context, String token, PayProcessInfo processInfo, IResponseHandler responseCallback) {
         OkHttpUtils.get().post(context, ApiUrl.getPayProcessUrl()
                 , generateSignatureMap(token, processInfo), responseCallback);
+    }
+
+    /**
+     * 多币种支付在线支付
+     * @param context
+     * @param token
+     * @param autoDebitInfo
+     * @param responseCallback
+     */
+    public static void autoDebit(Context context, String token, AutoDebitInfo autoDebitInfo, IResponseHandler responseCallback) {
+        OkHttpUtils.get().post(context, ApiUrl.getAutoDebit()
+                , generateSignatureMap(token, autoDebitInfo), responseCallback);
     }
 
 }

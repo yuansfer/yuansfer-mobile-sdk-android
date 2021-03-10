@@ -18,14 +18,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.braintreepayments.api.dropin.DropInActivity;
 import com.yuansfer.pay.payment.YSAppPay;
 import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.api.ApiUrl;
 import com.yuansfer.paysdk.model.AlipayResultInfo;
-import com.yuansfer.paysdk.model.SecurePayInfo;
-import com.yuansfer.paysdk.model.SecureResultInfo;
+import com.yuansfer.paysdk.model.AutoDebitInfo;
 import com.yuansfer.paysdk.model.WechatInfo;
 import com.yuansfer.paysdk.model.WechatResultInfo;
 import com.yuansfer.paysdk.okhttp.GsonResponseHandler;
@@ -39,6 +37,9 @@ import com.yuansfer.pay.payment.PayResultMgr;
 import com.yuansfer.pay.payment.PayType;
 import com.yuansfer.pay.alipay.AlipayItem;
 import com.yuansfer.pay.wxpay.WxPayItem;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity implements ActionBar.OnNavigationListener
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
                 callRefund();
                 break;
             case R.id.btn_secure_pay:
-                callSecurePay();
+                callAutoDebit();
                 break;
             case R.id.btn_google_pay:
                 callGooglePay();
@@ -227,48 +228,49 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         });
     }
 
-
-    private void callSecurePay() {
-        SecurePayInfo info = new SecurePayInfo();
+    private void callAutoDebit() {
+        AutoDebitInfo info = new AutoDebitInfo();
         info.setMerchantNo(mMerchantNo);
         info.setStoreNo(mStoreNo);
-        info.setAmount(13);
-        info.setCurrency(mCurrencySpn.getSelectedItem().toString());
-        info.setVendor("alipay");
-        info.setTimeout(30);
-        info.setReference(getEditRef(mMultiEdt));
-        info.setIpnUrl("http://alipay.yunkeguan.com/ttest/test");
-        info.setCallbackUrl("http://alipay.yunkeguan.com/ttest/test2");
-        info.setDescription("test+description");
+        info.setAutoIpnUrl("http://alipay.yunkeguan.com/ttest/test");
+        info.setAutoRedirectUrl("http://alipay.yunkeguan.com/ttest/test2");
+        info.setAutoReference(getEditRef(mMultiEdt));
         info.setNote("note");
-        ApiService.securePay(this.getApplicationContext(), mToken, info, new GsonResponseHandler<SecureResultInfo>() {
+        info.setOsType("ANDROID");
+        info.setOsVersion("10");
+        info.setTerminal("APP");
+        info.setVendor(mCurrencySpn.getSelectedItem().toString());
+        ApiService.autoDebit(this.getApplicationContext(), mToken, info, new RawResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, String result) {
+                try {
+                    JSONObject retObj = new JSONObject(result);
+                    if ("000100".equals(retObj.optString("ret_code"))) {
+                        launchCashierUrl(retObj.optJSONObject("result").optString("authUrl"));
+                    } else {
+                        mResultTxt.setText(retObj.optString("ret_msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
-                mResultTxt.setText(errorMsg);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, SecureResultInfo response) {
-                setDefaultEditRef(mMultiEdt);
-                if ("000100".equals(response.getRet_code())) {
-                    mResultTxt.setText("跳转WAP:" + response.getResult().getCashierUrl());
-                    launchCashierUrl(response.getResult().getCashierUrl());
-                } else {
-                    mResultTxt.setText(response.getRet_msg());
-                }
-            }
-
-            private void launchCashierUrl(String paymentRedirectUrl) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(paymentRedirectUrl));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                mResultTxt.setText(statusCode+":"+errorMsg);
             }
         });
+    }
+
+    private void launchCashierUrl(String paymentRedirectUrl) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(paymentRedirectUrl));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void callAlipay() {
@@ -308,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         info.setStoreNo(mStoreNo);
         info.setPayType(PayType.WECHAT_PAY);
         info.setAmount(0.01);
-        info.setIpnUrl("https://wx.yuansfer.yunkeguan.com/wx");
+        info.setIpnUrl("https://app.yuansfer.com/wx");
         info.setDescription("description");
         info.setNote("note");
         info.setReference(getEditRef(mWechatPayEdt));
