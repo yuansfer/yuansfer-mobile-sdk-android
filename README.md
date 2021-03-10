@@ -4,7 +4,7 @@ English | [中文文档](README_zh.md)
 ## Introductions
 yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments. In addition, it includes some other API interfaces with payment.
 
-### Quick integration
+## Quick integration
 * Add the following dependencies in the app's build.gradle file, the payment method is optional
 ````
 dependencies {
@@ -53,7 +53,7 @@ allprojects {
     }
 }
 ````
-### How to use
+## How to use
 * Register and remove payment callbacks and receive payment results
 ````
 @Override
@@ -126,7 +126,7 @@ YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
 ````
 * For detailed instructions, please refer to Demo usage examples.
 
-### Other instructions
+## Other instructions
 
 * Since the minimum version requirement of Alipay SDK is 16, if the app module is lower than 16, you need to add the following statement in AndroidManifest.xml
 
@@ -141,7 +141,7 @@ YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
   - Google Pay, Start with the character 'G'
   - Braintree, Start with the character 'B'
   
-### Version log
+## Version log
 
 #### 1.1.5
 - Add Braintree Card Payment
