@@ -1,11 +1,11 @@
-## Language
-English | [中文文档](README_zh.md)
+## 语言
+[English](README.md) | 中文文档
 
-## Introductions
-yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments. In addition, it includes some other API interfaces with payment.
+## 概述
+yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目，项目中还包含有关Yuansfer平台的与支付相关的API接口例子.
 
-### Quick integration
-* Add the following dependencies in the app's build.gradle file, the payment method is optional
+### 快速集成
+* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它第三方支付是可选的.
 ````
 dependencies {
         ... 
@@ -26,7 +26,7 @@ dependencies {
         implementation 'com.braintreepayments.api:drop-in:4.6.0'
 }
 ````
-* When using the Drop-in UI payment method, please add the following code to app's build.gradle file
+* 如果要使用Braintree的带UI功能Drop-in工具包，需在app下的build.gradle添加以下认证信息.
 ````
 repositories {
     //add drop-in certificate
@@ -39,7 +39,7 @@ repositories {
     }
 }
 ````
-* If you want to add Alipay payment SDK, please copy the Alipay SDK aar file to the app/libs directory and declare the location of aar in project build.gradle
+* 如果要添加支付宝支付SDK，请复制支付宝aar文件到app/libs目录，并在项目build.gradle中声明aar的位置.
 ````
 allprojects {
     repositories {
@@ -53,8 +53,8 @@ allprojects {
     }
 }
 ````
-### How to use
-* Register and remove payment callbacks and receive payment results
+### 如何使用
+* 注册并移除支付、支付宝等付款监听并接收付款结果.
 ````
 @Override
 protected void onStart() {
@@ -68,7 +68,7 @@ protected void onStop() {
     YSAppPay.unregisterPayResultCallback(callback);
 }
 ````
-* Start payment after obtaining WeChat or Alipay data from the backend server
+* 从Yuansfer服务器获取预付款信息后发起支付宝或微信支付.
 ````
 // Alipay
 YSAppPay.getInstance().requestAliPayment(Activity activity, AlipayItem alipayItem)
@@ -77,7 +77,7 @@ YSAppPay.getInstance().requestAliPayment(Activity activity, AlipayItem alipayIte
 YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayItem)
 ````
 
-* If you want to integrate Braintree’s Drop-in UI, Your Activity must inherit YSDropinPayActivity and implement the methods of IBrainTreeCallback that need to be overridden.
+* 如果使用Braintree的Drop-in UI，则您的Activity必须继承YSDropinPayActivity并实现需要重写的IBrainTreeCallback方法.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
@@ -91,14 +91,14 @@ YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayIt
 
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
-* If you need to add a separate Braintree Pay, you should check whether the Pay service and configuration are available or not. If it is available, the Pay button is usually displayed, Your Activity must inherit YSBrainTreePayActivity and implement the methods of it.
+* 如果需要添加单独的Braintree的支付，则应检查相关服务和配置是否可用。 如果可用，通常会显示“付款”按钮，您的活动必须继承YSBrainTreePayActivity并实现其方法.
 ````
     public void onPaymentConfigurationFetched(Configuration configuration) {
         //configuration is available
     }
 
 ````
-* Braintree payment can be initiated by obtaining the client token from the backend server or using a constant merchant authorization code，But before google pay payment is started, it needs to check whether google pay service is available
+* 可以通过从后端服务器获取客户令牌或使用恒定的商家授权码来启动Braintree付款，但是在开始Google Pay付款之前，需要先检查Google Pay服务是否可用.
 ````
 // Bind Braintree
 YSAppPay.getInstance().bindBrainTree(T activity, String authorization)
@@ -124,37 +124,37 @@ YSAppPay.getInstance().requestVenmoPayment(T activity, boolean vault)
 YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
 
 ````
-* For detailed instructions, please refer to Demo usage examples.
+* 有关详细说明，请参阅演示用法示例.
 
-### Other instructions
+### 其他说明
 
-* Since the minimum version requirement of Alipay SDK is 16, if the app module is lower than 16, you need to add the following statement in AndroidManifest.xml
+* 由于支付宝SDK的最低版本要求为16，如果应用模块低于16，则需要在AndroidManifest.xml中添加以下语句.
 
 ````
 <uses-sdk tools:overrideLibrary="com.alipay.sdk,com.yuansfer.pay"/>
 ````
-* WeChat payment needs to determine the client appid, package name, package signature, and server parameters and signature to be the same to pull up the WeChat client
+* 微信支付需要确定客户端appid，软件包名称，软件包签名以及服务器参数和签名相同才能拉起微信客户端.
 
-* ErrorStatus Code of payment result:
-  - Wechat Pay, Start with the character 'W'
-  - Alipay, Start with the character 'A'
-  - Google Pay, Start with the character 'G'
-  - Braintree, Start with the character 'B'
+* ErrorStatus付款结果代码:
+  - 微信支付, 以字符W为开头的错误码
+  - 支付宝, 以字符A为开头的错误码
+  - Google Pay, 以字符G为开头的错误码
+  - Braintree, 以字符B为开头的错误码
   
-### Version log
+### 版本日志
 
 #### 1.1.5
-- Add Braintree Card Payment
-- Add Braintree PayPal Payment
-- Add Braintree Venmo Payment
+- 添加Braintree的信用卡支付
+- 添加Braintree PayPal支付
+- 添加Braintree Venmo支付
 
 #### 1.1.0
-- Add Braintree Drop-in Payment
-- Add Braintree Google Pay Payment
+- 添加Braintree Drop-in支付
+- 添加Braintree Google Pay支付
 
 #### 1.0.1
-- Add multi-currency secure-pay api
+- demo中添加在线多币种online支付接口测试
 
 #### 1.0.0
-- Project initialization
-- Simplify the launch of Alipay or WeChat Pay
+- 项目初始化
+- 简化支付宝或微信支付的支付接入
