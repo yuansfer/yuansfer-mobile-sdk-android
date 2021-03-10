@@ -144,7 +144,7 @@ YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
 ## 版本日志
 
 #### 1.1.5
-- 添加Braintree的信用卡支付
+- 添加Braintree CreditCard支付
 - 添加Braintree PayPal支付
 - 添加Braintree Venmo支付
 
