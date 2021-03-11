@@ -90,6 +90,8 @@ public class DropInPayActivity extends BrainTreeDropInActivity implements PayRes
 
     public void onViewClick(View v) {
         DropInRequest dropInRequest = new DropInRequest();
+        // 建议添加下一行代码，所有客户发起的交易都包括设备数据。 设备数据可提高我们可用的高级欺诈管理工具确定交易何时为欺诈行为的准确性。
+        dropInRequest.collectDeviceData(true);
         GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
                 .transactionInfo(TransactionInfo.newBuilder()
                         .setTotalPrice("0.01")
