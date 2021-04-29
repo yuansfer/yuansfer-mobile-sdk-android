@@ -2,7 +2,7 @@
 English | [中文文档](README_zh.md)
 
 ## Introduction
-yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments. In addition, it includes some other API interfaces with payment.
+yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments.
 
 ## Quick integration
 * Add the following dependencies in the app's build.gradle file, the payment method is optional

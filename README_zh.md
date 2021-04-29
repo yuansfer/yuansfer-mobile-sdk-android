@@ -2,7 +2,7 @@
 [English](README.md) | 中文文档
 
 ## 概述
-yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目，项目中还包含有关Yuansfer平台的与支付相关的API接口例子.
+yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目.
 
 ## 快速集成
 * 在app的build.gradle文件中添加以下依赖, payment是必要的，其它第三方支付是可选的.
