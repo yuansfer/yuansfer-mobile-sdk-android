@@ -11,25 +11,18 @@ import androidx.annotation.Nullable;
 
 import com.braintreepayments.api.models.Configuration;
 import com.braintreepayments.api.models.VenmoAccountNonce;
-import com.yuansfer.pay.braintree.BrainTreePayActivity;
-import com.yuansfer.pay.braintree.BrainTreePaymentMethod;
-import com.yuansfer.pay.payment.ErrStatus;
-import com.yuansfer.pay.payment.PayResultMgr;
-import com.yuansfer.pay.payment.PayType;
-import com.yuansfer.pay.payment.YSAppPay;
+import com.yuansfer.pay.braintree.BTCustomPayActivity;
+import com.yuansfer.paysdk.util.BTMethod;
+import com.yuansfer.pay.ErrStatus;
+import com.yuansfer.pay.YSAppPay;
 import com.yuansfer.paysdk.R;
-import com.yuansfer.paysdk.api.ApiService;
 import com.yuansfer.paysdk.model.CommonResultInfo;
-import com.yuansfer.paysdk.model.PayProcessInfo;
-import com.yuansfer.paysdk.model.SecurePayInfo;
 import com.yuansfer.paysdk.model.SecureResultV3Info;
 import com.yuansfer.paysdk.model.SecureV3Info;
 import com.yuansfer.paysdk.okhttp.GsonResponseHandler;
 import com.yuansfer.paysdk.util.YSTestApi;
 
-import static android.view.View.VISIBLE;
-
-public class VenmoActivity extends BrainTreePayActivity implements PayResultMgr.IPayResultCallback {
+public class VenmoActivity extends BTCustomPayActivity {
 
     private TextView mResultTxt;
     private SecureV3Info secureV3Info;
@@ -46,25 +39,13 @@ public class VenmoActivity extends BrainTreePayActivity implements PayResultMgr.
         callPrepay();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        YSAppPay.registerPayResultCallback(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        YSAppPay.unregisterPayResultCallback(this);
-    }
-
     private void setUpAsBackTitle() {
         getSupportActionBar().setTitle("Venmo");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void callPrepay() {
-        YSTestApi.callTestPrepay(getApplicationContext(), new GsonResponseHandler<SecureResultV3Info>() {
+        YSTestApi.requestBTPrepay(getApplicationContext(), new GsonResponseHandler<SecureResultV3Info>() {
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
@@ -86,7 +67,7 @@ public class VenmoActivity extends BrainTreePayActivity implements PayResultMgr.
     }
 
     private void callPayProcess(String transactionNo, String nonce, String deviceData) {
-        YSTestApi.callTestProcess(getApplicationContext(), BrainTreePaymentMethod.VENMO_ACCOUNT
+        YSTestApi.requestBTProcess(getApplicationContext(), BTMethod.VENMO_ACCOUNT
                 , transactionNo, nonce, deviceData, new GsonResponseHandler<CommonResultInfo>() {
 
                     @Override
@@ -113,18 +94,13 @@ public class VenmoActivity extends BrainTreePayActivity implements PayResultMgr.
     }
 
     @Override
-    public void onPaySuccess(int payType) {
-        mResultTxt.setText("支付成功");
-    }
-
-    @Override
-    public void onPayFail(@PayType int payType, ErrStatus errStatus) {
-        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
-    }
-
-    @Override
-    public void onPayCancel(int payType) {
+    public void onPrepayCancel() {
         mResultTxt.setText("支付取消");
+    }
+
+    @Override
+    public void onPrepayError(ErrStatus errStatus) {
+        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override

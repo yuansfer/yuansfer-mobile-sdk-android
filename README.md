@@ -10,7 +10,7 @@ yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintr
 dependencies {
         ... 
         // Required
-        implementation 'com.yuansfer.pay:payment:1.1.5'
+        implementation 'com.yuansfer.pay:payment:1.1.6'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -18,23 +18,25 @@ dependencies {
         // Wechat Pay (optional)
         implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 
-        // Google Pay of Braintree (optional)
-        implementation 'com.google.android.gms:play-services-wallet:16.0.1'
+        // Custom UI of Braintree (optional)
         implementation 'com.braintreepayments.api:braintree:3.14.2'
-
+        
         // Drop-in UI of Braintree (optional)
         implementation 'com.braintreepayments.api:drop-in:4.6.0'
+
+        // Google Pay of Braintree (optional)
+        implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 ````
-* When using the Drop-in UI payment method, please add the following code to app's build.gradle file
+* When using the Drop-in UI payment method, please add the following code to project's build.gradle file
 ````
 repositories {
     //add drop-in certificate
     maven {
-        url  "https://cardinalcommerce.bintray.com/android"
+        url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
         credentials {
-            username 'braintree-team-sdk@cardinalcommerce'
-            password '220cc9476025679c4e5c843666c27d97cfb0f951'
+            username 'braintree_team_sdk'
+            password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
         }
     }
 }
@@ -49,35 +51,45 @@ allprojects {
             dirs 'libs'
         }
 
-        // ... jcenter() 
     }
 }
 ````
 ## How to use
-* Register and remove payment callbacks and receive payment results
+* When WeChat or Alipay is integrated, register and remove unified monitoring of payment results.
 ````
 @Override
 protected void onStart() {
     ...
-    YSAppPay.registerPayResultCallback(callback);
+    YSAppPay.registerAliWxPayCallback(callback);
 }
 
 @Override
 protected void onStop() {
     ...
-    YSAppPay.unregisterPayResultCallback(callback);
+    YSAppPay.unregisterAliWxPayCallback(callback);
 }
 ````
 * Start payment after obtaining WeChat or Alipay data from the backend server
 ````
-// Alipay
-YSAppPay.getInstance().requestAliPayment(Activity activity, AlipayItem alipayItem)
-
-// Wechat Pay
-YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayItem)
+// Start Alipay
+YSAppPay.getInstance().requestAliPayment(Activity activity, String orderInfo)
+// Register App to Wechat
+YSAppPay.getInstance().registerWXAPP(Context context, String appId)
+// Start Wechat Pay
+YSAppPay.getInstance().requestWechatPayment( WxPayItem wxPayItem)
 ````
 
-* If you want to integrate Braintree’s Drop-in UI, Your Activity must inherit YSDropinPayActivity and implement the methods of IBrainTreeCallback that need to be overridden.
+* When using Braintree’s Drop-in UI, the activity needs to inherit BTDropInActivity. When using a custom UI, the activity needs to inherit BTCustomPayActivity, and implement the interface methods of IBTrepayCallback and IBTNonceCallback that need to be rewritten.
+   - IBTPrepayCallback callback occurs when checking whether the payment environment is abnormal.
+````
+    // Whether related services and configurations are available
+    void onPaymentConfigurationFetched(Configuration configuration);
+
+    void onPrepayCancel();
+
+    void onPrepayError(ErrStatus errStatus);
+````
+   -IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the actual supported payment method is required.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
@@ -91,14 +103,8 @@ YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayIt
 
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
-* If you need to add a separate Braintree Pay, you should check whether the Pay service and configuration are available or not. If it is available, the Pay button is usually displayed, Your Activity must inherit YSBrainTreePayActivity and implement the methods of it.
-````
-    public void onPaymentConfigurationFetched(Configuration configuration) {
-        //configuration is available
-    }
 
-````
-* Braintree payment can be initiated by obtaining the client token from the backend server or using a constant merchant authorization code，But before google pay payment is started, it needs to check whether google pay service is available
+* The corresponding Braintree payment can be initiated by obtaining the customer token from the back-end server or using a constant merchant authorization code.
 ````
 // Bind Braintree
 YSAppPay.getInstance().bindBrainTree(T activity, String authorization)
@@ -113,8 +119,10 @@ YSAppPay.getInstance().requestDropInPayment(T activity, String authorization
 // Start Google Pay
 YSAppPay.getInstance().requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
 
-// Start PayPal
+// Start PayPal，One-time
 YSAppPay.getInstance().requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
+
+// Start PayPal, Save payment method
 YSAppPay.getInstance().requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
 
 // Start Venmo
@@ -140,21 +148,3 @@ YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
   - Alipay, Start with the character 'A'
   - Google Pay, Start with the character 'G'
   - Braintree, Start with the character 'B'
-  
-## Version log
-
-#### 1.1.5
-- Add Braintree Card Payment
-- Add Braintree PayPal Payment
-- Add Braintree Venmo Payment
-
-#### 1.1.0
-- Add Braintree Drop-in Payment
-- Add Braintree Google Pay Payment
-
-#### 1.0.1
-- Add multi-currency secure-pay api
-
-#### 1.0.0
-- Project initialization
-- Simplify the launch of Alipay or WeChat Pay

@@ -89,12 +89,13 @@
         app:layout_constraintTop_toBottomOf="@id/edt_secure_pay" />
 
     <Button
-        android:id="@+id/btn_venmo"
+        android:id="@+id/btn_samsungpay"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:onClick="onViewClick"
-        android:text="@string/venmo"
+        android:text="@string/samsung_pay"
         android:textAllCaps="false"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_dropin_ui" />
 
@@ -105,7 +106,17 @@
         android:onClick="onViewClick"
         android:text="@string/creditcard"
         android:textAllCaps="false"
-        app:layout_constraintLeft_toRightOf="@id/btn_venmo"
+        app:layout_constraintLeft_toRightOf="@id/btn_samsungpay"
+        app:layout_constraintTop_toBottomOf="@id/btn_dropin_ui" />
+
+    <Button
+        android:id="@+id/btn_venmo"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:onClick="onViewClick"
+        android:text="@string/venmo"
+        android:textAllCaps="false"
+        app:layout_constraintLeft_toRightOf="@id/btn_creditcard"
         app:layout_constraintTop_toBottomOf="@id/btn_dropin_ui" />
 
     <EditText
@@ -179,7 +190,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="返回结果"
+        android:text="Result:"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tv_result" />
 </androidx.constraintlayout.widget.ConstraintLayout>

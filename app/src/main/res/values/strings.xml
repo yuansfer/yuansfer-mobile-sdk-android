@@ -2,16 +2,17 @@
     <string name="app_name">yuansfer-payment-android</string>
     <string name="alipay">Alipay</string>
     <string name="wechatpay">Wechat Pay</string>
-    <string name="order_status">Order status</string>
+    <string name="order_status">Query Trans</string>
     <string name="refund">Refund</string>
     <string name="secure_pay">Multi Payment</string>
     <string name="test_env">Test Env</string>
     <string name="release_env">Release Env</string>
-    <string name="google_pay" translatable="false">Google Pay</string>
-    <string name="dropin_ui" translatable="false">Drop-in UI</string>
-    <string name="paypal" translatable="false">PayPal</string>
-    <string name="venmo" translatable="false">Venmo</string>
-    <string name="creditcard" translatable="false">Card Pay</string>
+    <string name="google_pay">Google Pay</string>
+    <string name="dropin_ui">Drop-in UI</string>
+    <string name="paypal">PayPal</string>
+    <string name="venmo">Venmo</string>
+    <string name="creditcard">Card Pay</string>
+    <string name="samsung_pay">Samsung Pay</string>
 
     <string-array name="multi_alipay_currency">
         <item>gcash</item>

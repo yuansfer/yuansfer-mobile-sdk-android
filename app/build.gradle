@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.yuansfer.paysdk"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -47,28 +47,20 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    //Remote Yuansfer pay sdk
-//    implementation 'com.yuansfer.pay:payment:1.1.5'
-    //Local Yuansfer pay sdk
+    //remote sdk
+    //implementation 'com.yuansfer.pay:payment:1.1.6'
+    //local sdk
     implementation project(':payment')
     //支付宝
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
     //微信支付
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-    //google pay
-    implementation 'com.google.android.gms:play-services-wallet:16.0.1'
-    implementation 'com.braintreepayments.api:braintree:3.14.2'
     //drop-in UI
     implementation 'com.braintreepayments.api:drop-in:4.6.0'
+    //braintree custom
+    implementation 'com.braintreepayments.api:braintree:3.17.0'
+    //google pay
+    implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 
-repositories {
-    //drop-in UI配置
-    maven {
-        url  "https://cardinalcommerce.bintray.com/android"
-        credentials {
-            username 'braintree-team-sdk@cardinalcommerce'
-            password '220cc9476025679c4e5c843666c27d97cfb0f951'
-        }
-    }
-}
+

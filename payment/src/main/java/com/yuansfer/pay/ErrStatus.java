@@ -1,4 +1,4 @@
-package com.yuansfer.pay.payment;
+package com.yuansfer.pay;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,6 +14,14 @@ import android.os.Parcelable;
  */
 public class ErrStatus implements Parcelable {
 
+    public static final String BT_RESPONSE_ERROR = "B01";
+    public static final String BT_INIT_ERROR = "B02";
+    public static final String BT_UNKNOWN_ERROR = "B09";
+    public static final String GGPAY_COMMON_ERROR = "G01";
+    public static final String CARD_EXPIRE_ERROR = "C01";
+    public static final String WECHAT_COMMON_ERROR = "W01";
+    public static final String WECHAT_UNINSTALL_ERROR = "W02";
+    public static final String ALIPAY_COMMON_ERROR = "A01";
     private String errCode;
     private String errMsg;
 

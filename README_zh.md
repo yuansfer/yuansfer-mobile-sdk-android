@@ -10,7 +10,7 @@ yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Brai
 dependencies {
         ... 
         // Required
-        implementation 'com.yuansfer.pay:payment:1.1.5'
+        implementation 'com.yuansfer.pay:payment:1.1.6'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -18,12 +18,14 @@ dependencies {
         // Wechat Pay (optional)
         implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 
-        // Google Pay of Braintree (optional)
-        implementation 'com.google.android.gms:play-services-wallet:16.0.1'
+        // Custom UI of Braintree (optional)
         implementation 'com.braintreepayments.api:braintree:3.14.2'
 
         // Drop-in UI of Braintree (optional)
         implementation 'com.braintreepayments.api:drop-in:4.6.0'
+
+        // Google Pay of Braintree (optional)
+        implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 ````
 * 如果要使用Braintree的带UI功能Drop-in工具包，需在app下的build.gradle添加以下认证信息.
@@ -31,10 +33,10 @@ dependencies {
 repositories {
     //add drop-in certificate
     maven {
-        url  "https://cardinalcommerce.bintray.com/android"
+        url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
         credentials {
-            username 'braintree-team-sdk@cardinalcommerce'
-            password '220cc9476025679c4e5c843666c27d97cfb0f951'
+            username 'braintree_team_sdk'
+            password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
         }
     }
 }
@@ -49,35 +51,47 @@ allprojects {
             dirs 'libs'
         }
 
-        // ... jcenter() 
     }
 }
 ````
 ## 如何使用
-* 注册并移除支付、支付宝等付款监听并接收付款结果.
+* 当集成了微信或支付宝时，注册和移除统一监听付款结果.
 ````
 @Override
 protected void onStart() {
     ...
-    YSAppPay.registerPayResultCallback(callback);
+    YSAppPay.registerAliWxPayCallback(callback);
 }
 
 @Override
 protected void onStop() {
     ...
-    YSAppPay.unregisterPayResultCallback(callback);
+    YSAppPay.unregisterAliWxPayCallback(callback);
 }
 ````
 * 从Yuansfer服务器获取预付款信息后发起支付宝或微信支付.
 ````
-// Alipay
-YSAppPay.getInstance().requestAliPayment(Activity activity, AlipayItem alipayItem)
+// Start Alipay
+YSAppPay.getInstance().requestAliPayment(Activity activity, String orderInfo)
 
-// Wechat Pay
-YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayItem)
+// Register App to Wechat
+YSAppPay.getInstance().registerWXAPP(Context context, String appId)
+
+// Start Wechat Pay
+YSAppPay.getInstance().requestWechatPayment( WxPayItem wxPayItem)
 ````
 
-* 如果使用Braintree的Drop-in UI，则您的Activity必须继承YSDropinPayActivity并实现需要重写的IBrainTreeCallback方法.
+* 当使用Braintree的Drop-in UI，则Activity需继承BTDropInActivity，当使用自定义UI，则Activity需继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback的接口方法.
+   - IBTPrepayCallback在检查支付环境是否有异常时发生回调.
+````
+    // 相关服务和配置是否可用
+    void onPaymentConfigurationFetched(Configuration configuration);
+
+    void onPrepayCancel();
+
+    void onPrepayError(ErrStatus errStatus);
+````
+   -IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实际支持的支付方式即可.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
@@ -91,14 +105,8 @@ YSAppPay.getInstance().requestWechatPayment(Activity activity, WxPayItem wxPayIt
 
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
-* 如果需要添加单独的Braintree的支付，则应检查相关服务和配置是否可用。 如果可用，通常会显示“付款”按钮，您的活动必须继承YSBrainTreePayActivity并实现其方法.
-````
-    public void onPaymentConfigurationFetched(Configuration configuration) {
-        //configuration is available
-    }
 
-````
-* 可以通过从后端服务器获取客户令牌或使用恒定的商家授权码来启动Braintree付款，但是在开始Google Pay付款之前，需要先检查Google Pay服务是否可用.
+* 可以通过从后端服务器获取客户令牌或使用恒定的商家授权码来发起相应的Braintree付款.
 ````
 // Bind Braintree
 YSAppPay.getInstance().bindBrainTree(T activity, String authorization)
@@ -113,8 +121,10 @@ YSAppPay.getInstance().requestDropInPayment(T activity, String authorization
 // Start Google Pay
 YSAppPay.getInstance().requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
 
-// Start PayPal
+// Start PayPal，One-time
 YSAppPay.getInstance().requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
+
+// Start PayPal, Save payment method
 YSAppPay.getInstance().requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
 
 // Start Venmo
@@ -140,21 +150,3 @@ YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
   - 支付宝, 以字符A为开头的错误码
   - Google Pay, 以字符G为开头的错误码
   - Braintree, 以字符B为开头的错误码
-  
-## 版本日志
-
-#### 1.1.5
-- 添加Braintree 银行卡支付
-- 添加Braintree PayPal支付
-- 添加Braintree Venmo支付
-
-#### 1.1.0
-- 添加Braintree Drop-in支付
-- 添加Braintree Google Pay支付
-
-#### 1.0.1
-- demo中添加在线多币种online支付接口测试
-
-#### 1.0.0
-- 项目初始化
-- 简化支付宝或微信支付的支付接入

@@ -8,9 +8,7 @@ import com.braintreepayments.api.models.PayPalAccountNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
 
-public interface IBrainTreeCallback {
-
-    void onPaymentConfigurationFetched(Configuration configuration);
+public interface IBTNonceCallback {
 
     void onPaymentNonceFetched(CardNonce cardNonce, String deviceData);
 

@@ -20,12 +20,10 @@ import com.braintreepayments.api.models.VisaCheckoutAddress;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
 import com.google.android.gms.wallet.TransactionInfo;
 import com.google.android.gms.wallet.WalletConstants;
-import com.yuansfer.pay.braintree.BrainTreePaymentMethod;
-import com.yuansfer.pay.payment.ErrStatus;
-import com.yuansfer.pay.payment.PayResultMgr;
-import com.yuansfer.pay.payment.PayType;
-import com.yuansfer.pay.payment.YSAppPay;
-import com.yuansfer.pay.braintree.BrainTreeDropInActivity;
+import com.yuansfer.paysdk.util.BTMethod;
+import com.yuansfer.pay.ErrStatus;
+import com.yuansfer.pay.YSAppPay;
+import com.yuansfer.pay.braintree.BTDropInActivity;
 import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.model.CommonResultInfo;
 import com.yuansfer.paysdk.model.SecureResultV3Info;
@@ -33,7 +31,7 @@ import com.yuansfer.paysdk.model.SecureV3Info;
 import com.yuansfer.paysdk.okhttp.GsonResponseHandler;
 import com.yuansfer.paysdk.util.YSTestApi;
 
-public class DropInPayActivity extends BrainTreeDropInActivity implements PayResultMgr.IPayResultCallback {
+public class DropInPayActivity extends BTDropInActivity {
 
     private TextView mResultTxt;
     private Button mBtnPay;
@@ -49,25 +47,13 @@ public class DropInPayActivity extends BrainTreeDropInActivity implements PayRes
         callPrepay();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        YSAppPay.registerPayResultCallback(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        YSAppPay.unregisterPayResultCallback(this);
-    }
-
     private void setUpAsBackTitle() {
         getSupportActionBar().setTitle("Drop-In UI");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void callPrepay() {
-        YSTestApi.callTestPrepay(getApplicationContext(), new GsonResponseHandler<SecureResultV3Info>() {
+        YSTestApi.requestBTPrepay(getApplicationContext(), new GsonResponseHandler<SecureResultV3Info>() {
 
             @Override
             public void onFailure(int statusCode, String errorMsg) {
@@ -110,65 +96,60 @@ public class DropInPayActivity extends BrainTreeDropInActivity implements PayRes
     }
 
     @Override
-    public void onPaySuccess(int payType) {
-        mResultTxt.setText("支付成功");
-    }
-
-    @Override
-    public void onPayFail(@PayType int payType, ErrStatus errStatus) {
-        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
-    }
-
-    @Override
-    public void onPayCancel(int payType) {
+    public void onPrepayCancel() {
         mResultTxt.setText("支付取消");
+    }
+
+    @Override
+    public void onPrepayError(ErrStatus errStatus) {
+        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override
     public void onPaymentNonceFetched(CardNonce cardNonce, String deviceData) {
         mResultTxt.setText(DropInPayActivity.getDisplayString(cardNonce));
-        callProcess(BrainTreePaymentMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
+        callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , cardNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(PayPalAccountNonce payPalAccountNonce, String deviceData) {
         mResultTxt.setText(DropInPayActivity.getDisplayString(payPalAccountNonce));
-        callProcess(BrainTreePaymentMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
+        callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , payPalAccountNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
         mResultTxt.setText(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
-        callProcess(BrainTreePaymentMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
+        callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , googlePaymentCardNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(VisaCheckoutNonce visaCheckoutNonce, String deviceData) {
         mResultTxt.setText(DropInPayActivity.getDisplayString(visaCheckoutNonce));
-        callProcess(BrainTreePaymentMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
+        callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , visaCheckoutNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(VenmoAccountNonce venmoAccountNonce, String deviceData) {
         mResultTxt.setText(DropInPayActivity.getDisplayString(venmoAccountNonce));
-        callProcess(BrainTreePaymentMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
+        callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , venmoAccountNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(LocalPaymentResult localPaymentResult, String deviceData) {
         mResultTxt.setText(DropInPayActivity.getDisplayString(localPaymentResult));
-        callProcess(BrainTreePaymentMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
+        callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , localPaymentResult.getNonce(), deviceData);
     }
 
-    private void callProcess(@BrainTreePaymentMethod String paymentMethod
+    private void callProcess(@BTMethod String paymentMethod
             , String transactionNo, String nonce, String deviceData) {
-        YSTestApi.callTestProcess(getApplicationContext(), paymentMethod
+        YSTestApi.requestBTProcess(getApplicationContext(), paymentMethod
                 , transactionNo, nonce, deviceData, new GsonResponseHandler<CommonResultInfo>() {
 
                     @Override

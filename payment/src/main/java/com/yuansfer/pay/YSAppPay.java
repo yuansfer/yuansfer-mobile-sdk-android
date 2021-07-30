@@ -1,6 +1,7 @@
-package com.yuansfer.pay.payment;
+package com.yuansfer.pay;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.alipay.sdk.app.EnvUtils;
 import com.braintreepayments.api.BraintreeFragment;
@@ -13,12 +14,10 @@ import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.CardBuilder;
 import com.braintreepayments.api.models.GooglePaymentRequest;
 import com.braintreepayments.api.models.PayPalRequest;
-import com.yuansfer.pay.alipay.AlipayItem;
-import com.yuansfer.pay.alipay.AlipayStrategy;
-import com.yuansfer.pay.braintree.BrainTreeDropInActivity;
-import com.yuansfer.pay.braintree.BrainTreePayActivity;
-import com.yuansfer.pay.wxpay.WxPayItem;
-import com.yuansfer.pay.wxpay.WxPayStrategy;
+import com.yuansfer.pay.aliwx.AliWxPayMgr;
+import com.yuansfer.pay.aliwx.WxPayItem;
+import com.yuansfer.pay.braintree.BTDropInActivity;
+import com.yuansfer.pay.braintree.BTCustomPayActivity;
 import com.yuansfer.pay.util.LogUtils;
 import com.yuansfer.sdk.BuildConfig;
 
@@ -67,35 +66,34 @@ public class YSAppPay {
     }
 
     /**
-     * 注册支付结果通知
+     * 注册微信支付宝结果通知
      */
-    public static void registerPayResultCallback(PayResultMgr.IPayResultCallback callback) {
-        PayResultMgr.getInstance().addPayResultCallback(callback);
+    public static void registerAliWxPayCallback(AliWxPayMgr.IAliWxPayCallback callback) {
+        AliWxPayMgr.getInstance().addAliWxPayCallback(callback);
     }
 
     /**
-     * 移除支付结果通知
+     * 移除微信支付宝结果通知
      */
-    public static void unregisterPayResultCallback(PayResultMgr.IPayResultCallback callback) {
-        PayResultMgr.getInstance().removeResultCallback(callback);
+    public static void unregisterAliWxPayCallback(AliWxPayMgr.IAliWxPayCallback callback) {
+        AliWxPayMgr.getInstance().removeAliWxPayCallback(callback);
     }
 
     /**
      * 绑定Braintree
      */
-    public <T extends BrainTreePayActivity> void bindBrainTree(T activity, String authorization) {
+    public <T extends BTCustomPayActivity> void bindBrainTree(T activity, String authorization) {
         try {
             activity.setBrainTreeFragment(BraintreeFragment.newInstance(activity, authorization));
         } catch (InvalidArgumentException e) {
-            PayResultMgr.getInstance().dispatchPayFail(PayType.BRAIN_TREE
-                    , ErrStatus.getInstance("B10", e.getMessage()));
+            activity.onPrepayError(ErrStatus.getInstance(ErrStatus.BT_INIT_ERROR, e.getMessage()));
         }
     }
 
     /**
      * 解绑Braintree
      */
-    public <T extends BrainTreePayActivity> void unbindBrainTree(T activity) {
+    public <T extends BTCustomPayActivity> void unbindBrainTree(T activity) {
         BraintreeFragment braintreeFragment = activity.getBrainTreeFragment();
         if (braintreeFragment != null) {
             activity.getSupportFragmentManager().beginTransaction()
@@ -106,61 +104,68 @@ public class YSAppPay {
     /**
      * 发起支付宝支付
      */
-    public void requestAliPayment(Activity activity, AlipayItem alipayItem) {
-        new AlipayStrategy().startPay(activity, alipayItem);
+    public void requestAliPayment(Activity activity, String orderInfo) {
+        AliWxPayMgr.getInstance().requestAlipay(activity, orderInfo);
+    }
+
+    /**
+     * 注册APP到微信
+     * @param context
+     * @param appId
+     */
+    public void registerWXAPP(Context context, String appId) {
+        AliWxPayMgr.getInstance().registerApp(context, appId);
     }
 
     /**
      * 发起微信支付
      */
-    public void requestWechatPayment(Activity activity, WxPayItem wxPayItem) {
-        WxPayStrategy.initWxAppId(activity.getApplicationContext(), wxPayItem.getPayReq().appId);
-        WxPayStrategy wxPayStrategy = WxPayStrategy.getInstance();
-        wxPayStrategy.startPay(activity, wxPayItem);
+    public void requestWechatPayment(WxPayItem wxPayItem) {
+        AliWxPayMgr.getInstance().requestWXPay(wxPayItem);
     }
 
     /**
      * 发送Google Pay
      */
-    public <T extends BrainTreePayActivity> void requestGooglePayment(T activity, GooglePaymentRequest googlePaymentRequest) {
+    public <T extends BTCustomPayActivity> void requestGooglePayment(T activity, GooglePaymentRequest googlePaymentRequest) {
         GooglePayment.requestPayment(activity.getBrainTreeFragment(), googlePaymentRequest);
     }
 
     /**
-     * 发送PayPal支付，已安装App会自动启动，否则将打开H5
+     * 发送PayPal支付，不保存付款方式
      */
-    public <T extends BrainTreePayActivity> void requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest) {
+    public <T extends BTCustomPayActivity> void requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest) {
         PayPal.requestOneTimePayment(activity.getBrainTreeFragment(), payPalRequest);
     }
 
     /**
-     * 发送PayPal支付，已安装App会自动启动，否则将打开H5
+     * 发送PayPal支付，保存付款方式
      */
-    public <T extends BrainTreePayActivity> void requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest) {
+    public <T extends BTCustomPayActivity> void requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest) {
         PayPal.requestBillingAgreement(activity.getBrainTreeFragment(), payPalRequest);
     }
 
     /**
      * 发起Venmo支付
      */
-    public <T extends BrainTreePayActivity> void requestVenmoPayment(T activity, boolean vault) {
+    public <T extends BTCustomPayActivity> void requestVenmoPayment(T activity, boolean vault) {
         Venmo.authorizeAccount(activity.getBrainTreeFragment(), vault);
     }
 
     /**
      * 发起卡片支付,信用卡/借记卡
      */
-    public <T extends BrainTreePayActivity> void requestCardPayment(T activity, CardBuilder cardBuilder) {
+    public <T extends BTCustomPayActivity> void requestCardPayment(T activity, CardBuilder cardBuilder) {
         Card.tokenize(activity.getBrainTreeFragment(), cardBuilder);
     }
 
     /**
      * 发起Drop-in UI多钱包支付
      */
-    public <T extends BrainTreeDropInActivity> void requestDropInPayment(T activity, String authorization
+    public <T extends BTDropInActivity> void requestDropInPayment(T activity, String authorization
             , DropInRequest dropInRequest) {
         dropInRequest.clientToken(authorization);
-        activity.startActivityForResult(dropInRequest.getIntent(activity), BrainTreeDropInActivity.REQUEST_CODE);
+        activity.startActivityForResult(dropInRequest.getIntent(activity), BTDropInActivity.REQUEST_CODE);
     }
 
 }

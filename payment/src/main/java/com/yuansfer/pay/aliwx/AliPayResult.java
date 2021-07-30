@@ -1,4 +1,4 @@
-package com.yuansfer.pay.alipay;
+package com.yuansfer.pay.aliwx;
 
 import android.text.TextUtils;
 

@@ -28,7 +28,7 @@ import okhttp3.OkHttpClient;
 /**
  * @Author Fly
  * @CreateDate 2019/5/24 11:43
- * @Desciption Yuansfer api service
+ * @Desciption 调用yuansfer接口
  */
 public class ApiService {
 

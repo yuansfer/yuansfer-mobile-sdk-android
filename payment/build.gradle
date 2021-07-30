@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-//apply from: 'bintray.gradle'
+//apply from: 'maven.gradle'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         versionCode 11
-        versionName "1.1.5"
+        versionName "1.1.6"
     }
 
     buildTypes {
@@ -21,23 +21,13 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    // Wechat Pay dependencies
+    // Wechat Pay
     compileOnly 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-    // Alipay dependencies
+    // Alipay
     compileOnly 'com.fly.aar:alipaySdk:15.6.2'
-    // Braintree dependencies
-    compileOnly 'com.google.android.gms:play-services-wallet:16.0.1'
+    // Braintree
     compileOnly 'com.braintreepayments.api:braintree:3.14.2'
     compileOnly 'com.braintreepayments.api:drop-in:4.6.0'
-}
-
-repositories {
-    //drop-in UI配置
-    maven {
-        url  "https://cardinalcommerce.bintray.com/android"
-        credentials {
-            username 'braintree-team-sdk@cardinalcommerce'
-            password '220cc9476025679c4e5c843666c27d97cfb0f951'
-        }
-    }
+    // Google Pay
+    compileOnly 'com.google.android.gms:play-services-wallet:16.0.1'
 }

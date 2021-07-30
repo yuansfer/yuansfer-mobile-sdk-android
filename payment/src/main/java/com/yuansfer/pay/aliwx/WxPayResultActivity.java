@@ -1,4 +1,4 @@
-package com.yuansfer.pay.wxpay;
+package com.yuansfer.pay.aliwx;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,9 +8,7 @@ import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.yuansfer.pay.payment.ErrStatus;
-import com.yuansfer.pay.payment.PayResultMgr;
-import com.yuansfer.pay.payment.PayType;
+import com.yuansfer.pay.ErrStatus;
 import com.yuansfer.pay.util.LogUtils;
 
 /**
@@ -24,13 +22,13 @@ public class WxPayResultActivity extends Activity implements IWXAPIEventHandler 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WxPayStrategy.getInstance().handleIntent(getIntent(), this);
+        AliWxPayMgr.getInstance().handleIntent(getIntent(), this);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        WxPayStrategy.getInstance().handleIntent(intent, this);
+        AliWxPayMgr.getInstance().handleIntent(intent, this);
     }
 
     @Override
@@ -43,12 +41,12 @@ public class WxPayResultActivity extends Activity implements IWXAPIEventHandler 
         LogUtils.d(String.format("Wechat Pay onResp call, type=%s,errCode=%s", resp.getType(), resp.errCode));
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
-                PayResultMgr.getInstance().dispatchPaySuccess(PayType.WECHAT_PAY);
+                AliWxPayMgr.getInstance().dispatchPaySuccess(AliWxType.WECHAT_PAY);
             } else if (resp.errCode == BaseResp.ErrCode.ERR_USER_CANCEL) {
-                PayResultMgr.getInstance().dispatchPayCancel(PayType.WECHAT_PAY);
+                AliWxPayMgr.getInstance().dispatchPayCancel(AliWxType.WECHAT_PAY);
             } else {
-                PayResultMgr.getInstance().dispatchPayFail(PayType.WECHAT_PAY
-                        , ErrStatus.getInstance("W001", resp.errStr));
+                AliWxPayMgr.getInstance().dispatchPayFail(AliWxType.WECHAT_PAY
+                        , ErrStatus.getInstance(ErrStatus.WECHAT_COMMON_ERROR, resp.errStr));
             }
             finish();
         }

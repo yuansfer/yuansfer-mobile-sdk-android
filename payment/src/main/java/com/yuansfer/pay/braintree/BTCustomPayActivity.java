@@ -21,8 +21,6 @@ import com.braintreepayments.api.models.PayPalAccountNonce;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
-import com.yuansfer.pay.payment.PayResultMgr;
-import com.yuansfer.pay.payment.PayType;
 import com.yuansfer.pay.util.LogUtils;
 
 /**
@@ -30,8 +28,8 @@ import com.yuansfer.pay.util.LogUtils;
  * @date 2020/12/21
  * @desc 集成Braintree自定义支付时可继承此类，处理相应渠道的支付流程，如Google Pay, PayPal, Venmo等
  */
-public abstract class BrainTreePayActivity extends AppCompatActivity implements BraintreeCancelListener, BraintreeErrorListener
-        , PaymentMethodNonceCreatedListener, ConfigurationListener, BraintreePaymentResultListener, IBrainTreeCallback {
+public abstract class BTCustomPayActivity extends AppCompatActivity implements BraintreeCancelListener, BraintreeErrorListener
+        , PaymentMethodNonceCreatedListener, ConfigurationListener, BraintreePaymentResultListener, IBTNonceCallback, IBTPrepayCallback {
 
     private static final String TAG = "YSBrainTreePayActivity";
     private BraintreeFragment mBrainTreeFragment;
@@ -40,13 +38,13 @@ public abstract class BrainTreePayActivity extends AppCompatActivity implements 
     @Override
     public final void onCancel(int i) {
         LogUtils.d(TAG, "BrainTree Pay canceled");
-        PayResultMgr.getInstance().dispatchPayCancel(PayType.GOOGLE_PAY);
+        onPrepayCancel();
     }
 
     @Override
     public final void onError(Exception error) {
         LogUtils.d(TAG, "BrainTree Pay error:" + error.getMessage());
-        BrainTreeListenerHandler.handleError(error);
+        BTListenerHandler.handleError(error, this);
     }
 
     @Override
@@ -58,21 +56,20 @@ public abstract class BrainTreePayActivity extends AppCompatActivity implements 
 
     @Override
     public final void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-        LogUtils.d(TAG, "onPaymentMethodNonceCreated");
-        BrainTreeListenerHandler.handlerPaymentMethodNonceCreated(paymentMethodNonce, mDeviceData, this);
+        LogUtils.d(TAG, "Braintree nonce got");
+        BTListenerHandler.handlerPaymentMethodNonceCreated(paymentMethodNonce, mDeviceData, this);
     }
 
     @Override
-    public final void onBraintreePaymentResult(BraintreePaymentResult braintreePaymentResult) {
-        LogUtils.d(TAG, "onBrainTreePaymentResult");
-        BrainTreeListenerHandler.handleBrainTreePaymentResult(braintreePaymentResult);
+    public void onBraintreePaymentResult(BraintreePaymentResult braintreePaymentResult) {
+        LogUtils.d(TAG, "Braintree payment finished");
     }
 
     private void collectDeviceData() {
         DataCollector.collectDeviceData(mBrainTreeFragment, new BraintreeResponseListener<String>() {
             @Override
             public void onResponse(String deviceData) {
-                LogUtils.d(TAG, "deviceData=" + deviceData);
+                LogUtils.d(TAG, "DeviceData=" + deviceData);
                 mDeviceData = deviceData;
             }
         });

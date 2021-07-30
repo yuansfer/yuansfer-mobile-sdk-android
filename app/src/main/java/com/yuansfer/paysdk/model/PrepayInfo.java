@@ -3,7 +3,7 @@ package com.yuansfer.paysdk.model;
 import android.os.Parcel;
 import android.text.TextUtils;
 
-import com.yuansfer.pay.payment.PayType;
+import com.yuansfer.pay.aliwx.AliWxType;
 
 import java.util.HashMap;
 
@@ -125,7 +125,7 @@ public class PrepayInfo extends SignInfo {
     @Override
     public HashMap<String, String> toHashMap() {
         HashMap<String, String> paramMap = super.toHashMap();
-        paramMap.put("vendor", payType == PayType.WECHAT_PAY
+        paramMap.put("vendor", payType == AliWxType.WECHAT_PAY
                 ? "wechatpay" : "alipay");
         paramMap.put("amount", amount + "");
         paramMap.put("ipnUrl", ipnUrl);
@@ -135,7 +135,7 @@ public class PrepayInfo extends SignInfo {
         paramMap.put("terminal", terminal);
         paramMap.put("currency", currency);
         paramMap.put("settleCurrency", settleCurrency);
-        if (payType == PayType.WECHAT_PAY && !TextUtils.isEmpty(appid)) {
+        if (payType == AliWxType.WECHAT_PAY && !TextUtils.isEmpty(appid)) {
             paramMap.put("appid", appid);
         }
         return paramMap;

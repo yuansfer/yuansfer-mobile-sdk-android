@@ -10,7 +10,7 @@
 
         <!-- 微信支付 -->
         <activity
-            android:name="com.yuansfer.pay.wxpay.WxPayResultActivity"
+            android:name="com.yuansfer.pay.aliwx.WxPayResultActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="true"
             android:launchMode="singleTop"
@@ -18,7 +18,7 @@
         <activity-alias
             android:name="${applicationId}.wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:targetActivity="com.yuansfer.pay.wxpay.WxPayResultActivity" />
+            android:targetActivity="com.yuansfer.pay.aliwx.WxPayResultActivity" />
 
         <!--Drop-in UI PalPal支付-->
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"

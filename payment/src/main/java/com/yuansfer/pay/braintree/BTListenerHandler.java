@@ -3,7 +3,6 @@ package com.yuansfer.pay.braintree;
 import com.braintreepayments.api.exceptions.BraintreeError;
 import com.braintreepayments.api.exceptions.ErrorWithResponse;
 import com.braintreepayments.api.exceptions.GooglePaymentException;
-import com.braintreepayments.api.models.BraintreePaymentResult;
 import com.braintreepayments.api.models.CardNonce;
 import com.braintreepayments.api.models.GooglePaymentCardNonce;
 import com.braintreepayments.api.models.LocalPaymentResult;
@@ -11,17 +10,14 @@ import com.braintreepayments.api.models.PayPalAccountNonce;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
-import com.yuansfer.pay.payment.ErrStatus;
-import com.yuansfer.pay.payment.PayResultMgr;
-import com.yuansfer.pay.payment.PayType;
+import com.yuansfer.pay.ErrStatus;
 
-public class BrainTreeListenerHandler {
+public class BTListenerHandler {
 
     /**
      * 解析处理BraintreeErrorListener
-     * @param error
      */
-    public static void handleError(Exception error) {
+    public static void handleError(Exception error, IBTPrepayCallback callback) {
         if (error instanceof ErrorWithResponse) {
             ErrorWithResponse errorWithResponse = (ErrorWithResponse) error;
             BraintreeError cardErrors = errorWithResponse.errorFor("creditCard");
@@ -30,31 +26,24 @@ public class BrainTreeListenerHandler {
                 BraintreeError expirationMonthError = cardErrors.errorFor("expirationMonth");
                 if (expirationMonthError != null) {
                     // There is an issue with the expiration month.
-                    PayResultMgr.getInstance().dispatchPayFail(PayType.BRAIN_TREE
-                            , ErrStatus.getInstance("B01", expirationMonthError.getMessage()));
+                    callback.onPrepayError(ErrStatus.getInstance(ErrStatus.CARD_EXPIRE_ERROR, expirationMonthError.getMessage()));
                     return;
                 }
             }
-            PayResultMgr.getInstance().dispatchPayFail(PayType.BRAIN_TREE
-                    , ErrStatus.getInstance("B02", errorWithResponse.getErrorResponse()));
+            callback.onPrepayError(ErrStatus.getInstance(ErrStatus.BT_RESPONSE_ERROR, errorWithResponse.getErrorResponse()));
         } else if (error instanceof GooglePaymentException) {
             GooglePaymentException errorGooglePayment = (GooglePaymentException) error;
-            PayResultMgr.getInstance().dispatchPayFail(PayType.GOOGLE_PAY
-                    , ErrStatus.getInstance(String.valueOf("G" + errorGooglePayment.getStatus().getStatusCode())
-                            , errorGooglePayment.getStatus().zzg()));
+            callback.onPrepayError(ErrStatus.getInstance(ErrStatus.GGPAY_COMMON_ERROR
+                            , errorGooglePayment.getMessage()));
         } else {
-            PayResultMgr.getInstance().dispatchPayFail(PayType.BRAIN_TREE
-                    , ErrStatus.getInstance("B03", error.getMessage()));
+            callback.onPrepayError(ErrStatus.getInstance(ErrStatus.BT_UNKNOWN_ERROR, error.getMessage()));
         }
     }
 
     /**
      * 解析处理PaymentMethodNonceCreatedListener，
-     * @param paymentMethodNonce
-     * @param deviceData
-     * @param callback
      */
-    public static void handlerPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce, String deviceData, IBrainTreeCallback callback) {
+    public static void handlerPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce, String deviceData, IBTNonceCallback callback) {
         if (paymentMethodNonce instanceof CardNonce) {
             callback.onPaymentNonceFetched((CardNonce) paymentMethodNonce, deviceData);
         } else if (paymentMethodNonce instanceof PayPalAccountNonce) {
@@ -68,10 +57,6 @@ public class BrainTreeListenerHandler {
         } else if (paymentMethodNonce instanceof LocalPaymentResult) {
             callback.onPaymentNonceFetched((LocalPaymentResult) paymentMethodNonce, deviceData);
         }
-    }
-
-    public static void handleBrainTreePaymentResult(BraintreePaymentResult braintreePaymentResult) {
-        PayResultMgr.getInstance().dispatchPaySuccess(PayType.BRAIN_TREE);
     }
 
 }
