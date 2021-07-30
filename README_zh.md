@@ -11,7 +11,7 @@ dependencies {
         ... 
         // Required
         implementation project(':payment')
-        //implementation 'com.yuansfer.pay:payment:1.1.6'
+        //implementation 'com.yuansfer.pay:payment:1.1.7'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
