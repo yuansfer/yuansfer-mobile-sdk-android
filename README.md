@@ -89,7 +89,7 @@ YSAppPay.getInstance().requestWechatPayment( WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-   -IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the actual supported payment method is required.
+   - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the actual supported payment method is required.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 

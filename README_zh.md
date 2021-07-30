@@ -28,7 +28,7 @@ dependencies {
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 ````
-* 如果要使用Braintree的带UI功能Drop-in工具包，需在app下的build.gradle添加以下认证信息.
+* 如果要使用Braintree的带UI功能Drop-in工具包，需在project下的build.gradle添加以下认证信息.
 ````
 repositories {
     //add drop-in certificate
@@ -41,7 +41,7 @@ repositories {
     }
 }
 ````
-* 如果要添加支付宝支付SDK，请复制支付宝aar文件到app/libs目录，并在项目build.gradle中声明aar的位置.
+* 如果要添加支付宝支付SDK，请复制支付宝aar文件到app/libs目录，并在project下build.gradle中声明aar的位置.
 ````
 allprojects {
     repositories {
@@ -91,7 +91,7 @@ YSAppPay.getInstance().requestWechatPayment( WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-   -IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实际支持的支付方式即可.
+   - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实际支持的支付方式即可.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
