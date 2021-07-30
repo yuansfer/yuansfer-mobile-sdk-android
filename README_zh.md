@@ -85,7 +85,9 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * 当使用Braintree的Drop-in UI，则Activity需继承BTDropInActivity，当使用自定义UI，则Activity需继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback的接口方法.
+    
     - IBTPrepayCallback在检查支付环境后发生回调.
+    
 ````
     // 相关服务和配置是否可用
     void onPaymentConfigurationFetched(Configuration configuration);
@@ -94,7 +96,9 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-    - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
+
+   - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
+   
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
