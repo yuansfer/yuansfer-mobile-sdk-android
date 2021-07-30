@@ -10,8 +10,8 @@ yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintr
 dependencies {
         ... 
         // Required
-        implementation project(':payment')
-        //implementation 'com.yuansfer.pay:payment:1.1.7'
+        //implementation project(':payment')
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.7'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -29,9 +29,11 @@ dependencies {
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 ````
-* When using the Drop-in UI payment method, please add the following code to project's build.gradle file
+* Be sure to add the Jitpack warehouse url in the build.gradle file under the project. If you want to use Braintree's Drop-in toolkit with UI function, add the following certification content.
 ````
 repositories {
+    //jitpack url
+    maven { url 'https://jitpack.io' }
     //add drop-in certificate
     maven {
         url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
@@ -83,7 +85,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * When using Braintree’s Drop-in UI, the activity needs to inherit BTDropInActivity. When using a custom UI, the activity needs to inherit BTCustomPayActivity, and implement the interface methods of IBTrepayCallback and IBTNonceCallback that need to be rewritten.
-  1. IBTPrepayCallback callback occurs after checking the payment environment.
+    - IBTPrepayCallback callback occurs after checking the payment environment.
 ````
     // Whether related services and configurations are available
     void onPaymentConfigurationFetched(Configuration configuration);
@@ -92,7 +94,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-  2. IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the supported payment method needs to be implemented.
+    - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the supported payment method needs to be implemented.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 

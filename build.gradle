@@ -19,6 +19,8 @@ allprojects {
         }
         google()
         jcenter()
+        //务必加上jitpack仓库地址
+        maven { url 'https://jitpack.io' }
         //drop-in UI配置
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"

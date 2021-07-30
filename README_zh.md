@@ -10,8 +10,8 @@ yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Brai
 dependencies {
         ... 
         // Required
-        implementation project(':payment')
-        //implementation 'com.yuansfer.pay:payment:1.1.7'
+        //implementation project(':payment')
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.7'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -29,9 +29,11 @@ dependencies {
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 }
 ````
-* 如果要使用Braintree的带UI功能Drop-in工具包，需在project下的build.gradle添加以下认证信息.
+* 务必在project下的build.gradle文件中添加Jitpack仓库url, 若要使用Braintree的带UI功能Drop-in工具包，则添加以下认证内容.
 ````
 repositories {
+    //jitpack url
+    maven { url 'https://jitpack.io' }
     //add drop-in certificate
     maven {
         url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
@@ -83,7 +85,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * 当使用Braintree的Drop-in UI，则Activity需继承BTDropInActivity，当使用自定义UI，则Activity需继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback的接口方法.
-  1. IBTPrepayCallback在检查支付环境后发生回调.
+    - IBTPrepayCallback在检查支付环境后发生回调.
 ````
     // 相关服务和配置是否可用
     void onPaymentConfigurationFetched(Configuration configuration);
@@ -92,7 +94,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-  2. IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
+    - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
