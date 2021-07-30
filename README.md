@@ -73,14 +73,16 @@ protected void onStop() {
 ````
 // Start Alipay
 YSAppPay.getInstance().requestAliPayment(Activity activity, String orderInfo)
+
 // Register App to Wechat
 YSAppPay.getInstance().registerWXAPP(Context context, String appId)
+
 // Start Wechat Pay
 YSAppPay.getInstance().requestWechatPayment( WxPayItem wxPayItem)
 ````
 
 * When using Braintree’s Drop-in UI, the activity needs to inherit BTDropInActivity. When using a custom UI, the activity needs to inherit BTCustomPayActivity, and implement the interface methods of IBTrepayCallback and IBTNonceCallback that need to be rewritten.
-   - IBTPrepayCallback callback occurs when checking whether the payment environment is abnormal.
+  - IBTPrepayCallback callback occurs when checking whether the payment environment is abnormal.
 ````
     // Whether related services and configurations are available
     void onPaymentConfigurationFetched(Configuration configuration);
@@ -89,7 +91,7 @@ YSAppPay.getInstance().requestWechatPayment( WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-   - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the actual supported payment method is required.
+  - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the actual supported payment method is required.
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
