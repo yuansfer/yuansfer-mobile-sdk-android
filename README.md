@@ -5,13 +5,45 @@ English | [中文文档](README_zh.md)
 yuansfer-payment-android is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments.
 
 ## Quick integration
-* Add the following dependencies in the app's build.gradle file, the payment method is optional
+* Add jitpack and Alibaba Cloud mirror url to the build.gradle file under the project. If Alipay is integrated, specify the aar directory.
 ````
+buildscript {
+    repositories {
+        google()
+        //aliyun mirror
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+    }
+}
+repositories {
+    //jitpack url
+    maven { url 'https://jitpack.io' }
+    //aliyun mirror
+    maven { url 'https://maven.aliyun.com/repository/jcenter' }
+    // alipay arr location
+    flatDir {
+        dirs 'libs'
+    }
+}
+````
+* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication.
+````
+android{
+    repositories {
+        //add drop-in certificate
+        maven {
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username 'braintree_team_sdk'
+                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+            }
+        }
+    }
+}
 dependencies {
         ... 
         // Required
         //implementation project(':payment')
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.7'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -21,40 +53,12 @@ dependencies {
 
         // Custom UI of Braintree (optional)
         implementation 'com.braintreepayments.api:braintree:3.14.2'
-        
+
         // Drop-in UI of Braintree (optional)
         implementation 'com.braintreepayments.api:drop-in:4.6.0'
 
         // Google Pay of Braintree (optional)
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
-}
-````
-* Be sure to add the Jitpack warehouse url in the build.gradle file under the project. If you want to use Braintree's Drop-in toolkit with UI function, add the following certification content.
-````
-repositories {
-    //jitpack url
-    maven { url 'https://jitpack.io' }
-    //add drop-in certificate
-    maven {
-        url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
-        credentials {
-            username 'braintree_team_sdk'
-            password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
-        }
-    }
-}
-````
-* If you want to add Alipay payment SDK, please copy the Alipay SDK aar file to the app/libs directory and declare the location of aar in project build.gradle
-````
-allprojects {
-    repositories {
-
-        // alipay arr location
-        flatDir {
-            dirs 'libs'
-        }
-
-    }
 }
 ````
 ## How to use
@@ -86,7 +90,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
 * When using Braintree’s Drop-in UI, the activity needs to inherit BTDropInActivity. When using a custom UI, the activity needs to inherit BTCustomPayActivity, and implement the interface methods of IBTrepayCallback and IBTNonceCallback that need to be rewritten.
    
-   - IBTPrepayCallback callback occurs after checking the payment environment.
+  - IBTPrepayCallback callback occurs after checking the payment environment.
    
 ````
     // Whether related services and configurations are available
@@ -97,7 +101,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
     void onPrepayError(ErrStatus errStatus);
 ````
 
-   - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the supported payment method needs to be implemented.
+  - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the supported payment method needs to be implemented.
 
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}

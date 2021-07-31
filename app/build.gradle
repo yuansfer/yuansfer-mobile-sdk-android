@@ -39,6 +39,17 @@ android {
             v2SigningEnabled true //是否采用APK Signature Scheme v2
         }
     }
+
+    repositories {
+        //drop-in UI配置
+        maven {
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username 'braintree_team_sdk'
+                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -47,10 +58,10 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.5'
-    //remote sdk
-    implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.7'
     //local sdk
-    //implementation project(':payment')
+    implementation project(':payment')
+    //remote sdk
+    //implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
     //支付宝
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
     //微信支付
@@ -61,6 +72,7 @@ dependencies {
     implementation 'com.braintreepayments.api:braintree:3.17.0'
     //google pay
     implementation 'com.google.android.gms:play-services-wallet:16.0.1'
+    implementation project(path: ':payment')
 }
 
 

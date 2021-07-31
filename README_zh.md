@@ -5,13 +5,45 @@
 yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目.
 
 ## 快速集成
-* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它第三方支付是可选的.
+* 在project下的build.gradle文件中添加jitpack和阿里云镜像url, 若集成支付宝，则指定aar目录.
 ````
+buildscript {
+    repositories {
+        google()
+        //aliyun mirror
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+    }
+}
+repositories {
+    //jitpack url
+    maven { url 'https://jitpack.io' }
+    //aliyun mirror
+    maven { url 'https://maven.aliyun.com/repository/jcenter' }
+    // alipay arr location
+    flatDir {
+        dirs 'libs'
+    }
+}
+````
+* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它支付方式均为可选，若要使用Braintree的带UI功能Drop-in工具包，则添加以下私服认证.
+````
+android{
+    repositories {
+        //add drop-in certificate
+        maven {
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username 'braintree_team_sdk'
+                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+            }
+        }
+    }
+}
 dependencies {
         ... 
         // Required
         //implementation project(':payment')
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.7'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -27,34 +59,6 @@ dependencies {
 
         // Google Pay of Braintree (optional)
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
-}
-````
-* 务必在project下的build.gradle文件中添加Jitpack仓库url, 若要使用Braintree的带UI功能Drop-in工具包，则添加以下认证内容.
-````
-repositories {
-    //jitpack url
-    maven { url 'https://jitpack.io' }
-    //add drop-in certificate
-    maven {
-        url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
-        credentials {
-            username 'braintree_team_sdk'
-            password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
-        }
-    }
-}
-````
-* 如果要添加支付宝支付SDK，请复制支付宝aar文件到app/libs目录，并在project下build.gradle中声明aar的位置.
-````
-allprojects {
-    repositories {
-
-        // alipay arr location
-        flatDir {
-            dirs 'libs'
-        }
-
-    }
 }
 ````
 ## 如何使用
@@ -86,7 +90,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
 * 当使用Braintree的Drop-in UI，则Activity需继承BTDropInActivity，当使用自定义UI，则Activity需继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback的接口方法.
     
-    - IBTPrepayCallback在检查支付环境后发生回调.
+  - IBTPrepayCallback在检查支付环境后发生回调.
     
 ````
     // 相关服务和配置是否可用
@@ -97,7 +101,7 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
     void onPrepayError(ErrStatus errStatus);
 ````
 
-   - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
+  - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
    
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
