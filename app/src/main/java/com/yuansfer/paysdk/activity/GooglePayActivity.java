@@ -99,11 +99,7 @@ public class GooglePayActivity extends BTCustomPayActivity {
                             .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
                             .setCurrencyCode("USD")
                             .build())
-                    // We recommend collecting and passing billing address information
-                    // with all Google Pay transactions as a best practice.
                     .billingAddressRequired(true)
-                    // Optional in sandbox; if set in sandbox, this value must be
-                    // a valid production Google Merchant ID.
                     .googleMerchantId("merchant-id-from-google");
             YSAppPay.getInstance().requestGooglePayment(GooglePayActivity.this, googlePaymentRequest);
         }
