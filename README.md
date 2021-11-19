@@ -65,13 +65,13 @@ dependencies {
 * When WeChat or Alipay is integrated, register and remove unified monitoring of payment results.
 ````
 @Override
-protected void onStart() {
+protected void onCreate() {
     ...
     YSAppPay.registerAliWxPayCallback(callback);
 }
 
 @Override
-protected void onStop() {
+protected void onDestroy() {
     ...
     YSAppPay.unregisterAliWxPayCallback(callback);
 }

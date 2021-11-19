@@ -65,13 +65,13 @@ dependencies {
 * 当集成了微信或支付宝时，注册和移除统一监听付款结果.
 ````
 @Override
-protected void onStart() {
+protected void onCreate() {
     ...
     YSAppPay.registerAliWxPayCallback(callback);
 }
 
 @Override
-protected void onStop() {
+protected void onDestroy() {
     ...
     YSAppPay.unregisterAliWxPayCallback(callback);
 }

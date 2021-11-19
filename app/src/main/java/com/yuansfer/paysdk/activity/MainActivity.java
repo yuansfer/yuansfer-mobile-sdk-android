@@ -43,22 +43,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        YSAppPay.registerAliWxPayCallback(this);
         setContentView(R.layout.activity_main);
         initViews();
         setupActionBar();
         YSAppPay.setLogEnable(true);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        YSAppPay.registerAliWxPayCallback(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        YSAppPay.unregisterAliWxPayCallback(this);
     }
 
     private void initViews() {
@@ -257,6 +246,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
 
     private void setDefaultEditRef(EditText editRef) {
         editRef.setHint(System.currentTimeMillis() + "");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        YSAppPay.unregisterAliWxPayCallback(this);
     }
 
 }
