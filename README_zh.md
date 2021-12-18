@@ -2,7 +2,7 @@
 [English](README.md) | 中文文档
 
 ## 概述
-yuansfer-payment-android 是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目.
+这是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目.
 
 ## 快速集成
 * 在project下的build.gradle文件中添加jitpack和阿里云镜像url, 若集成支付宝，则指定aar目录.
