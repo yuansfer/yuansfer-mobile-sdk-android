@@ -17,9 +17,9 @@ import com.yuansfer.paysdk.okhttp.IResponseHandler;
  */
 public class YSTestApi {
 
-    public static final String TEST_TOKEN_ALIWX = "5cbfb079f15b150122261c8537086d77a";
-    public static final String PRODUCTION_TOKEN_ALIWX = "5cbfb079f15b150122261c8537086d77a";
-    public static final String TEST_TOKEN_BT = "17cfc0170ef1c017b4a929d233d6e65e";
+    public static final String TEST_TOKEN_ALIWX = "xxx";
+    public static final String PRODUCTION_TOKEN_ALIWX = "xxx";
+    public static final String TEST_TOKEN_BT = "xxx";
     private static final String sAWMerchantNo = "200043";
     private static final String sAWStoreNo = "300014";
     private static final String sBTMerchantNo = "202333";

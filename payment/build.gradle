@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         versionCode 12
-        versionName "1.1.8"
+        versionName "1.1.9"
     }
 
     buildTypes {
@@ -17,12 +17,12 @@ android {
     }
 
     repositories {
-        //drop-in UI配置
+        //drop-in repo config
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
                 username 'braintree_team_sdk'
-                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+                password 'xxx'
             }
         }
     }
