@@ -44,7 +44,7 @@ dependencies {
     //local sdk
     debugImplementation project(':payment')
     //remote sdk
-    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.1.9'
+    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
     //支付宝
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
     //微信支付

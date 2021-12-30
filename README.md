@@ -42,7 +42,7 @@ android{
 dependencies {
         ... 
         // Required
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.9'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
