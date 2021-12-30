@@ -25,7 +25,7 @@ repositories {
     }
 }
 ````
-* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication.
+* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication, For password, please visit [official website](https://developer.paypal.com/braintree/docs/guides/client-sdk/migration/android/v3#3d-secure).
 ````
 android{
     repositories {
@@ -34,7 +34,7 @@ android{
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
                 username 'braintree_team_sdk'
-                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+                password 'xxx'
             }
         }
     }
@@ -42,7 +42,6 @@ android{
 dependencies {
         ... 
         // Required
-        //implementation project(':payment')
         implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
 
         // Alipay (optional)

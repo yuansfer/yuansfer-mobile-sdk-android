@@ -25,7 +25,7 @@ repositories {
     }
 }
 ````
-* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它支付方式均为可选，若要使用Braintree的带UI功能Drop-in工具包，则添加以下私服认证.
+* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它支付方式均为可选，若要使用Braintree的带UI功能Drop-in工具包，则添加以下私服认证,其中password获取请访问 [官网](https://developer.paypal.com/braintree/docs/guides/client-sdk/migration/android/v3#3d-secure).
 ````
 android{
     repositories {
@@ -34,7 +34,7 @@ android{
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
                 username 'braintree_team_sdk'
-                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+                password 'xxx'
             }
         }
     }
@@ -42,7 +42,6 @@ android{
 dependencies {
         ... 
         // Required
-        //implementation project(':payment')
         implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
 
         // Alipay (optional)

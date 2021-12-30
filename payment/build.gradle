@@ -17,7 +17,7 @@ android {
     }
 
     repositories {
-        //drop-in UI配置
+        //drop-in repo config
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
