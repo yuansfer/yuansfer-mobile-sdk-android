@@ -25,7 +25,7 @@ repositories {
     }
 }
 ````
-* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication, For password, please visit[official website](https://developer.paypal.com/braintree/docs/guides/client-sdk/migration/android/v3#3d-secure).
+* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication, For password, please visit [official website](https://developer.paypal.com/braintree/docs/guides/client-sdk/migration/android/v3#3d-secure).
 ````
 android{
     repositories {
