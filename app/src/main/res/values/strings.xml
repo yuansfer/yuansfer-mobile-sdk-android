@@ -2,7 +2,7 @@
     <string name="app_name">yuansfer-mobile-sdk-android</string>
     <string name="alipay">Alipay</string>
     <string name="wechatpay">Wechat Pay</string>
-    <string name="order_status">Query Trans</string>
+    <string name="order_status">Trans Status</string>
     <string name="refund">Refund</string>
     <string name="secure_pay">Multi Payment</string>
     <string name="test_env">Test Env</string>

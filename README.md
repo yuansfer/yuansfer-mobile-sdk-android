@@ -2,7 +2,7 @@
 English | [中文文档](README_zh.md)
 
 ## Introduction
-This is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments.
+This is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments, At the same time, it supports the convenient call of some online API interfaces. Each payment method is independent of each other, and corresponding dependencies are introduced if necessary.
 
 ## Quick integration
 * Add jitpack and Alibaba Cloud mirror url to the build.gradle file under the project. If Alipay is integrated, specify the aar directory.
@@ -10,39 +10,27 @@ This is a project that aggregates WeChat、Alipay or Braintree payments, It main
 buildscript {
     repositories {
         google()
-        //aliyun mirror
+        // aliyun mirror
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 repositories {
-    //jitpack url
+    // jitpack url
     maven { url 'https://jitpack.io' }
-    //aliyun mirror
+    // aliyun mirror
     maven { url 'https://maven.aliyun.com/repository/jcenter' }
-    // alipay arr location
+    // alipay arr location (optional)
     flatDir {
         dirs 'libs'
     }
 }
 ````
-* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication, For password, please visit [official website](https://developer.paypal.com/braintree/docs/guides/client-sdk/migration/android/v3#3d-secure).
+* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication.
 ````
-android{
-    repositories {
-        //add drop-in certificate
-        maven {
-            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
-            credentials {
-                username 'braintree_team_sdk'
-                password 'xxx'
-            }
-        }
-    }
-}
 dependencies {
         ... 
         // Required
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -58,6 +46,21 @@ dependencies {
 
         // Google Pay of Braintree (optional)
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
+
+        // Client Online API (optional)
+        implementation 'com.ejlchina:okhttps-gson:3.2.0'
+}
+android{
+    repositories {
+        // Add drop-in certificate
+        maven {
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username 'braintree_team_sdk'
+                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+            }
+        }
+    }
 }
 ````
 ## How to use
@@ -142,6 +145,17 @@ YSAppPay.getInstance().requestVenmoPayment(T activity, boolean vault)
 
 // Start Card Pay
 YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
+
+````
+* Online payment API interface.
+````
+IClientAPI api = YSAppPay.getInstance().getClientAPI()
+
+// Instore api: Add
+api.transAdd(request, new OnResponseListener<TransAddResponse>() {})
+
+// Instore api: Prepay
+api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 
 ````
 * For detailed instructions, please refer to Demo usage examples.

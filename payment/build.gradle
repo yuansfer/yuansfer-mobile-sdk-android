@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         versionCode 12
-        versionName "1.1.8"
+        versionName "1.2.0"
     }
 
     buildTypes {
@@ -26,6 +26,10 @@ android {
             }
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -36,7 +40,10 @@ dependencies {
     compileOnly 'com.fly.aar:alipaySdk:15.6.2'
     // Braintree
     compileOnly 'com.braintreepayments.api:braintree:3.14.2'
+    // Braintree Drop-in
     compileOnly 'com.braintreepayments.api:drop-in:4.6.0'
     // Google Pay
     compileOnly 'com.google.android.gms:play-services-wallet:16.0.1'
+    // Client API
+    compileOnly 'com.ejlchina:okhttps-gson:3.2.0'
 }

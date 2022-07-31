@@ -14,7 +14,7 @@ import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.yuansfer.pay.ErrStatus;
+import com.yuansfer.pay.util.ErrStatus;
 import com.yuansfer.pay.util.LogUtils;
 
 import java.util.ArrayList;

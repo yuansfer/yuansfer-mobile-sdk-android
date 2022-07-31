@@ -42,11 +42,5 @@ public class AliPayResult {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "resultStatus={" + resultStatus + "};memo={" + memo
-                + "};result={" + result + "}";
-    }
-
 }
 

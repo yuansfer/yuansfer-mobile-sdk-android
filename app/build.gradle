@@ -23,13 +23,30 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        debug {
+            keyAlias 'yuansfer'
+            keyPassword '111111'
+            storeFile file('../yuansfer_test.jks')
+            storePassword '111111'
+            v2SigningEnabled true //是否采用APK Signature Scheme v2
+        }
+        release {
+            keyAlias 'yuansfer'
+            keyPassword '111111'
+            storeFile file('../yuansfer_test.jks')
+            storePassword '111111'
+            v2SigningEnabled true //是否采用APK Signature Scheme v2
+        }
+    }
+
     repositories {
         //drop-in repo config
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
                 username 'braintree_team_sdk'
-                password 'xxx'
+                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
             }
         }
     }
@@ -39,23 +56,22 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    //local sdk
+    // local sdk
     debugImplementation project(':payment')
-    //remote sdk
-    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
-    //支付宝
+    // remote sdk
+    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
+    // alipay
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
-    //微信支付
+    // wechatpay
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-    //drop-in UI
+    // drop-in UI
     implementation 'com.braintreepayments.api:drop-in:4.6.0'
-    //braintree custom
+    // braintree custom
     implementation 'com.braintreepayments.api:braintree:3.17.0'
-    //google pay
+    // google pay
     implementation 'com.google.android.gms:play-services-wallet:16.0.1'
-    implementation project(path: ':payment')
+    // client API
+    implementation 'com.ejlchina:okhttps-gson:3.2.0'
 }
 
 

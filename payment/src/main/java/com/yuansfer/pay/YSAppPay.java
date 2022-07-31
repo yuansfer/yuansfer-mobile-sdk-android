@@ -2,6 +2,8 @@ package com.yuansfer.pay;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.alipay.sdk.app.EnvUtils;
 import com.braintreepayments.api.BraintreeFragment;
@@ -16,8 +18,10 @@ import com.braintreepayments.api.models.GooglePaymentRequest;
 import com.braintreepayments.api.models.PayPalRequest;
 import com.yuansfer.pay.aliwx.AliWxPayMgr;
 import com.yuansfer.pay.aliwx.WxPayItem;
+import com.yuansfer.pay.api.IClientAPI;
 import com.yuansfer.pay.braintree.BTDropInActivity;
 import com.yuansfer.pay.braintree.BTCustomPayActivity;
+import com.yuansfer.pay.util.ErrStatus;
 import com.yuansfer.pay.util.LogUtils;
 import com.yuansfer.sdk.BuildConfig;
 
@@ -28,9 +32,11 @@ import com.yuansfer.sdk.BuildConfig;
  */
 public class YSAppPay {
 
+    private static Handler sHandler;
     private static YSAppPay sInstance;
 
     private YSAppPay() {
+        sHandler = new Handler(Looper.getMainLooper());
     }
 
     public static YSAppPay getInstance() {
@@ -42,6 +48,13 @@ public class YSAppPay {
             }
         }
         return sInstance;
+    }
+
+    /**
+     * 获取在线API接口
+     */
+    public IClientAPI getClientAPI() {
+        return ClientAPIImpl.get(sHandler);
     }
 
     /**
