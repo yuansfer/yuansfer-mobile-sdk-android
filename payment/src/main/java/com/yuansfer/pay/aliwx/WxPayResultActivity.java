@@ -8,7 +8,7 @@ import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.yuansfer.pay.ErrStatus;
+import com.yuansfer.pay.util.ErrStatus;
 import com.yuansfer.pay.util.LogUtils;
 
 /**

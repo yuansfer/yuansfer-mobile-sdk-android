@@ -10,7 +10,7 @@ import com.braintreepayments.api.models.PayPalAccountNonce;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.VenmoAccountNonce;
 import com.braintreepayments.api.models.VisaCheckoutNonce;
-import com.yuansfer.pay.ErrStatus;
+import com.yuansfer.pay.util.ErrStatus;
 
 public class BTListenerHandler {
 

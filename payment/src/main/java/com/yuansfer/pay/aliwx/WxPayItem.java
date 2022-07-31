@@ -93,16 +93,4 @@ public class WxPayItem {
         return payReq;
     }
 
-    @Override
-    public String toString() {
-        return "WxPayItem{" +
-                "appId='" + appId + '\'' +
-                ", partnerId='" + partnerId + '\'' +
-                ", packageValue='" + packageValue + '\'' +
-                ", nonceStr='" + nonceStr + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", prepayId='" + prepayId + '\'' +
-                ", sign='" + sign + '\'' +
-                '}';
-    }
 }

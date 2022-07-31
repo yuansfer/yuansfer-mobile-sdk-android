@@ -2,47 +2,35 @@
 [English](README.md) | 中文文档
 
 ## 概述
-这是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目.
+这是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目, 同时支持部分在线api接口的便捷调用。每种支付方式相互独立，需要则引入相应依赖.
 
 ## 快速集成
-* 在project下的build.gradle文件中添加jitpack和阿里云镜像url, 若集成支付宝，则指定aar目录.
+* 在project下的build.gradle文件中添加jitpack和阿里云镜像url, 若集成支付宝，则需指定aar目录.
 ````
 buildscript {
     repositories {
         google()
-        //aliyun mirror
+        // aliyun mirror
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 repositories {
-    //jitpack url
+    // jitpack url
     maven { url 'https://jitpack.io' }
-    //aliyun mirror
+    // aliyun mirror
     maven { url 'https://maven.aliyun.com/repository/jcenter' }
-    // alipay arr location
+    // alipay arr location (optional)
     flatDir {
         dirs 'libs'
     }
 }
 ````
-* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它支付方式均为可选，若要使用Braintree的带UI功能Drop-in工具包，则添加以下私服认证,其中password获取请访问 [官网](https://developer.paypal.com/braintree/docs/guides/client-sdk/migration/android/v3#3d-secure).
+* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它支付方式均为可选，若要使用Braintree的带UI功能Drop-in工具包，则添加以下私服认证.
 ````
-android{
-    repositories {
-        //add drop-in certificate
-        maven {
-            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
-            credentials {
-                username 'braintree_team_sdk'
-                password 'xxx'
-            }
-        }
-    }
-}
 dependencies {
         ... 
         // Required
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.1.8'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -58,6 +46,21 @@ dependencies {
 
         // Google Pay of Braintree (optional)
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
+
+        // Client Online API (optional)
+        implementation 'com.ejlchina:okhttps-gson:3.2.0'
+}
+android{
+    repositories {
+        // Add drop-in certificate (optional)
+        maven {
+            url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
+            credentials {
+                username 'braintree_team_sdk'
+                password 'AKCp8jQcoDy2hxSWhDAUQKXLDPDx6NYRkqrgFLRc3qDrayg6rrCbJpsKKyMwaykVL8FWusJpp'
+            }
+        }
+    }
 }
 ````
 ## 如何使用
@@ -142,6 +145,17 @@ YSAppPay.getInstance().requestVenmoPayment(T activity, boolean vault)
 
 // Start Card Pay
 YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
+
+````
+* 在线支付API接口.
+````
+IClientAPI api = YSAppPay.getInstance().getClientAPI()
+
+// Instore api: Add
+api.transAdd(request, new OnResponseListener<TransAddResponse>() {})
+
+// Instore api: Prepay
+api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 
 ````
 * 有关详细说明，请参阅演示用法示例.
