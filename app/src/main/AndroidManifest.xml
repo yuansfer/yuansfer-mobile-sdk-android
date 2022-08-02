@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yuansfer.paysdk">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -43,7 +45,5 @@
         </activity>
 
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

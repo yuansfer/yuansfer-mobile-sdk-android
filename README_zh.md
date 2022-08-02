@@ -174,3 +174,4 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   - 支付宝, 以字符A为开头的错误码
   - Google Pay, 以字符G为开头的错误码
   - Braintree, 以字符B为开头的错误码
+  
