@@ -27,16 +27,16 @@ android {
         debug {
             keyAlias 'yuansfer'
             keyPassword '111111'
-            storeFile file('../yuansfer_test.jks')
+            storeFile file('../test.jks')
             storePassword '111111'
-            v2SigningEnabled true //是否采用APK Signature Scheme v2
+            v2SigningEnabled true
         }
         release {
             keyAlias 'yuansfer'
             keyPassword '111111'
-            storeFile file('../yuansfer_test.jks')
+            storeFile file('../test.jks')
             storePassword '111111'
-            v2SigningEnabled true //是否采用APK Signature Scheme v2
+            v2SigningEnabled true
         }
     }
 

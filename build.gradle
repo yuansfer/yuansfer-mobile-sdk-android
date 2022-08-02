@@ -4,7 +4,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        //阿里云镜像
+
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
     dependencies {
@@ -16,14 +16,11 @@ buildscript {
 allprojects {
     repositories {
         google()
-        //支付宝aar位置
         flatDir {
             dirs 'libs'
         }
         jcenter()
-        //阿里云镜像
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        //jitpack仓库
         maven { url 'https://jitpack.io' }
     }
 }
