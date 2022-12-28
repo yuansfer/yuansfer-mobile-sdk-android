@@ -161,6 +161,17 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 * 有关详细说明，请参阅演示用法示例.
 
 ## 其他说明
+* Android 11 系统策略更新, 添加微信的软件可见性适配，
+````
+  // 在应用的AndroidManifest.xml添加如下<queries>标签
+  <queries>
+      <package android:name="com.tencent.mm" />   // 指定微信包名
+  </queries>
+  // 添加以上标签之后，需要开发者升级编译工具，否则会出现编译错误。
+  // Android Studio 需要升级至 3.3 及以上，建议升级至 4.0 及以上版本；
+  // Android SDK Build-Tools 需要升级至 30 及以上版本；
+  // com.android.tools.build:gradle 需要升级至 3.6.0 版本，建议升级至最新的 3.6.4 版本。
+````
 
 * 由于支付宝SDK的最低版本要求为16，如果应用模块低于16，则需要在AndroidManifest.xml中添加以下语句.
 
