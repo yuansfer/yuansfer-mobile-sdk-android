@@ -161,6 +161,17 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 * For detailed instructions, please refer to Demo usage examples.
 
 ## Other instructions
+* Android 11 system policy update, adding WeChat software visibility adaptation
+````
+  // Add the following<queries>tag to the AndroidManifest.xml of the application
+  <queries>
+      <package android:name="com.tencent.mm" />   // Specify WeChat package name
+  </queries>
+  // After adding the above tags, developers need to upgrade the compilation tools, otherwise compilation errors will occur.
+  // Android Studio needs to be upgraded to 3.3 or above, and it is recommended to upgrade to 4.0 or above;
+  // Android SDK Build Tools needs to be upgraded to version 30 or above;
+  // Com.android.tools.build.gradle needs to be upgraded to version 3.6.0. It is recommended to upgrade to the latest version 3.6.4.
+````
 
 * Since the minimum version requirement of Alipay SDK is 16, if the app module is lower than 16, you need to add the following statement in AndroidManifest.xml
 

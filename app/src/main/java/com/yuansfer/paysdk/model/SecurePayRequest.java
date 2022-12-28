@@ -15,10 +15,8 @@ public class SecurePayRequest extends BaseRequest {
     private String description;
     private String note;
     private String osType = "ANDROID";
-    private int timeout = 120;
     private String goodsInfo;
     private String creditType;
-    private int paymentCount;
     private String frequency;
 
     public double getAmount() {
@@ -109,14 +107,6 @@ public class SecurePayRequest extends BaseRequest {
         this.osType = osType;
     }
 
-    public int getTimeout() {
-        return timeout;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
     public String getGoodsInfo() {
         return goodsInfo;
     }
@@ -131,14 +121,6 @@ public class SecurePayRequest extends BaseRequest {
 
     public void setCreditType(String creditType) {
         this.creditType = creditType;
-    }
-
-    public int getPaymentCount() {
-        return paymentCount;
-    }
-
-    public void setPaymentCount(int paymentCount) {
-        this.paymentCount = paymentCount;
     }
 
     public String getFrequency() {
