@@ -49,6 +49,9 @@ dependencies {
 
         // Client Online API (optional)
         implementation 'com.ejlchina:okhttps-gson:3.2.0'
+        
+        // CashAppPay
+        implementation 'app.cash.paykit:core:1.0.3'
 }
 android{
     repositories {
@@ -66,28 +69,30 @@ android{
 ## How to use
 * When WeChat or Alipay is integrated, register and remove unified monitoring of payment results.
 ````
+IAliWxPay pay = YSAppPay.getAliWxPay()
+
 @Override
 protected void onCreate() {
     ...
-    YSAppPay.registerAliWxPayCallback(callback);
+    pay.registerAliWxPayCallback(callback);
 }
 
 @Override
 protected void onDestroy() {
     ...
-    YSAppPay.unregisterAliWxPayCallback(callback);
+    pay.unregisterAliWxPayCallback(callback);
 }
 ````
 * Start payment after obtaining WeChat or Alipay data from the backend server
 ````
 // Start Alipay
-YSAppPay.getInstance().requestAliPayment(Activity activity, String orderInfo)
+pay.requestAliPayment(Activity activity, String orderInfo)
 
 // Register App to Wechat
-YSAppPay.getInstance().registerWXAPP(Context context, String appId)
+pay.registerWXAPP(Context context, String appId)
 
 // Start Wechat Pay
-YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
+pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * When using Braintree’s Drop-in UI, the activity needs to inherit BTDropInActivity. When using a custom UI, the activity needs to inherit BTCustomPayActivity, and implement the interface methods of IBTrepayCallback and IBTNonceCallback that need to be rewritten.
@@ -121,35 +126,51 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
 * The corresponding Braintree payment can be initiated by obtaining the customer token from the back-end server or using a constant merchant authorization code.
 ````
+IBraintreePay pay = YSAppPay.getBraintreePay()
+
 // Bind Braintree
-YSAppPay.getInstance().bindBrainTree(T activity, String authorization)
+pay.bindBrainTree(T activity, String authorization)
 
 // Unbind Braintree
-YSAppPay.getInstance().unbindBrainTree(T activity)
+pay.unbindBrainTree(T activity)
 
 // Start Drop-in UI Payment
-YSAppPay.getInstance().requestDropInPayment(T activity, String authorization
+pay.requestDropInPayment(T activity, String authorization
             , DropInRequest dropInRequest)
 
 // Start Google Pay
-YSAppPay.getInstance().requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
+pay.requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
 
 // Start PayPal，One-time
-YSAppPay.getInstance().requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
+pay.requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
 
 // Start PayPal, Save payment method
-YSAppPay.getInstance().requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
+pay.requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
 
 // Start Venmo
-YSAppPay.getInstance().requestVenmoPayment(T activity, boolean vault)
+pay.requestVenmoPayment(T activity, boolean vault)
 
 // Start Card Pay
-YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
+pay.requestCardPayment(T activity, CardBuilder cardBuilder)
+
+````
+* Cash App Pay.
+````
+ICashAppPay pay = YSAppPay.getCashAppPay()
+
+// Register event callback
+pay.registerPayEventCallback()
+
+// To create a payment request, you must use a thread to call
+pay.requestCashAppPayInBackground()
+
+// Authorized payment
+pay.authorizeCashAppPay()
 
 ````
 * Online payment API interface.
 ````
-IClientAPI api = YSAppPay.getInstance().getClientAPI()
+IClientAPI api = YSAppPay.getClientAPI()
 
 // Instore api: Add
 api.transAdd(request, new OnResponseListener<TransAddResponse>() {})
@@ -179,6 +200,11 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 <uses-sdk tools:overrideLibrary="com.alipay.sdk,com.yuansfer.pay"/>
 ````
 * WeChat payment needs to determine the client appid, package name, package signature, and server parameters and signature to be the same to pull up the WeChat client
+
+* After adding the CashAppPay dependency, when the error of Failed to transform moshi-1.13.0.jar appears, please add the AndroidX automatic conversion blacklist in the gradle.properties file to exclude it:
+````
+  android.jetifier.blacklist=moshi-1.13.0
+````
 
 * ErrorStatus Code of payment result:
   - Wechat Pay, Start with the character 'W'

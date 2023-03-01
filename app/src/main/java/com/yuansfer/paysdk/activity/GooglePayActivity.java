@@ -28,11 +28,12 @@ import com.yuansfer.pay.util.LogUtils;
 import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.model.SecureV3Response;
 import com.yuansfer.paysdk.model.SecureV3Info;
+import com.yuansfer.paysdk.util.Logger;
 import com.yuansfer.paysdk.util.YSAuth;
 
 public class GooglePayActivity extends BTCustomPayActivity {
 
-    private TextView mResultTxt;
+    private Logger mLogger;
     private SecureV3Info secureV3Info;
     private Button mBtnGooglePay;
 
@@ -41,7 +42,7 @@ public class GooglePayActivity extends BTCustomPayActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_pay);
         setUpAsBackTitle();
-        mResultTxt = findViewById(R.id.tv_result);
+        mLogger = new Logger(findViewById(R.id.tv_result));
         mBtnGooglePay = findViewById(R.id.btn_start_pay);
         mBtnGooglePay.setText("Google Pay");
         callPrepay();
@@ -64,23 +65,23 @@ public class GooglePayActivity extends BTCustomPayActivity {
         spRequest.setIpnUrl("https://yuansferdev.com/callback");
         spRequest.setDescription("test+description");
         spRequest.setNote("note");
-        YSAppPay.getInstance().getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
+        YSAppPay.getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         SecureV3Response response = APIHelper.convertResponseKeepRaw(new Gson(), s, SecureV3Response.class);
                         if (response.isSuccess()) {
                             secureV3Info = response.getResult();
-                            mResultTxt.setText(secureV3Info.toString());
-                            YSAppPay.getInstance().bindBrainTree(GooglePayActivity.this, secureV3Info.getAuthorization());
+                            mLogger.log(secureV3Info.toString());
+                            YSAppPay.getBraintreePay().bindBrainTree(GooglePayActivity.this, secureV3Info.getAuthorization());
                         } else {
-                            mResultTxt.setText("prepay接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("prepay error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
@@ -94,22 +95,22 @@ public class GooglePayActivity extends BTCustomPayActivity {
         ppRequest.setPaymentMethodNonce(nonce);
         ppRequest.setTransactionNo(transactionNo);
         ppRequest.setDeviceData(deviceData);
-        YSAppPay.getInstance().getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
+        YSAppPay.getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         BaseResponse response = APIHelper.convertResponseKeepRaw(new Gson(), s, BaseResponse.class);
                         if (response.isSuccess()) {
                             //支付成功
-                            mResultTxt.setText(response.getRet_msg());
+                            mLogger.log(response.getRet_msg());
                         } else {
-                            mResultTxt.setText("process接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("process error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
@@ -124,18 +125,18 @@ public class GooglePayActivity extends BTCustomPayActivity {
                             .build())
                     .billingAddressRequired(true)
                     .googleMerchantId("merchant-id-from-google");
-            YSAppPay.getInstance().requestGooglePayment(GooglePayActivity.this, googlePaymentRequest);
+            YSAppPay.getBraintreePay().requestGooglePayment(GooglePayActivity.this, googlePaymentRequest);
         }
     }
 
     @Override
     public void onPrepayCancel() {
-        mResultTxt.setText("支付取消");
+        mLogger.log("Pay cancel");
     }
 
     @Override
     public void onPrepayError(ErrStatus errStatus) {
-        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
+        mLogger.log(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override
@@ -145,17 +146,17 @@ public class GooglePayActivity extends BTCustomPayActivity {
                 @Override
                 public void onResponse(Boolean isReadyToPay) {
                     if (isReadyToPay) {
-                        LogUtils.d("Google Pay服务可用");
+                        LogUtils.d("Google Pay service available");
                         mBtnGooglePay.setEnabled(true);
                     } else {
-                        mResultTxt.setText("Google Payments are not available. The following issues could be the cause:\n\n" +
+                        mLogger.log("Google Payments are not available. The following issues could be the cause:\n\n" +
                                 "No user is logged in to the device.\n\n" +
                                 "Google Play Services is missing or out of date.");
                     }
                 }
             });
         } else {
-            mResultTxt.setText("Google Payments are not available. The following issues could be the cause:\n\n" +
+            mLogger.log("Google Payments are not available. The following issues could be the cause:\n\n" +
                     "Google Payments are not enabled for the current merchant.\n\n" +
                     "Google Play Services is missing or out of date.");
         }
@@ -163,14 +164,14 @@ public class GooglePayActivity extends BTCustomPayActivity {
 
     @Override
     public void onPaymentNonceFetched(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
         callPayProcess(secureV3Info.getTransactionNo(), googlePaymentCardNonce.getNonce(), deviceData);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        YSAppPay.getInstance().unbindBrainTree(this);
+        YSAppPay.getBraintreePay().unbindBrainTree(this);
     }
 
 }

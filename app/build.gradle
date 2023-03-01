@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "com.yuansfer.paysdk"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -72,6 +72,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:16.0.1'
     // client API
     implementation 'com.ejlchina:okhttps-gson:3.2.0'
+    // cashapppay
+    implementation 'app.cash.paykit:core:1.0.3'
 }
 
 

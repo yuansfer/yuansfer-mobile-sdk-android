@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         versionCode 12
-        versionName "1.2.0"
+        versionName "1.3.0"
     }
 
     buildTypes {
@@ -46,4 +46,6 @@ dependencies {
     compileOnly 'com.google.android.gms:play-services-wallet:16.0.1'
     // Client API
     compileOnly 'com.ejlchina:okhttps-gson:3.2.0'
+    // Cash APP
+    compileOnly 'app.cash.paykit:core:1.0.3'
 }
