@@ -59,7 +59,7 @@ dependencies {
     // local sdk
     debugImplementation project(':payment')
     // remote sdk
-    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
+    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.3.0'
     // alipay
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
     // wechatpay

@@ -72,8 +72,7 @@ public final class AliWxPayMgr {
     /**
      * 支付结果回调
      */
-    public interface
-    IAliWxPayCallback {
+    public interface IAliWxPayCallback {
 
         /**
          * 支付成功
