@@ -30,7 +30,7 @@ repositories {
 dependencies {
         ... 
         // Required
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.3.0'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.3.2'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
