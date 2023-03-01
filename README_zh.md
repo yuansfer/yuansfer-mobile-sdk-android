@@ -30,7 +30,7 @@ repositories {
 dependencies {
         ... 
         // Required
-        implementation 'com.github.yuansfer:yuansfer-payment-android:1.2.0'
+        implementation 'com.github.yuansfer:yuansfer-payment-android:1.3.0'
 
         // Alipay (optional)
         implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
@@ -49,6 +49,9 @@ dependencies {
 
         // Client Online API (optional)
         implementation 'com.ejlchina:okhttps-gson:3.2.0'
+        
+        // CashAppPay
+        implementation 'app.cash.paykit:core:1.0.3'
 }
 android{
     repositories {
@@ -66,28 +69,30 @@ android{
 ## 如何使用
 * 当集成了微信或支付宝时，注册和移除统一监听付款结果.
 ````
+IAliWxPay pay = YSAppPay.getAliWxPay()
+
 @Override
 protected void onCreate() {
     ...
-    YSAppPay.registerAliWxPayCallback(callback);
+    pay.registerAliWxPayCallback(callback);
 }
 
 @Override
 protected void onDestroy() {
     ...
-    YSAppPay.unregisterAliWxPayCallback(callback);
+    pay.unregisterAliWxPayCallback(callback);
 }
 ````
 * 从Yuansfer服务器获取预付款信息后发起支付宝或微信支付.
 ````
 // Start Alipay
-YSAppPay.getInstance().requestAliPayment(Activity activity, String orderInfo)
+pay.requestAliPayment(Activity activity, String orderInfo)
 
 // Register App to Wechat
-YSAppPay.getInstance().registerWXAPP(Context context, String appId)
+pay.registerWXAPP(Context context, String appId)
 
 // Start Wechat Pay
-YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
+pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * 当使用Braintree的Drop-in UI，则Activity需继承BTDropInActivity，当使用自定义UI，则Activity需继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback的接口方法.
@@ -121,35 +126,52 @@ YSAppPay.getInstance().requestWechatPayment(WxPayItem wxPayItem)
 
 * 可以通过从后端服务器获取客户令牌或使用恒定的商家授权码来发起相应的Braintree付款.
 ````
+IBraintreePay pay = YSAppPay.getBraintreePay()
+
 // Bind Braintree
-YSAppPay.getInstance().bindBrainTree(T activity, String authorization)
+pay.bindBrainTree(T activity, String authorization)
 
 // Unbind Braintree
-YSAppPay.getInstance().unbindBrainTree(T activity)
+pay.unbindBrainTree(T activity)
 
 // Start Drop-in UI Payment
-YSAppPay.getInstance().requestDropInPayment(T activity, String authorization
+pay.requestDropInPayment(T activity, String authorization
             , DropInRequest dropInRequest)
 
 // Start Google Pay
-YSAppPay.getInstance().requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
+pay.requestGooglePayment(T activity, GooglePaymentRequest googlePayItem)
 
 // Start PayPal，One-time
-YSAppPay.getInstance().requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
+pay.requestPayPalOneTimePayment(T activity, PayPalRequest payPalRequest)
 
 // Start PayPal, Save payment method
-YSAppPay.getInstance().requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
+pay.requestPayPalBillingAgreementPayment(T activity, PayPalRequest payPalRequest)
 
 // Start Venmo
-YSAppPay.getInstance().requestVenmoPayment(T activity, boolean vault)
+pay.requestVenmoPayment(T activity, boolean vault)
 
 // Start Card Pay
-YSAppPay.getIntance().requestCardPayment(T activity, CardBuilder cardBuilder)
+pay.requestCardPayment(T activity, CardBuilder cardBuilder)
 
 ````
+* Cash App Pay.
+````
+ICashAppPay pay = YSAppPay.getCashAppPay()
+
+// 注册支付回调
+pay.registerPayEventCallback()
+
+// 创建支付请求，必须在工作线程调用
+pay.requestCashAppPayInBackground()
+
+// 授权支付
+pay.authorizeCashAppPay()
+
+````
+
 * 在线支付API接口.
 ````
-IClientAPI api = YSAppPay.getInstance().getClientAPI()
+IClientAPI api = YSAppPay.getClientAPI()
 
 // Instore api: Add
 api.transAdd(request, new OnResponseListener<TransAddResponse>() {})
@@ -179,6 +201,11 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 <uses-sdk tools:overrideLibrary="com.alipay.sdk,com.yuansfer.pay"/>
 ````
 * 微信支付需要确定客户端appid，软件包名称，软件包签名以及服务器参数和签名相同才能拉起微信客户端.
+
+* 添加了CashAppPay依赖后出现Failed to transform moshi-1.13.0.jar报错时，请在gradle.properties文件添加AndroidX自动转换黑名单排除在外:
+````
+  android.jetifier.blacklist=moshi-1.13.0
+````
 
 * ErrorStatus付款结果代码:
   - 微信支付, 以字符W为开头的错误码

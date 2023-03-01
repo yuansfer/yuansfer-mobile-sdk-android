@@ -23,11 +23,12 @@ import com.yuansfer.pay.YSAppPay;
 import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.model.SecureV3Response;
 import com.yuansfer.paysdk.model.SecureV3Info;
+import com.yuansfer.paysdk.util.Logger;
 import com.yuansfer.paysdk.util.YSAuth;
 
 public class PayPalActivity extends BTCustomPayActivity {
 
-    private TextView mResultTxt;
+    private Logger mLogger;
     private SecureV3Info secureV3Info;
     private Button mPayPalBtn;
 
@@ -36,7 +37,7 @@ public class PayPalActivity extends BTCustomPayActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_pay);
         setUpAsBackTitle();
-        mResultTxt = findViewById(R.id.tv_result);
+        mLogger = new Logger(findViewById(R.id.tv_result));
         mPayPalBtn = findViewById(R.id.btn_start_pay);
         mPayPalBtn.setText("PayPal");
         callPrepay();
@@ -59,23 +60,23 @@ public class PayPalActivity extends BTCustomPayActivity {
         spRequest.setIpnUrl("https://yuansferdev.com/callback");
         spRequest.setDescription("test+description");
         spRequest.setNote("note");
-        YSAppPay.getInstance().getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
+        YSAppPay.getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         SecureV3Response response = APIHelper.convertResponseKeepRaw(new Gson(), s, SecureV3Response.class);
                         if (response.isSuccess()) {
                             secureV3Info = response.getResult();
-                            mResultTxt.setText(secureV3Info.toString());
-                            YSAppPay.getInstance().bindBrainTree(PayPalActivity.this, secureV3Info.getAuthorization());
+                            mLogger.log(secureV3Info.toString());
+                            YSAppPay.getBraintreePay().bindBrainTree(PayPalActivity.this, secureV3Info.getAuthorization());
                         } else {
-                            mResultTxt.setText("prepay接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("prepay error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
@@ -89,29 +90,29 @@ public class PayPalActivity extends BTCustomPayActivity {
         ppRequest.setPaymentMethodNonce(nonce);
         ppRequest.setTransactionNo(transactionNo);
         ppRequest.setDeviceData(deviceData);
-        YSAppPay.getInstance().getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
+        YSAppPay.getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         BaseResponse response = APIHelper.convertResponseKeepRaw(new Gson(), s, BaseResponse.class);
                         if (response.isSuccess()) {
                             //支付成功
-                            mResultTxt.setText(response.getRet_msg());
+                            mLogger.log(response.getRet_msg());
                         } else {
-                            mResultTxt.setText("process接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("process error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
 
     public void onViewClick(View v) {
         if (secureV3Info != null) {
-            YSAppPay.getInstance().requestPayPalOneTimePayment(this
+            YSAppPay.getBraintreePay().requestPayPalOneTimePayment(this
                     , getPayPalRequest(secureV3Info.getAmount() + ""));
         }
     }
@@ -135,12 +136,12 @@ public class PayPalActivity extends BTCustomPayActivity {
 
     @Override
     public void onPrepayCancel() {
-        mResultTxt.setText("支付取消");
+        mLogger.log("Pay cancel");
     }
 
     @Override
     public void onPrepayError(ErrStatus errStatus) {
-        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
+        mLogger.log(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override
@@ -151,14 +152,14 @@ public class PayPalActivity extends BTCustomPayActivity {
     @Override
     public void onPaymentNonceFetched(PayPalAccountNonce payPalAccountNonce, String deviceData) {
         super.onPaymentNonceFetched(payPalAccountNonce, deviceData);
-        mResultTxt.setText(DropInPayActivity.getDisplayString(payPalAccountNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(payPalAccountNonce));
         callPayProcess(secureV3Info.getTransactionNo(), payPalAccountNonce.getNonce(), deviceData);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        YSAppPay.getInstance().unbindBrainTree(this);
+        YSAppPay.getBraintreePay().unbindBrainTree(this);
     }
 
 }

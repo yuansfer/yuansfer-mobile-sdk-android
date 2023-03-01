@@ -33,11 +33,12 @@ import com.yuansfer.pay.braintree.BTDropInActivity;
 import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.model.SecureV3Response;
 import com.yuansfer.paysdk.model.SecureV3Info;
+import com.yuansfer.paysdk.util.Logger;
 import com.yuansfer.paysdk.util.YSAuth;
 
 public class DropInPayActivity extends BTDropInActivity {
 
-    private TextView mResultTxt;
+    private Logger mLogger;
     private Button mBtnPay;
     private SecureV3Info secureV3Info;
 
@@ -46,7 +47,7 @@ public class DropInPayActivity extends BTDropInActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropin);
         setUpAsBackTitle();
-        mResultTxt = findViewById(R.id.tv_result);
+        mLogger = new Logger(findViewById(R.id.tv_result));
         mBtnPay = findViewById(R.id.btn_pay_start);
         callPrepay();
     }
@@ -68,23 +69,23 @@ public class DropInPayActivity extends BTDropInActivity {
         spRequest.setIpnUrl("https://yuansferdev.com/callback");
         spRequest.setDescription("test+description");
         spRequest.setNote("note");
-        YSAppPay.getInstance().getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
+        YSAppPay.getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         SecureV3Response response = APIHelper.convertResponseKeepRaw(new Gson(), s, SecureV3Response.class);
                         if (response.isSuccess()) {
                             secureV3Info = response.getResult();
-                            mResultTxt.setText(secureV3Info.toString());
+                            mLogger.log(secureV3Info.toString());
                             mBtnPay.setEnabled(true);
                         } else {
-                            mResultTxt.setText("prepay接口报错:" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("prepay error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
@@ -107,57 +108,57 @@ public class DropInPayActivity extends BTDropInActivity {
                 .googleMerchantId("merchant-id-from-google");
 
         dropInRequest.googlePaymentRequest(googlePaymentRequest);
-        YSAppPay.getInstance().requestDropInPayment(this, secureV3Info.getAuthorization(), dropInRequest);
+        YSAppPay.getBraintreePay().requestDropInPayment(this, secureV3Info.getAuthorization(), dropInRequest);
     }
 
     @Override
     public void onPrepayCancel() {
-        mResultTxt.setText("支付取消");
+        mLogger.log("Pay cancel");
     }
 
     @Override
     public void onPrepayError(ErrStatus errStatus) {
-        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
+        mLogger.log(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override
     public void onPaymentNonceFetched(CardNonce cardNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(cardNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(cardNonce));
         callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , cardNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(PayPalAccountNonce payPalAccountNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(payPalAccountNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(payPalAccountNonce));
         callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , payPalAccountNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(GooglePaymentCardNonce googlePaymentCardNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(googlePaymentCardNonce));
         callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , googlePaymentCardNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(VisaCheckoutNonce visaCheckoutNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(visaCheckoutNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(visaCheckoutNonce));
         callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , visaCheckoutNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(VenmoAccountNonce venmoAccountNonce, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(venmoAccountNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(venmoAccountNonce));
         callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , venmoAccountNonce.getNonce(), deviceData);
     }
 
     @Override
     public void onPaymentNonceFetched(LocalPaymentResult localPaymentResult, String deviceData) {
-        mResultTxt.setText(DropInPayActivity.getDisplayString(localPaymentResult));
+        mLogger.log(DropInPayActivity.getDisplayString(localPaymentResult));
         callProcess(BTMethod.CREDIT_CARD, secureV3Info.getTransactionNo()
                 , localPaymentResult.getNonce(), deviceData);
     }
@@ -172,22 +173,22 @@ public class DropInPayActivity extends BTDropInActivity {
         ppRequest.setPaymentMethodNonce(nonce);
         ppRequest.setTransactionNo(transactionNo);
         ppRequest.setDeviceData(deviceData);
-        YSAppPay.getInstance().getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
+        YSAppPay.getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         BaseResponse response = APIHelper.convertResponseKeepRaw(new Gson(), s, BaseResponse.class);
                         if (response.isSuccess()) {
                             //支付成功
-                            mResultTxt.setText(response.getRet_msg());
+                            mLogger.log(response.getRet_msg());
                         } else {
-                            mResultTxt.setText("process接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("process error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }

@@ -3,7 +3,6 @@ package com.yuansfer.paysdk.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -26,22 +25,23 @@ import com.yuansfer.pay.YSAppPay;
 import com.yuansfer.paysdk.R;
 import com.yuansfer.paysdk.model.SecureV3Response;
 import com.yuansfer.paysdk.model.SecureV3Info;
+import com.yuansfer.paysdk.util.Logger;
 import com.yuansfer.paysdk.util.YSAuth;
 
 public class CardActivity extends BTCustomPayActivity implements
         OnCardFormFieldFocusedListener, OnCardFormSubmitListener {
 
-    private TextView mResultTxt;
     private SecureV3Info secureV3Info;
     private Button mCardBtn;
     private CardForm mCardForm;
+    private Logger mLogger;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_pay);
         setUpAsBackTitle();
-        mResultTxt = findViewById(R.id.tv_result);
+        mLogger = new Logger(findViewById(R.id.tv_result));
         mCardBtn = findViewById(R.id.btn_start_pay);
         mCardBtn.setText("Card Pay");
         mCardForm = findViewById(R.id.card_form);
@@ -67,23 +67,23 @@ public class CardActivity extends BTCustomPayActivity implements
         spRequest.setIpnUrl("https://yuansferdev.com/callback");
         spRequest.setDescription("test+description");
         spRequest.setNote("note");
-        YSAppPay.getInstance().getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
+        YSAppPay.getClientAPI().apiPost("/online/v3/secure-pay", new Gson().toJson(spRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         SecureV3Response response = APIHelper.convertResponseKeepRaw(new Gson(), s, SecureV3Response.class);
                         if (response.isSuccess()) {
                             secureV3Info = response.getResult();
-                            mResultTxt.setText(secureV3Info.toString());
-                            YSAppPay.getInstance().bindBrainTree(CardActivity.this, secureV3Info.getAuthorization());
+                            mLogger.log(secureV3Info.toString());
+                            YSAppPay.getBraintreePay().bindBrainTree(CardActivity.this, secureV3Info.getAuthorization());
                         } else {
-                            mResultTxt.setText("prepay接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("prepay error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
@@ -97,22 +97,22 @@ public class CardActivity extends BTCustomPayActivity implements
         ppRequest.setPaymentMethodNonce(nonce);
         ppRequest.setTransactionNo(transactionNo);
         ppRequest.setDeviceData(deviceData);
-        YSAppPay.getInstance().getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
+        YSAppPay.getClientAPI().apiPost("/creditpay/v3/process", new Gson().toJson(ppRequest)
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
                         BaseResponse response = APIHelper.convertResponseKeepRaw(new Gson(), s, BaseResponse.class);
                         if (response.isSuccess()) {
                             //支付成功
-                            mResultTxt.setText(response.getRet_msg());
+                            mLogger.log(response.getRet_msg());
                         } else {
-                            mResultTxt.setText("process接口报错" + response.getRet_code() + "/" + response.getRet_msg());
+                            mLogger.log("process error:" + response.getRet_code() + "/" + response.getRet_msg());
                         }
                     }
 
                     @Override
                     public void onFail(Exception e) {
-                        mResultTxt.setText(e.getMessage());
+                        mLogger.log(e.getMessage());
                     }
                 });
     }
@@ -126,18 +126,18 @@ public class CardActivity extends BTCustomPayActivity implements
                     .cvv(mCardForm.getCvv())
                     .validate(false) // TODO GQL currently only returns the bin if validate = false
                     .postalCode(mCardForm.getPostalCode());
-            YSAppPay.getInstance().requestCardPayment(this, cardBuilder);
+            YSAppPay.getBraintreePay().requestCardPayment(this, cardBuilder);
         }
     }
 
     @Override
     public void onPrepayCancel() {
-        mResultTxt.setText("支付取消");
+        mLogger.log("Pay cancel");
     }
 
     @Override
     public void onPrepayError(ErrStatus errStatus) {
-        mResultTxt.setText(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
+        mLogger.log(errStatus.getErrCode() + "/" + errStatus.getErrMsg());
     }
 
     @Override
@@ -155,7 +155,7 @@ public class CardActivity extends BTCustomPayActivity implements
     @Override
     public void onPaymentNonceFetched(CardNonce cardNonce, String deviceData) {
         super.onPaymentNonceFetched(cardNonce, deviceData);
-        mResultTxt.setText(DropInPayActivity.getDisplayString(cardNonce));
+        mLogger.log(DropInPayActivity.getDisplayString(cardNonce));
         callPayProcess(secureV3Info.getTransactionNo(), cardNonce.getNonce(), deviceData);
     }
 
@@ -172,7 +172,7 @@ public class CardActivity extends BTCustomPayActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        YSAppPay.getInstance().unbindBrainTree(this);
+        YSAppPay.getBraintreePay().unbindBrainTree(this);
     }
 
 }

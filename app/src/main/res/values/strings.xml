@@ -13,6 +13,7 @@
     <string name="venmo">Venmo</string>
     <string name="creditcard">Card Pay</string>
     <string name="samsung_pay">Samsung Pay</string>
+    <string name="cashapppay">Cash App Pay</string>
 
     <string-array name="multi_alipay_currency">
         <item>gcash</item>

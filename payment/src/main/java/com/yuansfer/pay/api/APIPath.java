@@ -8,8 +8,9 @@ public class APIPath {
     public static final String RELEASE_URL = "https://mapi.yuansfer.com";
     /**
      * 沙箱环境
+     * fixme 待恢复test
      */
-    public static final String SANDBOX_URL = "https://mapi.yuansfer.yunkeguan.com";
+    public static final String SANDBOX_URL = "https://mapi.dev.yunkeguan.com";
     /**
      * 创建一个交易订单
      */

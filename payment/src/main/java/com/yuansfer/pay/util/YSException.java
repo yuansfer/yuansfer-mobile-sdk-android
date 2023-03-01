@@ -1,6 +1,6 @@
 package com.yuansfer.pay.util;
 
-public class YSException extends RuntimeException {
+public class YSException extends Exception {
     public YSException() {
     }
 
