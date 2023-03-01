@@ -50,7 +50,7 @@ dependencies {
         // Client Online API (optional)
         implementation 'com.ejlchina:okhttps-gson:3.2.0'
         
-        // CashAppPay
+        // CashAppPay (optional)
         implementation 'app.cash.paykit:core:1.0.3'
 }
 android{
