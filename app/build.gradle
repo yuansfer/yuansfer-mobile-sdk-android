@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.yuansfer.paysdk"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -59,7 +59,7 @@ dependencies {
     // local sdk
     debugImplementation project(':payment')
     // remote sdk
-    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.3.0'
+    releaseImplementation 'com.github.yuansfer:yuansfer-payment-android:1.3.2'
     // alipay
     implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
     // wechatpay
@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:16.0.1'
     // client API
     implementation 'com.ejlchina:okhttps-gson:3.2.0'
-    // cashapppay
+    // cash app pay
     implementation 'app.cash.paykit:core:1.0.3'
 }
 
