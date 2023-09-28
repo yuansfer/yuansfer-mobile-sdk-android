@@ -201,7 +201,7 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   android.jetifier.blacklist=moshi-1.13.0
 ````
 
-* Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. First, the vault configuration on the backend needs to be turned on. Next, the client integration process is as follows:
+* Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. The client integration process is as follows:
   - Register a customer before the first payment, including information such as email, phone, and country. The customer information can be retrieved or updated as needed.
   - Call the /online/v3/secure-pay interface and pass in the customerNo field associated with the customer from the previous step.
   - Call the /creditpay/v3/process interface to complete the payment.
