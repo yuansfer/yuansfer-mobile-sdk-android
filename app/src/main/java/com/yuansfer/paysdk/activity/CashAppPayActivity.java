@@ -74,6 +74,7 @@ public class CashAppPayActivity extends AppCompatActivity implements ICashPayCal
                 , new OnResponseListener<String>() {
                     @Override
                     public void onSuccess(String s) {
+                        mLogger.log(s);
                         handlePrepay(s);
                     }
 
