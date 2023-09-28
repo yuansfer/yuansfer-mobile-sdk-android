@@ -99,7 +99,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 
 * 如果您要集成Drop-in UI，您需要让Activity继承BTDropInActivity。如果您要使用自定义UI，则需要让Activity继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback接口方法。
 
-  > 当支付环境不允许、用户取消支付或出现错误时，将触发IBTPrepayCallback回调，请实现以下方法并向用户提供反馈。
+> 当支付环境不允许、用户取消支付或出现错误时，将触发IBTPrepayCallback回调，请实现以下方法并向用户提供反馈。
 
 ````
     void onPaymentConfigurationFetched(Configuration configuration);
@@ -108,7 +108,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-  > IBTNonceCallback在获取支付Nonce成功后触发回调, 仅需要实现支持的支付方式，如信用卡只需实现参数为CardNonce实例的回调方法。
+> IBTNonceCallback在获取支付Nonce成功后触发回调, 仅需要实现支持的支付方式，如信用卡只需实现参数为CardNonce实例的回调方法。
 
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
