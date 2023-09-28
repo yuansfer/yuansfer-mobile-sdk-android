@@ -149,6 +149,23 @@ pay.requestVenmoPayment(T activity, boolean vault)
 pay.requestCardPayment(T activity, CardBuilder cardBuilder)
 
 ````
+* 保存信用卡PayPal等付款方式
+
+  为方便同一客户再次使用相同的支付方式进行付款，保存最近的付款方式可避免重复输入账号等信息来完成支付。客户端流程如下：
+
+  1. 首次支付前注册一个客户，内容包括邮箱、电话、国家等信息。必要时可检索或更新该客户信息。
+  2. 调用/online/v3/secure-pay接口传入上一步的customerNo字段关联客户。
+  3. 调用/creditpay/v3/process接口继续完成支付。
+
+  **Drop-in方式**
+
+  按照以上步骤Drop-in方式将自动把该客户之前付款过的Credit Card、PayPal等支付方式保存并显示在Drop-in显示面板，客户选择支付方式后免录入继续完成支付。
+
+  **Custom UI方式**
+
+  - 调用/online/v3/secure-pay接口获取authorization绑定fragment。
+  - 调用查找最近支付方式列表接口方法PaymentMethod.getPaymentMethodNonces()，同时实现监听PaymentMethodNoncesUpdatedListener接口并展示列表数据，包含支付类型、卡后4位等信息。
+
 * Cash App Pay.
 ````
 ICashAppPay pay = YSAppPay.getCashAppPay()
@@ -196,21 +213,3 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 ````
   android.jetifier.blacklist=moshi-1.13.0
 ````
-
-* **保存信用卡PayPal等付款方式**
-   
-  为方便同一客户再次使用相同的支付方式进行付款，保存最近的付款方式可避免重复输入账号等信息来完成支付。客户端流程如下：
-
-  1. 首次支付前注册一个客户，内容包括邮箱、电话、国家等信息。必要时可检索或更新该客户信息。 
-  2. 调用/online/v3/secure-pay接口传入上一步的customerNo字段关联客户。 
-  3. 调用/creditpay/v3/process接口继续完成支付。
-
-  **Drop-in方式**
-
-  按照以上步骤Drop-in方式将自动把该客户之前付款过的Credit Card、PayPal等支付方式保存并显示在Drop-in显示面板，客户选择支付方式后免录入继续完成支付。
-   
-  **Custom UI方式**
-
-  - 调用/online/v3/secure-pay接口获取authorization绑定fragment。
-  - 调用查找最近支付方式列表接口方法PaymentMethod.getPaymentMethodNonces()，同时实现监听PaymentMethodNoncesUpdatedListener接口并展示列表数据，包含支付类型、卡后4位等信息。
-  
