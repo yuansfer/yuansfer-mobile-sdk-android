@@ -2,22 +2,23 @@
 English | [中文文档](README_zh.md)
 
 ## Introduction
-This is a project that aggregates WeChat、Alipay or Braintree payments, It mainly provides apps to quickly access APIs for many payments, At the same time, it supports the convenient call of some online API interfaces. Each payment method is independent of each other, and corresponding dependencies are introduced if necessary.
-
+This project supports multiple payment methods, including WeChat Pay, Alipay, credit card, PayPal, Venmo, Google Pay, CashApp, and more. These payment methods are independent of each other, and you only need to introduce the corresponding dependencies when needed.
+The project consists of an SDK and a demo. The SDK provides interfaces and encapsulations for various payment methods, making it easy for you to integrate payment functions quickly. The demo provides specific code examples and explanations, making it easy for you to learn how to use the SDK for payment integration.
+By using the SDK, you can quickly integrate multiple payment methods, provide users with more convenient payment options, and improve their payment experience and transaction efficiency.
 ## Quick integration
-* Add jitpack and Alibaba Cloud mirror url to the build.gradle file under the project. If Alipay is integrated, specify the aar directory.
+* In the build.gradle file of your project, you can add JitPack and Alibaba Cloud mirror URLs. If you need to integrate Alipay, you also need to specify the AAR directory.
 ````
 buildscript {
     repositories {
         google()
-        // aliyun mirror
+        // aliyun url
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 repositories {
     // jitpack url
     maven { url 'https://jitpack.io' }
-    // aliyun mirror
+    // aliyun url
     maven { url 'https://maven.aliyun.com/repository/jcenter' }
     // alipay arr location (optional)
     flatDir {
@@ -25,7 +26,7 @@ repositories {
     }
 }
 ````
-* Add the following dependencies to the app’s build.gradle file. Payment is necessary. Other payment methods are optional. If you want to use Braintree’s Drop-in toolkit with UI functionality, add the following private server authentication.
+* Add the following dependencies to the build.gradle file of your application. Payment is required, while other payment methods are optional. If you want to use the Drop-in tool package with UI functionality, you need to add the following private service authentication.
 ````
 dependencies {
         ... 
@@ -38,13 +39,13 @@ dependencies {
         // Wechat Pay (optional)
         implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 
-        // Custom UI of Braintree (optional)
+        // Custom UI (optional)
         implementation 'com.braintreepayments.api:braintree:3.14.2'
 
-        // Drop-in UI of Braintree (optional)
+        // Drop-in UI (optional)
         implementation 'com.braintreepayments.api:drop-in:4.6.0'
 
-        // Google Pay of Braintree (optional)
+        // Google Pay (optional)
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 
         // Client Online API (optional)
@@ -67,7 +68,7 @@ android{
 }
 ````
 ## How to use
-* When WeChat or Alipay is integrated, register and remove unified monitoring of payment results.
+* If you want to integrate WeChat Pay or Alipay, please register a unified listener to handle payment results first.
 ````
 IAliWxPay pay = YSAppPay.getAliWxPay()
 
@@ -83,7 +84,7 @@ protected void onDestroy() {
     pay.unregisterAliWxPayCallback(callback);
 }
 ````
-* Start payment after obtaining WeChat or Alipay data from the backend server
+* After obtaining the pre-payment data from the Pockyt server, you can use the requestXXX function to initiate Alipay or WeChat Pay.
 ````
 // Start Alipay
 pay.requestAliPayment(Activity activity, String orderInfo)
@@ -95,12 +96,11 @@ pay.registerWXAPP(Context context, String appId)
 pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 
-* When using Braintree’s Drop-in UI, the activity needs to inherit BTDropInActivity. When using a custom UI, the activity needs to inherit BTCustomPayActivity, and implement the interface methods of IBTrepayCallback and IBTNonceCallback that need to be rewritten.
+* If you want to integrate the Drop-in UI, you need to make the Activity inherit from BTDropInActivity. If you want to use a custom UI, you need to make the Activity inherit from BTCustomPayActivity and implement the interface methods that need to be overwritten, including IBTPrepayCallback and IBTNonceCallback.
    
-  - IBTPrepayCallback callback occurs after checking the payment environment.
+  - When the payment environment is not allowed, the user cancels the payment, or an error occurs, the IBTPrepayCallback callback will be triggered. Please implement the following method and provide feedback to the user.
    
 ````
-    // Whether related services and configurations are available
     void onPaymentConfigurationFetched(Configuration configuration);
 
     void onPrepayCancel();
@@ -108,7 +108,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
     void onPrepayError(ErrStatus errStatus);
 ````
 
-  - IBTNonceCallback will be called back after obtaining the payment Nonce successfully, only the supported payment method needs to be implemented.
+  - The IBTNonceCallback callback is triggered after successfully obtaining a payment nonce. Only the supported payment methods need to be implemented, for example, for credit card payments, only the callback method with the CardNonce instance parameter needs to be implemented.
 
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
@@ -124,7 +124,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
 
-* The corresponding Braintree payment can be initiated by obtaining the customer token from the back-end server or using a constant merchant authorization code.
+* You can initiate credit card, Paypal, Venmo, and Google Pay payments by obtaining a customer token from the backend server.
 ````
 IBraintreePay pay = YSAppPay.getBraintreePay()
 
@@ -179,10 +179,10 @@ api.transAdd(request, new OnResponseListener<TransAddResponse>() {})
 api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 
 ````
-* For detailed instructions, please refer to Demo usage examples.
+* Please refer to the usage examples in the demo for detailed instructions.
 
 ## Other instructions
-* Android 11 system policy update, adding WeChat software visibility adaptation
+* Android 11 system policy update, adding WeChat software visibility adaptation.
 ````
   // Add the following<queries>tag to the AndroidManifest.xml of the application
   <queries>
@@ -194,11 +194,6 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   // Com.android.tools.build.gradle needs to be upgraded to version 3.6.0. It is recommended to upgrade to the latest version 3.6.4.
 ````
 
-* Since the minimum version requirement of Alipay SDK is 16, if the app module is lower than 16, you need to add the following statement in AndroidManifest.xml
-
-````
-<uses-sdk tools:overrideLibrary="com.alipay.sdk,com.yuansfer.pay"/>
-````
 * WeChat payment needs to determine the client appid, package name, package signature, and server parameters and signature to be the same to pull up the WeChat client
 
 * After adding the CashAppPay dependency, when the error of Failed to transform moshi-1.13.0.jar appears, please add the AndroidX automatic conversion blacklist in the gradle.properties file to exclude it:
@@ -206,9 +201,13 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   android.jetifier.blacklist=moshi-1.13.0
 ````
 
-* ErrorStatus Code of payment result:
-  - Wechat Pay, Start with the character 'W'
-  - Alipay, Start with the character 'A'
-  - Google Pay, Start with the character 'G'
-  - Braintree, Start with the character 'B'
+* Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. First, the vault configuration on the backend needs to be turned on. Next, the client integration process is as follows:
+  1.Register a customer before the first payment, including information such as email, phone, and country. The customer information can be retrieved or updated as needed.
+  2.Call the /online/v3/secure-pay interface and pass in the customerNo field associated with the customer from the previous step.
+  3.Call the /creditpay/v3/process interface to complete the payment.
+  Drop-in method:
+  Following the above steps, the Drop-in method will automatically save and display the previously used payment methods such as Credit Card and PayPal for the customer in the Drop-in display panel. After selecting the payment method, the customer can proceed to complete the payment without entering any information.
+  Custom UI method:
+  a. Call the /online/v3/secure-pay interface to obtain the authorization and bind the Braintree fragment.
+  b. Call the PaymentMethod.getPaymentMethodNonces() method to retrieve the list of recently used payment methods, and implement the PaymentMethodNoncesUpdatedListener interface to display the list data, including payment type and the last four digits of the card.
   

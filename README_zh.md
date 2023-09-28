@@ -2,22 +2,24 @@
 [English](README.md) | 中文文档
 
 ## 概述
-这是一个可快速集成微信支付、支付宝、Braintree等第三方支付平台的SDK项目, 同时支持部分在线api接口的便捷调用。每种支付方式相互独立，需要则引入相应依赖.
+该项目支持多种支付方式，包括微信支付、支付宝、信用卡、PayPal、Venmo、Google Pay、CashApp等。这些支付方式相互独立，您只需要在需要时引入相应依赖即可。
+该项目由SDK和Demo组成，SDK提供了各种支付方式的接口和封装，方便您快速集成支付功能。Demo则提供了具体的代码示例和说明，方便您了解如何使用SDK进行支付集成。
+通过使用SDK，您可以快速集成多种支付方式，为用户提供更加便捷的支付方式，提高用户的支付体验和交易效率。
 
 ## 快速集成
-* 在project下的build.gradle文件中添加jitpack和阿里云镜像url, 若集成支付宝，则需指定aar目录.
+* 在项目的build.gradle文件中，您可以添加JitPack和阿里云镜像URL。如果您需要集成支付宝，还需要指定AAR目录。
 ````
 buildscript {
     repositories {
         google()
-        // aliyun mirror
+        // aliyun url
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 repositories {
     // jitpack url
     maven { url 'https://jitpack.io' }
-    // aliyun mirror
+    // aliyun url
     maven { url 'https://maven.aliyun.com/repository/jcenter' }
     // alipay arr location (optional)
     flatDir {
@@ -25,7 +27,7 @@ repositories {
     }
 }
 ````
-* 在app的build.gradle文件中添加以下依赖, payment是必要的，其它支付方式均为可选，若要使用Braintree的带UI功能Drop-in工具包，则添加以下私服认证.
+* 在您的应用程序的build.gradle文件中添加以下依赖项。其中，payment是必需的，而其他支付方式是可选的。如果您想要使用带有UI功能的Drop-in工具包，则需要添加以下私服认证。
 ````
 dependencies {
         ... 
@@ -38,13 +40,13 @@ dependencies {
         // Wechat Pay (optional)
         implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 
-        // Custom UI of Braintree (optional)
+        // Custom UI (optional)
         implementation 'com.braintreepayments.api:braintree:3.14.2'
 
-        // Drop-in UI of Braintree (optional)
+        // Drop-in UI (optional)
         implementation 'com.braintreepayments.api:drop-in:4.6.0'
 
-        // Google Pay of Braintree (optional)
+        // Google Pay (optional)
         implementation 'com.google.android.gms:play-services-wallet:16.0.1'
 
         // Client Online API (optional)
@@ -67,7 +69,7 @@ android{
 }
 ````
 ## 如何使用
-* 当集成了微信或支付宝时，注册和移除统一监听付款结果.
+* 如果您想要集成微信或支付宝支付，首先请注册统一监听器以处理付款结果。
 ````
 IAliWxPay pay = YSAppPay.getAliWxPay()
 
@@ -83,7 +85,7 @@ protected void onDestroy() {
     pay.unregisterAliWxPayCallback(callback);
 }
 ````
-* 从Yuansfer服务器获取预付款信息后发起支付宝或微信支付.
+* 在从Pockyt服务器获取预支付数据后，您可以使用requestXXX函数发起支付宝或微信支付。
 ````
 // Start Alipay
 pay.requestAliPayment(Activity activity, String orderInfo)
@@ -95,12 +97,11 @@ pay.registerWXAPP(Context context, String appId)
 pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 
-* 当使用Braintree的Drop-in UI，则Activity需继承BTDropInActivity，当使用自定义UI，则Activity需继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback的接口方法.
+* 如果您要集成Drop-in UI，您需要让Activity继承BTDropInActivity。如果您要使用自定义UI，则需要让Activity继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback接口方法。
     
-  - IBTPrepayCallback在检查支付环境后发生回调.
+  - 当支付环境不允许、用户取消支付或出现错误时，将触发IBTPrepayCallback回调，请实现以下方法并向用户提供反馈。
     
 ````
-    // 相关服务和配置是否可用
     void onPaymentConfigurationFetched(Configuration configuration);
 
     void onPrepayCancel();
@@ -108,7 +109,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
     void onPrepayError(ErrStatus errStatus);
 ````
 
-  - IBTNonceCallback在获取支付Nonce成功后发生回调, 仅需要实现支持的支付方式即可.
+  - IBTNonceCallback在获取支付Nonce成功后触发回调, 仅需要实现支持的支付方式即可，比如信用卡只需实现参数为CardNonce实例的回调方法。
    
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
@@ -124,7 +125,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
     void onPaymentMethodResult(LocalPaymentResult localPaymentResult, String deviceData){}
 ````
 
-* 可以通过从后端服务器获取客户令牌或使用恒定的商家授权码来发起相应的Braintree付款.
+* 您可以通过从后端服务器获取客户令牌，然后发起相应的信用卡、Paypal、Venmo、Google Pay支付。
 ````
 IBraintreePay pay = YSAppPay.getBraintreePay()
 
@@ -180,10 +181,10 @@ api.transAdd(request, new OnResponseListener<TransAddResponse>() {})
 api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 
 ````
-* 有关详细说明，请参阅演示用法示例.
+* 请参阅演示用法示例以获取详细说明。
 
 ## 其他说明
-* Android 11 系统策略更新, 添加微信的软件可见性适配，
+* Android 11 系统策略更新, 添加微信的软件可见性适配。
 ````
   // 在应用的AndroidManifest.xml添加如下<queries>标签
   <queries>
@@ -195,11 +196,6 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   // com.android.tools.build:gradle 需要升级至 3.6.0 版本，建议升级至最新的 3.6.4 版本。
 ````
 
-* 由于支付宝SDK的最低版本要求为16，如果应用模块低于16，则需要在AndroidManifest.xml中添加以下语句.
-
-````
-<uses-sdk tools:overrideLibrary="com.alipay.sdk,com.yuansfer.pay"/>
-````
 * 微信支付需要确定客户端appid，软件包名称，软件包签名以及服务器参数和签名相同才能拉起微信客户端.
 
 * 添加了CashAppPay依赖后出现Failed to transform moshi-1.13.0.jar报错时，请在gradle.properties文件添加AndroidX自动转换黑名单排除在外:
@@ -207,9 +203,13 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   android.jetifier.blacklist=moshi-1.13.0
 ````
 
-* ErrorStatus付款结果代码:
-  - 微信支付, 以字符W为开头的错误码
-  - 支付宝, 以字符A为开头的错误码
-  - Google Pay, 以字符G为开头的错误码
-  - Braintree, 以字符B为开头的错误码
+* 保存信用卡PayPal等付款方式。为方便同一客户再次使用相同的支付方式进行付款，保存最近的付款方式可避免重复输入账号等信息来完成支付。首先后端的vault配置需要打开，其次客户端对接流程如下：
+  1．首次支付前注册一个客户，内容包括邮箱、电话、国家等信息。必要时可检索或更新该客户信息。
+  2．调用/online/v3/secure-pay接口传入上一步的customerNo字段关联客户。
+  3．调用/creditpay/v3/process接口继续完成支付。
+  Drop-in方式：
+  按照以上步骤Drop-in方式将自动把该客户之前付款过的Credit Card、PayPal等支付方式保存并显示在Drop-in显示面板，客户选择支付方式后免录入继续完成支付。
+  Custom UI方式：
+  a.调用/online/v3/secure-pay接口获取authorization绑定braintree fragment。
+  b.调用查找最近支付方式列表接口方法PaymentMethod.getPaymentMethodNonces()，同时实现监听PaymentMethodNoncesUpdatedListener接口并展示列表数据，包含支付类型、卡后4位等信息。
   
