@@ -207,7 +207,7 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 
   **Drop-in方式**
 
-      按照以上步骤Drop-in方式将自动把该客户之前付款过的Credit Card、PayPal等支付方式保存并显示在Drop-in显示面板，客户选择支付方式后免录入继续完成支付。
+  按照以上步骤Drop-in方式将自动把该客户之前付款过的Credit Card、PayPal等支付方式保存并显示在Drop-in显示面板，客户选择支付方式后免录入继续完成支付。
    
   **Custom UI方式**
 
