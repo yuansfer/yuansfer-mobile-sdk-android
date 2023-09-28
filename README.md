@@ -149,7 +149,6 @@ pay.requestVenmoPayment(T activity, boolean vault)
 pay.requestCardPayment(T activity, CardBuilder cardBuilder)
 
 ````
-
 * Saving payment methods such as credit cards and PayPal
 
   Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. The client integration process is as follows:
