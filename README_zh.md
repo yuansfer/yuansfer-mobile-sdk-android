@@ -107,7 +107,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-  b.IBTNonceCallback在获取支付Nonce成功后触发回调, 仅需要实现支持的支付方式即可，比如信用卡只需实现参数为CardNonce实例的回调方法。
+    b.IBTNonceCallback在获取支付Nonce成功后触发回调, 仅需要实现支持的支付方式即可，比如信用卡只需实现参数为CardNonce实例的回调方法。
 
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
