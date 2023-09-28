@@ -128,10 +128,8 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 IBraintreePay pay = YSAppPay.getBraintreePay()
 
-// Bind Braintree
 pay.bindBrainTree(T activity, String authorization)
 
-// Unbind Braintree
 pay.unbindBrainTree(T activity)
 
 // Start Drop-in UI Payment
@@ -202,7 +200,7 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   android.jetifier.blacklist=moshi-1.13.0
 ````
 
-* **保存信用卡PayPal等付款方式。**
+* **保存信用卡PayPal等付款方式**
    
   为方便同一客户再次使用相同的支付方式进行付款，保存最近的付款方式可避免重复输入账号等信息来完成支付。客户端流程如下：
 
@@ -216,6 +214,6 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
    
   **Custom UI方式**
 
-  - 调用/online/v3/secure-pay接口获取authorization绑定braintree fragment。
+  - 调用/online/v3/secure-pay接口获取authorization绑定fragment。
   - 调用查找最近支付方式列表接口方法PaymentMethod.getPaymentMethodNonces()，同时实现监听PaymentMethodNoncesUpdatedListener接口并展示列表数据，包含支付类型、卡后4位等信息。
   

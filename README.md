@@ -97,8 +97,8 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * If you want to integrate the Drop-in UI, you need to make the Activity inherit from BTDropInActivity. If you want to use a custom UI, you need to make the Activity inherit from BTCustomPayActivity and implement the interface methods that need to be overwritten, including IBTPrepayCallback and IBTNonceCallback.
-   
-  - When the payment environment is not allowed, the user cancels the payment, or an error occurs, the IBTPrepayCallback callback will be triggered. Please implement the following method and provide feedback to the user.
+
+>  When the payment environment is not allowed, the user cancels the payment, or an error occurs, the IBTPrepayCallback callback will be triggered. Please implement the following method and provide feedback to the user.
    
 ````
     void onPaymentConfigurationFetched(Configuration configuration);
@@ -108,7 +108,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
     void onPrepayError(ErrStatus errStatus);
 ````
 
-  - The IBTNonceCallback callback is triggered after successfully obtaining a payment nonce. Only the supported payment methods need to be implemented, for example, for credit card payments, only the callback method with the CardNonce instance parameter needs to be implemented.
+> The IBTNonceCallback triggers a callback after successfully obtaining a payment Nonce. Only the supported payment methods need to be implemented, for example, for credit cards, only the callback method with a parameter of CardNonce instance needs to be implemented.
 
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
@@ -128,10 +128,8 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 IBraintreePay pay = YSAppPay.getBraintreePay()
 
-// Bind Braintree
 pay.bindBrainTree(T activity, String authorization)
 
-// Unbind Braintree
 pay.unbindBrainTree(T activity)
 
 // Start Drop-in UI Payment
@@ -201,13 +199,20 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
   android.jetifier.blacklist=moshi-1.13.0
 ````
 
-* Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. The client integration process is as follows:
-  - Register a customer before the first payment, including information such as email, phone, and country. The customer information can be retrieved or updated as needed.
-  - Call the /online/v3/secure-pay interface and pass in the customerNo field associated with the customer from the previous step.
-  - Call the /creditpay/v3/process interface to complete the payment.
-  Drop-in method:
-  Following the above steps, the Drop-in method will automatically save and display the previously used payment methods such as Credit Card and PayPal for the customer in the Drop-in display panel. After selecting the payment method, the customer can proceed to complete the payment without entering any information.
-  Custom UI method:
-  - Call the /online/v3/secure-pay interface to obtain the authorization and bind the Braintree fragment.
+* **Saving payment methods such as credit cards and PayPal**
+
+  Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. The client integration process is as follows:
+
+  1. Register a customer before the first payment, including information such as email, phone, and country. The customer information can be retrieved or updated as needed.
+  2. Call the /online/v3/secure-pay interface and pass in the customerNo field associated with the customer from the previous step.
+  3. Call the /creditpay/v3/process interface to complete the payment.
+   
+  **Drop-in method:**
+  
+    Following the above steps, the Drop-in method will automatically save and display the previously used payment methods such as Credit Card and PayPal for the customer in the Drop-in display panel. After selecting the payment method, the customer can proceed to complete the payment without entering any information.
+    
+  **Custom UI method:**
+
+  - Call the /online/v3/secure-pay interface to obtain the authorization and bind the fragment.
   - Call the PaymentMethod.getPaymentMethodNonces() method to retrieve the list of recently used payment methods, and implement the PaymentMethodNoncesUpdatedListener interface to display the list data, including payment type and the last four digits of the card.
   
