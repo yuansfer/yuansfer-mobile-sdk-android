@@ -11,14 +11,11 @@ By using the SDK, you can quickly integrate multiple payment methods, provide us
 buildscript {
     repositories {
         google()
-        // aliyun url
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
 }
 repositories {
-    // jitpack url
     maven { url 'https://jitpack.io' }
-    // aliyun url
     maven { url 'https://maven.aliyun.com/repository/jcenter' }
     // alipay arr location (optional)
     flatDir {
