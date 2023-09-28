@@ -98,9 +98,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 ````
 
 * 如果您要集成Drop-in UI，您需要让Activity继承BTDropInActivity。如果您要使用自定义UI，则需要让Activity继承BTCustomPayActivity，并实现需要重写的IBTPrepayCallback和IBTNonceCallback接口方法。
-    
   - 当支付环境不允许、用户取消支付或出现错误时，将触发IBTPrepayCallback回调，请实现以下方法并向用户提供反馈。
-    
 ````
     void onPaymentConfigurationFetched(Configuration configuration);
 
@@ -108,9 +106,7 @@ pay.requestWechatPayment(WxPayItem wxPayItem)
 
     void onPrepayError(ErrStatus errStatus);
 ````
-
   - IBTNonceCallback在获取支付Nonce成功后触发回调, 仅需要实现支持的支付方式即可，比如信用卡只需实现参数为CardNonce实例的回调方法。
-   
 ````
     void onPaymentMethodResult(CardNonce cardNonce, String deviceData){}
 
@@ -214,6 +210,6 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
    
    **Custom UI方式**
 
-    - 调用/online/v3/secure-pay接口获取authorization绑定braintree fragment。
-    - 调用查找最近支付方式列表接口方法PaymentMethod.getPaymentMethodNonces()，同时实现监听PaymentMethodNoncesUpdatedListener接口并展示列表数据，包含支付类型、卡后4位等信息。
+  - 调用/online/v3/secure-pay接口获取authorization绑定braintree fragment。
+  - 调用查找最近支付方式列表接口方法PaymentMethod.getPaymentMethodNonces()，同时实现监听PaymentMethodNoncesUpdatedListener接口并展示列表数据，包含支付类型、卡后4位等信息。
   
