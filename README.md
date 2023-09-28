@@ -209,7 +209,7 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
    
   **Drop-in method:**
   
-    Following the above steps, the Drop-in method will automatically save and display the previously used payment methods such as Credit Card and PayPal for the customer in the Drop-in display panel. After selecting the payment method, the customer can proceed to complete the payment without entering any information.
+      Following the above steps, the Drop-in method will automatically save and display the previously used payment methods such as Credit Card and PayPal for the customer in the Drop-in display panel. After selecting the payment method, the customer can proceed to complete the payment without entering any information.
     
   **Custom UI method:**
 
