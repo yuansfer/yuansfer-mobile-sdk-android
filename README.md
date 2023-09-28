@@ -202,12 +202,12 @@ api.transPrepay(request2, new OnResponseListener<TransPrepayResponse>() {})
 ````
 
 * Save payment methods such as credit cards and PayPal. To facilitate customers using the same payment method for future payments, saving the most recent payment method can avoid the need to repeatedly enter account information and complete payment. First, the vault configuration on the backend needs to be turned on. Next, the client integration process is as follows:
-  1.Register a customer before the first payment, including information such as email, phone, and country. The customer information can be retrieved or updated as needed.
-  2.Call the /online/v3/secure-pay interface and pass in the customerNo field associated with the customer from the previous step.
-  3.Call the /creditpay/v3/process interface to complete the payment.
+  - Register a customer before the first payment, including information such as email, phone, and country. The customer information can be retrieved or updated as needed.
+  - Call the /online/v3/secure-pay interface and pass in the customerNo field associated with the customer from the previous step.
+  - Call the /creditpay/v3/process interface to complete the payment.
   Drop-in method:
   Following the above steps, the Drop-in method will automatically save and display the previously used payment methods such as Credit Card and PayPal for the customer in the Drop-in display panel. After selecting the payment method, the customer can proceed to complete the payment without entering any information.
   Custom UI method:
-  a. Call the /online/v3/secure-pay interface to obtain the authorization and bind the Braintree fragment.
-  b. Call the PaymentMethod.getPaymentMethodNonces() method to retrieve the list of recently used payment methods, and implement the PaymentMethodNoncesUpdatedListener interface to display the list data, including payment type and the last four digits of the card.
+  - Call the /online/v3/secure-pay interface to obtain the authorization and bind the Braintree fragment.
+  - Call the PaymentMethod.getPaymentMethodNonces() method to retrieve the list of recently used payment methods, and implement the PaymentMethodNoncesUpdatedListener interface to display the list data, including payment type and the last four digits of the card.
   
