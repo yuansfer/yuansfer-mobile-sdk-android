@@ -74,11 +74,11 @@ dependencies {
 ## How to use
 
 * Only a few steps are required to initiate the payment.
-> For WeChat Pay, registering WeChat API.
+1. For WeChat Pay, registering WeChat API.
 ```
 WechatPayStrategy.registerApi(context, wechatAppId)
 ```
-* After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.  
+2. After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.  
 ```
 val request = AlipayReq(activity, payInfo)
 val request = WechatPayReq(appId, partnerId, prepayId, packageValue, nonceStr, timeStamp, sign)
@@ -86,7 +86,7 @@ val request = DropInReq(activity, authorization, dropInRequest)
 val request = CardReq(activity, authorization, card, true)
 ...
 ```
-* The payment request is then passed to the `PockytPay` class to initiate the payment.
+3. The payment request is then passed to the `PockytPay` class to initiate the payment.
 ```
 // For WeChat Pay
 PockytPay.alipayPay.requestPay(AlipayReq(activity, payInfo)) {
@@ -126,7 +126,7 @@ PockytPay.cardPay.requestPay(request) {
     }
 }
 ```
-* For Braintree, After obtaining the nonce from the payment result, call the Pockyt process API (`/creditpay/v3/process`) to complete the payment.
+4. For Braintree, After obtaining the nonce from the payment result, call the Pockyt process API (`/creditpay/v3/process`) to complete the payment.
 
 ## Note
 
