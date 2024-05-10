@@ -1,7 +1,7 @@
 ## Introduction
 
 ![jitpack](https://img.shields.io/badge/jitpack-v2.0.0-blue)  
-`pockyt_pay` is a mobile payment sdk that supports popular channels such as WeChat Pay, Alipay, Braintree (Credit Card, PayPal, Venmo, Google Pay).
+`pockyt_pay` is a mobile payment sdk that supports popular channels such as WeChat Pay, Alipay and Braintree etc.
 
 ## Getting Started
 
@@ -54,10 +54,10 @@ allprojects {
 dependencies {
     ...
     // Required
-	implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:^${lastest version}' 
-	// Optional, Alipay dependency
+	implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:^${version}' 
+    // Optional, Alipay dependency
 	implementation 'com.alipay.sdk:alipaysdk-android:15.8.14@aar' 
-	// Optional, Wechat Pay dependency
+    // Optional, Wechat Pay dependency
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'  
     // Optional, Include all other dependencies
     implementation 'com.braintreepayments.api:drop-in:6.13.0' 
@@ -74,19 +74,23 @@ dependencies {
 ## How to use
 
 * Only a few steps are required to initiate the payment.
-1. For WeChat Pay, registering WeChat API.
+> For WeChat Pay, registering WeChat API.
 ```
 WechatPayStrategy.registerApi(context, wechatAppId)
 ```
-2. After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.  
+> After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.  
 ```
+// AliPay request
 val request = AlipayReq(activity, payInfo)
+// WecChat Pay request
 val request = WechatPayReq(appId, partnerId, prepayId, packageValue, nonceStr, timeStamp, sign)
+// Drop-in request
 val request = DropInReq(activity, authorization, dropInRequest)
+// Card request
 val request = CardReq(activity, authorization, card, true)
 ...
 ```
-3. The payment request is then passed to the `PockytPay` class to initiate the payment.
+> The payment request is then passed to the `PockytPay` class to initiate the payment.
 ```
 // For WeChat Pay
 PockytPay.alipayPay.requestPay(AlipayReq(activity, payInfo)) {
@@ -126,12 +130,13 @@ PockytPay.cardPay.requestPay(request) {
     }
 }
 ```
-4. For Braintree, After obtaining the nonce from the payment result, call the Pockyt process API (`/creditpay/v3/process`) to complete the payment.
+> For Braintree, After obtaining the nonce from the payment result, call the Pockyt process API (`/creditpay/v3/process`) to complete the payment.
 
 ## Note
 
 * Drop-in UI of Braintree is a complete, ready-made payment UI that offers a quick and easy way to securely accept payments. The UI includes a card entry form and, if enabled, PayPal, Venmo and Google Pay.
 * For Braintree payment, it is recommended to retrieve and upload deviceData to reduce the rejection rate. For card payments, you can choose to include threeDSecure verification based on your requirements.
+* Due to the refactoring of version 2.x.x using Kotlin, it is not compatible with version 1.x.x, when the android project is pure java language, please modify the project configuration to support Kotlin.
 * If you are using WeChat Pay and need to obfuscate your code, please add the following code to ensure the proper functionality of the SDK.
 ```
 -keep class com.tencent.mm.opensdk.** {
@@ -144,5 +149,3 @@ PockytPay.cardPay.requestPay(request) {
     *;
 }
 ```
-* Due to the refactoring of version 2.x.x using Kotlin, it is not compatible with version 1.x.x, when the android project is pure java language, please modify the project configuration to support Kotlin.
-* Please refer to the example code for detailed usage instructions. 

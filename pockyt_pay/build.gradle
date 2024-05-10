@@ -8,8 +8,8 @@ android {
     compileSdk 33
 
     defaultConfig {
-        versionCode 13
-        versionName "1.9.0"
+        versionCode 14
+        versionName "2.0.0"
         minSdk 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
