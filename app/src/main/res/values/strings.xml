@@ -1,33 +1,3 @@
 <resources>
-    <string name="app_name">yuansfer-mobile-sdk-android</string>
-    <string name="alipay">Alipay</string>
-    <string name="wechatpay">Wechat Pay</string>
-    <string name="order_status">Trans Status</string>
-    <string name="refund">Refund</string>
-    <string name="secure_pay">Multi Payment</string>
-    <string name="test_env">Test Env</string>
-    <string name="release_env">Release Env</string>
-    <string name="google_pay">Google Pay</string>
-    <string name="dropin_ui">Drop-in UI</string>
-    <string name="paypal">PayPal</string>
-    <string name="venmo">Venmo</string>
-    <string name="creditcard">Card Pay</string>
-    <string name="samsung_pay">Samsung Pay</string>
-    <string name="cashapppay">Cash App Pay</string>
-
-    <string-array name="multi_alipay_currency">
-        <item>gcash</item>
-        <item>kakaopay</item>
-        <item>alipay</item>
-        <item>alipay_hk</item>
-        <item>dana</item>
-        <item>truemoney</item>
-        <item>tng</item>
-        <item>easypaisa</item>
-        <item>bkash</item>
-    </string-array>
-    <string-array name="environments">
-        <item>TEST</item>
-        <item>PRODUCTION</item>
-    </string-array>
+    <string name="app_name">Pockyt Payment Example</string>
 </resources>

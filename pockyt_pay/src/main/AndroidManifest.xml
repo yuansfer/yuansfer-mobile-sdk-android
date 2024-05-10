@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <queries>
+        <package android:name="com.tencent.mm" />
+    </queries>
+    <application>
+        <activity
+            android:name=".wechatpay.WechatPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="${applicationId}"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity-alias
+            android:name="${applicationId}.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:targetActivity=".wechatpay.WechatPayEntryActivity"
+            android:taskAffinity="${applicationId}"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity android:name=".braintree.DropInPayActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity android:name=".braintree.CustomPayActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTop"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${applicationId}.braintree" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

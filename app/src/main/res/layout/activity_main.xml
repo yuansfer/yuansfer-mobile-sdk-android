@@ -1,217 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:padding="15dp">
+
+    <Button
+        android:id="@+id/btn_alipay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".activity.MainActivity">
+        android:layout_height="wrap_content"
+        android:text="Alipay"
+        android:onClick="onMyClick" />
 
-            <Button
-                android:id="@+id/btn_ali"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/alipay"
-                android:textAllCaps="false"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/edt_ali"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/btn_wx"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/wechatpay"
-                android:textAllCaps="false"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_ali" />
-            <Button
-                android:id="@+id/btn_secure_pay"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/secure_pay"
-                android:textAllCaps="false"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_wx" />
-
-            <EditText
-                android:id="@+id/edt_ali"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBaseline_toBaselineOf="@id/btn_ali"
-                app:layout_constraintLeft_toRightOf="@id/btn_ali"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <EditText
-                android:id="@+id/edt_wx"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBaseline_toBaselineOf="@id/btn_wx"
-                app:layout_constraintLeft_toRightOf="@id/btn_wx"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edt_ali" />
-
-            <EditText
-                android:id="@+id/edt_secure_pay"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintBaseline_toBaselineOf="@id/btn_secure_pay"
-                app:layout_constraintLeft_toRightOf="@id/btn_secure_pay"
-                android:singleLine="true"
-                app:layout_constraintRight_toLeftOf="@id/sp_multi_currency" />
-
-            <Spinner
-                android:id="@+id/sp_multi_currency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/multi_alipay_currency"
-                android:gravity="center"
-                app:layout_constraintBaseline_toBaselineOf="@id/edt_secure_pay"
-                app:layout_constraintLeft_toRightOf="@id/edt_secure_pay"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/edt_wx" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="3">
-            <Button
-                android:id="@+id/btn_dropin_ui"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/dropin_ui"
-                android:textAllCaps="false"
-                />
-
-            <Button
-                android:id="@+id/btn_google_pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/google_pay"
-                android:textAllCaps="false"
-                />
-
-            <Button
-                android:id="@+id/btn_paypal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/paypal"
-                android:textAllCaps="false"
-                />
-
-            <Button
-                android:id="@+id/btn_creditcard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/creditcard"
-                android:textAllCaps="false" />
-
-            <Button
-                android:id="@+id/btn_venmo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/venmo"
-                android:textAllCaps="false" />
-            <Button
-                android:id="@+id/btn_cashapp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:text="@string/cashapppay"
-                android:textAllCaps="false"/>
-            <Button
-                android:id="@+id/btn_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Trans Add" />
-            <Button
-                android:id="@+id/btn_prepay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onViewClick"
-                android:textAllCaps="false"
-                android:text="Trans Prepay" />
-            <Button
-                android:id="@+id/btn_tran_query"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Trans Status" />
-            <Button
-                android:id="@+id/btn_tran_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Trans Detail" />
-            <Button
-                android:id="@+id/btn_tran_refund"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Trans Refund" />
-            <Button
-                android:id="@+id/btn_tran_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Tip Update" />
-            <Button
-                android:id="@+id/btn_mix_gen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Mixed Gen" />
-            <Button
-                android:id="@+id/btn_mix_query"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Mixed Query" />
-            <Button
-                android:id="@+id/btn_mix_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Mixed Cancel" />
-            <Button
-                android:id="@+id/btn_api_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:onClick="onViewClick"
-                android:text="Api Post" />
-        </GridLayout>
-    <ScrollView
+    <Button
+        android:id="@+id/btn_wechatpay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/tv_logger"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:gravity="bottom" />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:text="Wechat Pay"
+        android:onClick="onMyClick" />
+    <Button
+        android:id="@+id/btn_drop_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Drop IN"
+        android:onClick="onMyClick" />
+    <Button
+        android:id="@+id/btn_card_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Card Pay"
+        android:onClick="onMyClick"/>
+    <Button
+        android:id="@+id/btn_paypal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PayPal"
+        android:onClick="onMyClick"/>
+    <Button
+        android:id="@+id/btn_venmo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Venmo"
+        android:onClick="onMyClick"/>
+    <Button
+        android:id="@+id/btn_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Google Pay"
+        android:onClick="onMyClick"/>
 </LinearLayout>

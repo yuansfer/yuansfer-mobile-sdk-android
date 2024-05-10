@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Card Number" />
+
+    <EditText
+        android:id="@+id/et_number_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="4111111111111111"
+        android:inputType="number" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expiration Date" />
+
+    <EditText
+        android:id="@+id/et_expire_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="12/2025"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CVV" />
+
+    <EditText
+        android:id="@+id/et_cvv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="999"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btn_card_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onMyClick"
+        android:text="Card Pay" />
+
+    <Button
+        android:id="@+id/btn_3d_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onMyClick"
+        android:text="Card Pay &amp; ThreeDSecure" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </ScrollView>
+
+</LinearLayout>
