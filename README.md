@@ -1,6 +1,6 @@
 ## Introduction
 
-![jitpack](https://img.shields.io/badge/jitpack-v2.0.0-blue)
+![jitpack](https://img.shields.io/badge/jitpack-v2.0.0-blue)  
 `pockyt_pay` is a mobile payment sdk that supports popular channels such as WeChat Pay, Alipay, Braintree (Credit Card, PayPal, Venmo, Google Pay).
 
 ## Getting Started
@@ -12,7 +12,7 @@
 ## Configuration
 
 * Configure the jitpack repository URL in the project-level dependencies file. Additionally, if you need to add the Drop-in or 3D Secure dependency library, please add the following Maven repository and (non-sensitive) credentials to the gradle.
-After Android Gradle 7.x, please add it in the `settings.gradle` file.
+> After Android Gradle 7.x, please add it in the `settings.gradle` file.
 ```gradle
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -31,7 +31,7 @@ dependencyResolutionManagement {
     }
 }
 ```
-Before Android Gradle 7.x, please add it in the `build.gradle` file.
+> Before Android Gradle 7.x, please add it in the `build.gradle` file.
 ```gradle
 allprojects {
     repositories {
@@ -53,27 +53,39 @@ allprojects {
 ```gradle
 dependencies {
     ...
-	implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:^${lastest version}' // Required
-	implementation 'com.alipay.sdk:alipaysdk-android:15.8.14@aar' // Optional, Alipay dependency
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'  // Optional, Wechat Pay dependency
-    implementation 'com.braintreepayments.api:drop-in:6.13.0' // Optional, include all other dependencies
-    implementation 'com.braintreepayments.api:card:4.39.0'  // Optional, exclude the drop-in dependency
-    implementation 'com.braintreepayments.api:paypal:4.39.0'  // Optional, exclude the drop-in dependency
-    implementation 'com.braintreepayments.api:venmo:4.39.0' // Optional, exclude the drop-in dependency
-    implementation 'com.braintreepayments.api:google-pay:4.39.0'  // Optional, exclude the drop-in dependency
-    implementation 'com.braintreepayments.api:data-collector:4.39.0'  // Optional, exclude the drop-in dependency
-    implementation 'com.braintreepayments.api:three-d-secure:4.39.0'  // Optional, exclude the drop-in dependency
+    // Required
+	implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:^${lastest version}' 
+	// Optional, Alipay dependency
+	implementation 'com.alipay.sdk:alipaysdk-android:15.8.14@aar' 
+	// Optional, Wechat Pay dependency
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'  
+    // Optional, Include all other dependencies
+    implementation 'com.braintreepayments.api:drop-in:6.13.0' 
+    // Optional, The following dependencies are independent of each other, so you can add them as needed.
+    implementation 'com.braintreepayments.api:card:4.39.0'  
+    implementation 'com.braintreepayments.api:paypal:4.39.0' 
+    implementation 'com.braintreepayments.api:venmo:4.39.0'
+    implementation 'com.braintreepayments.api:google-pay:4.39.0'
+    implementation 'com.braintreepayments.api:data-collector:4.39.0'
+    implementation 'com.braintreepayments.api:three-d-secure:4.39.0'
 }
 ```
 
 ## How to use
 
 * Only a few steps are required to initiate the payment.
-For WeChat Pay, registering WeChat API.
+> For WeChat Pay, registering WeChat API.
 ```
 WechatPayStrategy.registerApi(context, wechatAppId)
 ```
-* After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request. Currently, there are AlipayReq, WechatPayReq, DropInReq, CardReq, PayPalReq, VenmoReq, and GooglePayReq.
+* After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.  
+```
+val request = AlipayReq(activity, payInfo)
+val request = WechatPayReq(appId, partnerId, prepayId, packageValue, nonceStr, timeStamp, sign)
+val request = DropInReq(activity, authorization, dropInRequest)
+val request = CardReq(activity, authorization, card, true)
+...
+```
 * The payment request is then passed to the `PockytPay` class to initiate the payment.
 ```
 // For WeChat Pay
