@@ -8,8 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
-import com.pockyt.pay.PockytPay
-import com.pockyt.pay.req.AlipayReq
+import com.pockyt.pay.Pockyt
 import com.pockyt.pay.req.WechatPayReq
 import com.pockyt.pay.wechatpay.WechatPayStrategy
 import org.json.JSONException
@@ -69,7 +68,7 @@ class WechatPayActivity: AppCompatActivity() {
                             return@doPost
                         }
                         jsonObject.optJSONObject("result")?.let { result ->
-                            PockytPay.wechatPay.requestPay(
+                            Pockyt.wechatPay.requestPay(
                                 WechatPayReq(
                                 appId = result.optString("appid"),
                                 partnerId = result.optString("partnerid"),

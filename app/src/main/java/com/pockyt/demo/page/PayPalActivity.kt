@@ -8,7 +8,7 @@ import com.braintreepayments.api.*
 import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
-import com.pockyt.pay.PockytPay
+import com.pockyt.pay.Pockyt
 import com.pockyt.pay.req.PPWrapRequest
 import com.pockyt.pay.req.PayPalReq
 
@@ -46,7 +46,7 @@ class PayPalActivity: AppCompatActivity() {
         val checkoutRequest = PayPalCheckoutRequest("0.01")
         checkoutRequest.currencyCode = "USD"
         val pockytRequest = PayPalReq(this, HttpUtils.CLIENT_TOKEN, PPWrapRequest.Checkout(checkoutRequest), false)
-        PockytPay.paypalPay.requestPay(pockytRequest) {
+        Pockyt.paypal.requestPay(pockytRequest) {
             loadDialog.dismiss()
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paypalNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
@@ -64,7 +64,7 @@ class PayPalActivity: AppCompatActivity() {
         val vaultRequest = PayPalVaultRequest()
         vaultRequest.billingAgreementDescription = "Your agreement description"
         val pockytRequest = PayPalReq(this, HttpUtils.CLIENT_TOKEN, PPWrapRequest.Vault(vaultRequest), true)
-        PockytPay.paypalPay.requestPay(pockytRequest) {
+        Pockyt.paypal.requestPay(pockytRequest) {
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paypalNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.paypalNonce!!.string, it.deviceData)

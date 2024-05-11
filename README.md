@@ -1,7 +1,7 @@
 ## Introduction
 
 ![jitpack](https://img.shields.io/badge/jitpack-v2.0.0-blue)  
-`pockyt_pay` is a android payment sdk that supports mainstream payment methods such as WeChat Pay, Alipay and Braintree etc.
+This is a payment sdk that supports mainstream payment methods such as WeChat Pay, Alipay and Braintree etc.
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ allprojects {
         ...
         // Required
         maven { url 'https://jitpack.io' }
-        // Optional(required for drop-in or three-d-secure library)
+        // Optional (required for drop-in or three-d-secure library)
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
@@ -49,7 +49,7 @@ allprojects {
     }
 }
 ```
-* Please add the `pocket_pay` dependency in the `build.gradle` file of the app-level gradle. Add the corresponding dependencies selectively based on the payments you want to support.
+* Please add the `pockyt_pay` dependency in the `build.gradle` file of the app-level gradle. Add the corresponding dependencies selectively based on the payments you want to support.
 ```gradle
 dependencies {
     ...
@@ -80,7 +80,7 @@ WechatPayStrategy.registerApi(context, wechatAppId)
 ```
 > After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.
 ```
-// AliPay request
+// Alipay request
 val request = AlipayReq(activity, payInfo)
 // WecChat Pay request
 val request = WechatPayReq(appId, partnerId, prepayId, packageValue, nonceStr, timeStamp, sign)
@@ -90,15 +90,15 @@ val request = DropInReq(activity, authorization, dropInRequest)
 val request = CardReq(activity, authorization, card, true)
 ...
 ```
-> The payment request is then passed to the `PockytPay` class to initiate the payment.
+> The payment request is then passed to the `Pockyt` class to initiate the payment.
 ```
-// For AliPay
-PockytPay.alipayPay.requestPay(AlipayReq(activity, payInfo)) {
+// For Alipay
+Pockyt.alipay.requestPay(AlipayReq(activity, payInfo)) {
     vLog.log("Paid:${it.isSuccessful}, cancelled:${it.isCancelled}, $it")
 }
 
 // For WeChat Pay
-PockytPay.wechatPay.requestPay(
+Pockyt.wechatPay.requestPay(
     WechatPayReq(
     appId = result.optString("appid"),
     partnerId = result.optString("partnerid"),
@@ -113,7 +113,7 @@ PockytPay.wechatPay.requestPay(
 
 // For Braintree Drop-in
 val dropInRequest = DropInRequest()
-PockytPay.dropInPay.requestPay(DropInReq(activity, authorization, dropInRequest)) {
+Pockyt.dropInPay.requestPay(DropInReq(activity, authorization, dropInRequest)) {
     vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, vendor:${it.dropInResult?.paymentMethodType}, nonce:${it.dropInResult?.paymentMethodNonce?.string}, deviceData:${it.dropInResult?.deviceData}")
     if (it.isSuccessful) {
         submitNonceToServer(jsonObject.optJSONObject("result").optString("transactionNo")
@@ -124,7 +124,7 @@ PockytPay.dropInPay.requestPay(DropInReq(activity, authorization, dropInRequest)
 
 // For Braintree Custom UI, Taking card payment as an example, similarly for other payment methods.
 val request = CardReq(activity, authorization, card, true)
-PockytPay.cardPay.requestPay(request) {
+Pockyt.cardPay.requestPay(request) {
     vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
     if (it.isSuccessful) {
         submitNonceToServer("Your transactionNo", it.cardNonce!!.string, it.deviceData)

@@ -1,6 +1,5 @@
 package com.pockyt.demo.page
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,7 @@ import com.google.android.gms.wallet.WalletConstants
 import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
-import com.pockyt.pay.PockytPay
+import com.pockyt.pay.Pockyt
 import com.pockyt.pay.req.*
 
 class GooglePayActivity: AppCompatActivity() {
@@ -46,7 +45,7 @@ class GooglePayActivity: AppCompatActivity() {
         googlePayRequest.googleMerchantId = "merchant-id-from-google";
         googlePayRequest.isBillingAddressRequired = true
         val request = GooglePayReq(this, HttpUtils.CLIENT_TOKEN, googlePayRequest)
-        PockytPay.googlePay.requestPay(request) {
+        Pockyt.googlePay.requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paymentNonce?.string}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.paymentNonce!!.string)

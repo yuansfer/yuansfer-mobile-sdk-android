@@ -7,7 +7,7 @@ import com.braintreepayments.api.*
 import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
-import com.pockyt.pay.PockytPay
+import com.pockyt.pay.Pockyt
 import com.pockyt.pay.req.VenmoReq
 
 class VenmoActivity: AppCompatActivity() {
@@ -35,7 +35,7 @@ class VenmoActivity: AppCompatActivity() {
      */
     private fun sendPay() {
         val request = VenmoReq(this, HttpUtils.CLIENT_TOKEN, VenmoRequest(VenmoPaymentMethodUsage.MULTI_USE), true)
-        PockytPay.venmoPay.requestPay(request) {
+        Pockyt.venmoPay.requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.venmoNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.venmoNonce!!.string, it.deviceData)

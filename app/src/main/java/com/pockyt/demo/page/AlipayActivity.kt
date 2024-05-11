@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
-import com.pockyt.pay.PockytPay
+import com.pockyt.pay.Pockyt
 import com.pockyt.pay.req.AlipayReq
 import org.json.JSONException
 import org.json.JSONObject
@@ -61,7 +61,7 @@ class AlipayActivity: AppCompatActivity() {
                             return@doPost
                         }
                         jsonObject.optJSONObject("result")?.getString("payInfo")?.let { payInfo ->
-                            PockytPay.alipayPay.requestPay(AlipayReq(AlipayPageActivity@this, payInfo)) {
+                            Pockyt.alipay.requestPay(AlipayReq(AlipayPageActivity@this, payInfo)) {
                                 vLog.log("Paid:${it.isSuccessful}, cancelled:${it.isCancelled}, $it")
                             }
                         }
