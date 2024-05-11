@@ -1,7 +1,7 @@
 package com.pockyt.pay.resp
 
 import com.braintreepayments.api.PaymentMethodNonce
-import com.pockyt.pay.PockytCodes
+import com.pockyt.pay.util.PockytCodes
 import com.pockyt.pay.base.BaseResp
 
 data class GooglePayResp(

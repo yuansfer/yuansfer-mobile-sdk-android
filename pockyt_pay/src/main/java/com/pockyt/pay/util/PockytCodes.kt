@@ -1,4 +1,4 @@
-package com.pockyt.pay
+package com.pockyt.pay.util
 
 object PockytCodes {
     // Common codes

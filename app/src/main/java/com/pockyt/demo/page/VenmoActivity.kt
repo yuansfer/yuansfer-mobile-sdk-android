@@ -1,18 +1,13 @@
 package com.pockyt.demo.page
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.braintreepayments.api.*
 import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
 import com.pockyt.pay.PockytPay
-import com.pockyt.pay.req.CardReq
-import com.pockyt.pay.req.PPWrapRequest
-import com.pockyt.pay.req.PayPalReq
 import com.pockyt.pay.req.VenmoReq
 
 class VenmoActivity: AppCompatActivity() {

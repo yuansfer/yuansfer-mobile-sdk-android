@@ -15,8 +15,8 @@ object HttpUtils {
     // Sandbox environment
     const val BASE_URL = "https://mapi.yuansfer.yunkeguan.com"
     const val API_TOKEN = "sandbox_pockyt_token"
-    const val MERCHANT_NO = "200043"
-    const val STORE_NO = "300014"
+    const val MERCHANT_NO = "merchant_no"
+    const val STORE_NO = "store_no"
     // Sandbox braintree token
     const val CLIENT_TOKEN = "sandbox_braintree_token"
 

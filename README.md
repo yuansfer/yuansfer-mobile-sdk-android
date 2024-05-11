@@ -1,7 +1,7 @@
 ## Introduction
 
 ![jitpack](https://img.shields.io/badge/jitpack-v2.0.0-blue)  
-`pockyt_pay` is a mobile payment sdk that supports popular channels such as WeChat Pay, Alipay and Braintree etc.
+`pockyt_pay` is a android payment sdk that supports mainstream payment methods such as WeChat Pay, Alipay and Braintree etc.
 
 ## Getting Started
 
@@ -62,12 +62,12 @@ dependencies {
     // Optional, Include all other dependencies
     implementation 'com.braintreepayments.api:drop-in:6.13.0' 
     // Optional, The following dependencies are independent of each other, so you can add them as needed.
-    implementation 'com.braintreepayments.api:card:4.39.0'  
+    implementation 'com.braintreepayments.api:card:4.39.0' 
+    implementation 'com.braintreepayments.api:three-d-secure:4.39.0' 
     implementation 'com.braintreepayments.api:paypal:4.39.0' 
     implementation 'com.braintreepayments.api:venmo:4.39.0'
     implementation 'com.braintreepayments.api:google-pay:4.39.0'
     implementation 'com.braintreepayments.api:data-collector:4.39.0'
-    implementation 'com.braintreepayments.api:three-d-secure:4.39.0'
 }
 ```
 
@@ -78,7 +78,7 @@ dependencies {
 ```
 WechatPayStrategy.registerApi(context, wechatAppId)
 ```
-> After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.  
+> After calling the Pockyt prepayment API(`/micropay/v3/prepay` or `/online/v3/secure-pay`), create a payment request.
 ```
 // AliPay request
 val request = AlipayReq(activity, payInfo)
@@ -113,7 +113,7 @@ PockytPay.wechatPay.requestPay(
 
 // For Braintree Drop-in
 val dropInRequest = DropInRequest()
-PockytPay.dropInPay.requestPay(DropInReq(DropInActivity@this, authorization, dropInRequest)) {
+PockytPay.dropInPay.requestPay(DropInReq(activity, authorization, dropInRequest)) {
     vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, vendor:${it.dropInResult?.paymentMethodType}, nonce:${it.dropInResult?.paymentMethodNonce?.string}, deviceData:${it.dropInResult?.deviceData}")
     if (it.isSuccessful) {
         submitNonceToServer(jsonObject.optJSONObject("result").optString("transactionNo")
@@ -123,8 +123,9 @@ PockytPay.dropInPay.requestPay(DropInReq(DropInActivity@this, authorization, dro
 }
 
 // For Braintree Custom UI, Taking card payment as an example, similarly for other payment methods.
+val request = CardReq(activity, authorization, card, true)
 PockytPay.cardPay.requestPay(request) {
-    vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, 3d secure nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
+    vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
     if (it.isSuccessful) {
         submitNonceToServer("Your transactionNo", it.cardNonce!!.string, it.deviceData)
     }

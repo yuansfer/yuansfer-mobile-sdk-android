@@ -1,5 +1,6 @@
 package com.pockyt.demo.page
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,6 @@ import com.pockyt.demo.util.ViewLog
 import com.pockyt.pay.PockytPay
 import com.pockyt.pay.req.PPWrapRequest
 import com.pockyt.pay.req.PayPalReq
-
 
 class PayPalActivity: AppCompatActivity() {
 
@@ -39,10 +39,15 @@ class PayPalActivity: AppCompatActivity() {
      * Here use hardcode for the authorization, please read DropInActivity.kt for details.
      */
     private fun sendCheckout() {
+        val loadDialog = ProgressDialog(this).apply {
+            setMessage("Loading...")
+            show()
+        }
         val checkoutRequest = PayPalCheckoutRequest("0.01")
         checkoutRequest.currencyCode = "USD"
-        val pockytRequest = PayPalReq(this, HttpUtils.CLIENT_TOKEN, PPWrapRequest.Checkout(checkoutRequest), true)
+        val pockytRequest = PayPalReq(this, HttpUtils.CLIENT_TOKEN, PPWrapRequest.Checkout(checkoutRequest), false)
         PockytPay.paypalPay.requestPay(pockytRequest) {
+            loadDialog.dismiss()
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paypalNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.paypalNonce!!.string, it.deviceData)

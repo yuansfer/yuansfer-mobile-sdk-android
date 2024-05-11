@@ -3,12 +3,12 @@ package com.pockyt.pay.braintree
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.braintreepayments.api.*
-import com.pockyt.pay.PockytCodes
+import com.pockyt.pay.util.PockytCodes
 import com.pockyt.pay.base.IPaymentStrategy
 import com.pockyt.pay.req.PPWrapRequest
 import com.pockyt.pay.req.PayPalReq
 import com.pockyt.pay.resp.PayPalResp
+import com.pockyt.pay.util.IntentExtras
 import com.pockyt.pay.util.StartForResultManager
 
 class PayPalStrategy : IPaymentStrategy<PayPalReq, PayPalResp>, StartForResultManager.Callback {
@@ -21,21 +21,22 @@ class PayPalStrategy : IPaymentStrategy<PayPalReq, PayPalResp>, StartForResultMa
         }
         payResp = resp
         val args = Bundle().apply {
-            putString("token", req.clientToken)
-            putBoolean("autoDeviceData", req.autoDeviceData)
+            putString(IntentExtras.EXTRA_TOKEN, req.clientToken)
+            putBoolean(IntentExtras.EXTRA_AUTO_DEVICE_DATA, req.autoDeviceData)
+            putString(IntentExtras.EXTRA_SCHEMA, CustomPayActivity.PAYPAL_SCHEMA)
             val request = req.request
             if (request is PPWrapRequest.Checkout) {
                 // with amount
-                putParcelable("clientRequest", request.checkoutRequest)
+                putParcelable(IntentExtras.EXTRA_CLIENT_REQUEST, request.checkoutRequest)
             } else if (request is PPWrapRequest.Vault) {
                 // without amount
-                putParcelable("clientRequest", request.vaultRequest)
+                putParcelable(IntentExtras.EXTRA_CLIENT_REQUEST, request.vaultRequest)
             }
         }
         StartForResultManager.get()
             .from(req.activity)
             .bundle(args)
-            .to(CustomPayActivity::class.java)
+            .to(PayPalActivity::class.java)
             .startForResult(this)
     }
 
@@ -50,8 +51,8 @@ class PayPalStrategy : IPaymentStrategy<PayPalReq, PayPalResp>, StartForResultMa
                 payResp?.invoke(
                     PayPalResp(
                         PockytCodes.SUCCESS,
-                        paypalNonce = data?.getParcelableExtra("nonceResult"),
-                        deviceData = data?.getStringExtra("deviceData")
+                        paypalNonce = data?.getParcelableExtra(IntentExtras.EXTRA_NONCE_RESULT),
+                        deviceData = data?.getStringExtra(IntentExtras.EXTRA_DEVICE_DATA)
                     )
                 )
             }
@@ -59,7 +60,7 @@ class PayPalStrategy : IPaymentStrategy<PayPalReq, PayPalResp>, StartForResultMa
                 payResp?.invoke(PayPalResp(PockytCodes.CANCEL, "User canceled"))
             }
             else -> {
-                payResp?.invoke(PayPalResp(PockytCodes.ERROR, data?.getStringExtra("error")))
+                payResp?.invoke(PayPalResp(PockytCodes.ERROR, data?.getStringExtra(IntentExtras.EXTRA_ERROR)))
             }
         }
         payResp = null

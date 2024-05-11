@@ -28,5 +28,7 @@ class PockytPay<T : BaseReq, E : BaseResp>(private var paymentStrategy: IPayment
         val venmoPay: PockytPay<VenmoReq, VenmoResp> by lazy { PockytPay(VenmoStrategy()) }
 
         val googlePay: PockytPay<GooglePayReq, GooglePayResp> by lazy { PockytPay(GooglePayStrategy()) }
+
+        val threeDPay: PockytPay<ThreeDReq, CardResp> by lazy { PockytPay(ThreeDStrategy()) }
     }
 }

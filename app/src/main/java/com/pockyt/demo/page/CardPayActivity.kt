@@ -10,6 +10,7 @@ import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
 import com.pockyt.pay.PockytPay
 import com.pockyt.pay.req.CardReq
+import com.pockyt.pay.req.ThreeDReq
 
 class CardPayActivity: AppCompatActivity() {
 
@@ -59,7 +60,20 @@ class CardPayActivity: AppCompatActivity() {
      * Here use hardcode for the authorization, please read DropInActivity.kt for details.
      */
     private fun send3DPay() {
+        val card = Card()
+        card.number = etCardNum.text.toString()
+        card.expirationDate = etExpDate.text.toString()
+        card.cvv = etCVV.text.toString()
+        val request = CardReq(this, HttpUtils.CLIENT_TOKEN, card, false)
+        PockytPay.cardPay.requestPay(request) {
+            vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
+            if (it.isSuccessful) {
+                sendPayWith3D(it.cardNonce!!)
+            }
+        }
+    }
 
+    private fun sendPayWith3D(cardNonce: CardNonce) {
         val address = ThreeDSecurePostalAddress()
         address.givenName = "Jill" // ASCII-printable characters required, else will throw a validation error
         address.surname = "Doe" // ASCII-printable characters required, else will throw a validation error
@@ -82,13 +96,12 @@ class CardPayActivity: AppCompatActivity() {
         threeDSecureRequest.versionRequested = ThreeDSecureRequest.VERSION_2
         threeDSecureRequest.additionalInformation = additionalInformation
 
-        val card = Card()
-        card.number = etCardNum.text.toString()
-        card.expirationDate = etExpDate.text.toString()
-        card.cvv = etCVV.text.toString()
-        val request = CardReq(this, HttpUtils.CLIENT_TOKEN, card, true, threeDSecureRequest)
-        PockytPay.cardPay.requestPay(request) {
-            vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, 3d secure nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
+        // Important: set the nonce to the 3DSecureRequest
+        threeDSecureRequest.nonce = cardNonce.string
+
+        val request = ThreeDReq(this, HttpUtils.CLIENT_TOKEN, threeDSecureRequest, true)
+        PockytPay.threeDPay.requestPay(request) {
+            vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, 3ds nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.cardNonce!!.string, it.deviceData)
             }
