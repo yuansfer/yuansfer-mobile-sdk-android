@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         ...
         // Required
         maven { url 'https://jitpack.io' }
-        // Optional (Required for drop-in or three-d-secure libraries)
+        // Optional (required for drop-in or three-d-secure library)
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
@@ -38,7 +38,7 @@ allprojects {
         ...
         // Required
         maven { url 'https://jitpack.io' }
-        // Optional(Required for drop-in or three-d-secure libraries)
+        // Optional(required for drop-in or three-d-secure library)
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
@@ -92,7 +92,7 @@ val request = CardReq(activity, authorization, card, true)
 ```
 > The payment request is then passed to the `PockytPay` class to initiate the payment.
 ```
-// For WeChat Pay
+// For AliPay
 PockytPay.alipayPay.requestPay(AlipayReq(activity, payInfo)) {
     vLog.log("Paid:${it.isSuccessful}, cancelled:${it.isCancelled}, $it")
 }
