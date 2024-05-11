@@ -54,7 +54,7 @@ allprojects {
 dependencies {
     ...
     // Required
-    implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:2.0.2' 
+    implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:^${version}' 
     // Optional, Alipay dependency
     implementation 'com.alipay.sdk:alipaysdk-android:15.8.14@aar' 
     // Optional, Wechat Pay dependency
