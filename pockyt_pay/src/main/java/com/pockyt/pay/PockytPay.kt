@@ -15,20 +15,21 @@ class PockytPay<T : BaseReq, E : BaseResp>(private var paymentStrategy: IPayment
     }
 
     companion object {
+        @JvmStatic
         val alipayPay: PockytPay<AlipayReq, AlipayResp> by lazy { PockytPay(AlipayStrategy()) }
-
+        @JvmStatic
         val wechatPay: PockytPay<WechatPayReq, WechatPayResp> by lazy { PockytPay(WechatPayStrategy()) }
-
+        @JvmStatic
         val dropInPay: PockytPay<DropInReq, DropInResp> by lazy { PockytPay(DropInStrategy()) }
-
+        @JvmStatic
         val cardPay: PockytPay<CardReq, CardResp> by lazy { PockytPay(CardStrategy()) }
-
+        @JvmStatic
         val paypalPay: PockytPay<PayPalReq, PayPalResp> by lazy { PockytPay(PayPalStrategy()) }
-
+        @JvmStatic
         val venmoPay: PockytPay<VenmoReq, VenmoResp> by lazy { PockytPay(VenmoStrategy()) }
-
+        @JvmStatic
         val googlePay: PockytPay<GooglePayReq, GooglePayResp> by lazy { PockytPay(GooglePayStrategy()) }
-
+        @JvmStatic
         val threeDPay: PockytPay<ThreeDReq, CardResp> by lazy { PockytPay(ThreeDStrategy()) }
     }
 }

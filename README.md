@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         ...
         // Required
         maven { url 'https://jitpack.io' }
-        // Optional(Required for drop-in or three-d-secure libraries)
+        // Optional (Required for drop-in or three-d-secure libraries)
         maven {
             url "https://cardinalcommerceprod.jfrog.io/artifactory/android"
             credentials {
@@ -137,7 +137,7 @@ PockytPay.cardPay.requestPay(request) {
 
 * Drop-in UI of Braintree is a complete, ready-made payment UI that offers a quick and easy way to securely accept payments. The UI includes a card entry form and, if enabled, PayPal, Venmo and Google Pay.
 * For Braintree payment, it is recommended to retrieve and upload deviceData to reduce the rejection rate. For card payments, you can choose to include threeDSecure verification based on your requirements.
-* Due to the refactoring of version 2.x.x using Kotlin, it is not compatible with version 1.x.x, when the android project is pure java language, please modify the project configuration to support Kotlin.
+* Due to the refactoring of version 2.x.x using Kotlin, it is not compatible with version 1.x.x, when the android project is pure java language, recommended configuration for supporting Kotlin.
 * If you are using WeChat Pay and need to obfuscate your code, please add the following code to ensure the proper functionality of the SDK.
 ```
 -keep class com.tencent.mm.opensdk.** {
