@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         versionCode 14
-        versionName "2.0.0"
+        versionName "2.0.3"
         minSdk 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

@@ -1,6 +1,6 @@
 ## Introduction
 
-![jitpack](https://img.shields.io/badge/jitpack-v2.0.2-blue)  
+![jitpack](https://img.shields.io/badge/jitpack-v2.0.3-blue)  
 This is a payment sdk that supports mainstream payment methods such as WeChat Pay, Alipay and Braintree etc.
 
 ## Getting Started
@@ -54,7 +54,7 @@ allprojects {
 dependencies {
     ...
     // Required
-    implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:2.0.2' 
+    implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:2.0.3' 
     // Optional, Alipay dependency
     implementation 'com.alipay.sdk:alipaysdk-android:15.8.14@aar' 
     // Optional, Wechat Pay dependency

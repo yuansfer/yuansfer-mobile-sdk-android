@@ -7,8 +7,8 @@ import com.pockyt.pay.util.IntentExtras
 class PayPalActivity : CustomPayActivity(), PayPalListener {
 
     override fun handleIntent(intent: Intent) {
-        val paypal = intent.getParcelableExtra(IntentExtras.EXTRA_CLIENT_REQUEST) as? PayPalRequest
-        processPayPal(paypal!!)
+        val paypalRequest = intent.getParcelableExtra(IntentExtras.EXTRA_CLIENT_REQUEST) as? PayPalRequest
+        processPayPal(paypalRequest!!)
     }
 
     private fun processPayPal(request: PayPalRequest) {

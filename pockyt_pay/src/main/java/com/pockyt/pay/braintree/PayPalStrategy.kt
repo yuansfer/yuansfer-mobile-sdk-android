@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import com.pockyt.pay.util.PockytCodes
 import com.pockyt.pay.base.IPaymentStrategy
-import com.pockyt.pay.req.PPWrapRequest
 import com.pockyt.pay.req.PayPalReq
 import com.pockyt.pay.resp.PayPalResp
 import com.pockyt.pay.util.IntentExtras
@@ -24,14 +23,7 @@ class PayPalStrategy : IPaymentStrategy<PayPalReq, PayPalResp>, StartForResultMa
             putString(IntentExtras.EXTRA_TOKEN, req.clientToken)
             putBoolean(IntentExtras.EXTRA_AUTO_DEVICE_DATA, req.autoDeviceData)
             putString(IntentExtras.EXTRA_SCHEMA, CustomPayActivity.PAYPAL_SCHEMA)
-            val request = req.request
-            if (request is PPWrapRequest.Checkout) {
-                // with amount
-                putParcelable(IntentExtras.EXTRA_CLIENT_REQUEST, request.checkoutRequest)
-            } else if (request is PPWrapRequest.Vault) {
-                // without amount
-                putParcelable(IntentExtras.EXTRA_CLIENT_REQUEST, request.vaultRequest)
-            }
+            putParcelable(IntentExtras.EXTRA_CLIENT_REQUEST, req.request)
         }
         StartForResultManager.get()
             .from(req.activity)
