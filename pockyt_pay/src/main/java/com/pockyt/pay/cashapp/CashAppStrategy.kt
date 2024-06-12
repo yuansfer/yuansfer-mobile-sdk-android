@@ -1,6 +1,8 @@
 package com.pockyt.pay.cashapp
 
 import android.os.AsyncTask
+import android.os.Handler
+import android.os.Looper
 import app.cash.paykit.core.CashAppPay
 import app.cash.paykit.core.CashAppPayFactory
 import app.cash.paykit.core.CashAppPayListener
@@ -17,6 +19,7 @@ class CashAppStrategy : IPaymentStrategy<CashAppReq, CashAppResp>, CashAppPayLis
 
     private lateinit var payKitSdk: CashAppPay
     private var payResp: ((CashAppResp) -> Unit)? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun requestPay(req: CashAppReq, resp: (CashAppResp) -> Unit) {
         if (payResp != null) {
@@ -63,8 +66,10 @@ class CashAppStrategy : IPaymentStrategy<CashAppReq, CashAppResp>, CashAppPayLis
     }
 
     private fun handleApprovedState() {
-        payResp?.invoke(CashAppResp(PockytCodes.SUCCESS))
-        payResp = null
+        handler.post {
+            payResp?.invoke(CashAppResp(PockytCodes.SUCCESS))
+            payResp = null
+        }
     }
 
     private fun handleLoadingState() {
@@ -72,8 +77,10 @@ class CashAppStrategy : IPaymentStrategy<CashAppReq, CashAppResp>, CashAppPayLis
     }
 
     private fun handleDeclinedState() {
-        payResp?.invoke(CashAppResp(PockytCodes.CANCEL, "Declined by user"))
-        payResp = null
+        handler.post {
+            payResp?.invoke(CashAppResp(PockytCodes.CANCEL, "Declined by user"))
+            payResp = null
+        }
     }
 
     private fun handleOptionalLoadingState() {
@@ -81,8 +88,10 @@ class CashAppStrategy : IPaymentStrategy<CashAppReq, CashAppResp>, CashAppPayLis
     }
 
     private fun handleExceptionState(newState: CashAppPayState.CashAppPayExceptionState) {
-        payResp?.invoke(CashAppResp(PockytCodes.ERROR, newState.exception.toString()))
-        payResp = null
+        handler.post {
+            payResp?.invoke(CashAppResp(PockytCodes.ERROR, newState.exception.toString()))
+            payResp = null
+        }
     }
 
 }
