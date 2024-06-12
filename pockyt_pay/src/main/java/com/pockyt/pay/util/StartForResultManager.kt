@@ -4,9 +4,10 @@ import android.app.Activity
 import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 
 class StartForResultManager private constructor() {
-    private val TAG = "StartForResultManager"
+    private val tag = "StartForResultManager"
     private var mStartCallbackFragment: StartCallbackFragment? = null
     private var mTargetClass: Class<*>? = null
     private var mTargetAction: String? = null
@@ -44,19 +45,25 @@ class StartForResultManager private constructor() {
 
     fun startForResult(callback: Callback) {
         if (mStartCallbackFragment == null) {
-            throw RuntimeException("From activity is null, forget from() ?")
+            Log.e(tag, "From activity is null, forget from() ?")
+            return
         }
         val activity = mStartCallbackFragment!!.activity
-            ?: throw RuntimeException("Surprise, something is error, perhaps this is love")
-        if (activity.isFinishing) {
-            throw RuntimeException("Activity is finishing?")
+        if (activity == null) {
+            Log.e(tag, "From Activity is also null, forget from() ?")
+            return
         }
-        val intent = if (mTargetClass != null) {
-            Intent(activity, mTargetClass)
-        } else if (mTargetAction != null) {
-            Intent(mTargetAction)
-        } else {
-            throw RuntimeException("Target Class or Target Action is null, forget to() ?")
+        if (activity.isFinishing) {
+            Log.e(tag, "Activity is finishing?")
+            return
+        }
+        val intent = when {
+            mTargetClass != null -> Intent(activity, mTargetClass)
+            mTargetAction != null -> Intent(mTargetAction)
+            else -> {
+                Log.e(tag, "Target Class or Target Action is null, forget to() ?")
+                return
+            }
         }
         mDataBundle?.let { intent.putExtras(it) }
         fragmentStartForResult(intent, callback.hashCode(), callback)
@@ -66,17 +73,21 @@ class StartForResultManager private constructor() {
         var resultFragment = findStartCallbackFragment(activity)
         if (resultFragment == null) {
             resultFragment = StartCallbackFragment()
-            val fragmentManager = activity.fragmentManager
-            fragmentManager.beginTransaction()
-                .add(resultFragment, TAG)
-                .commitAllowingStateLoss()
-            fragmentManager.executePendingTransactions()
+            try {
+                val fragmentManager = activity.fragmentManager
+                fragmentManager.beginTransaction()
+                    .add(resultFragment, tag)
+                    .commitAllowingStateLoss()
+                fragmentManager.executePendingTransactions()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         return resultFragment
     }
 
     private fun findStartCallbackFragment(activity: Activity): StartCallbackFragment? {
-        return activity.fragmentManager.findFragmentByTag(TAG) as StartCallbackFragment?
+        return activity.fragmentManager.findFragmentByTag(tag) as StartCallbackFragment?
     }
 
     private fun fragmentStartForResult(intent: Intent, requestCode: Int, callback: Callback) {

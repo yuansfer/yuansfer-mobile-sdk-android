@@ -100,7 +100,7 @@ class DropInActivity: AppCompatActivity() {
                     threeDSRequest.versionRequested = ThreeDSecureRequest.VERSION_2
                     dropInRequest.threeDSecureRequest = threeDSRequest
 
-                    Pockyt.dropInPay.requestPay(DropInReq(DropInActivity@this, authorization, dropInRequest)) {
+                    Pockyt.createDropIn().requestPay(DropInReq(DropInActivity@this, authorization, dropInRequest)) {
                         vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, vendor:${it.dropInResult?.paymentMethodType}, nonce:${it.dropInResult?.paymentMethodNonce?.string}, deviceData:${it.dropInResult?.deviceData}")
                         if (it.isSuccessful) {
                             submitNonceToServer(jsonObject.optJSONObject("result").optString("transactionNo")

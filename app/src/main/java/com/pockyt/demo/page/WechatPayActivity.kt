@@ -17,7 +17,6 @@ import java.util.UUID
 
 class WechatPayActivity: AppCompatActivity() {
 
-    private val wechatAppId = "wxa0d4a241e5d692df"
     private lateinit var etAmount: EditText
     private lateinit var etMerchantNo: EditText
     private lateinit var etStoreNo: EditText
@@ -36,7 +35,7 @@ class WechatPayActivity: AppCompatActivity() {
         etAmount.setText("0.01")
         btSendPay = findViewById(R.id.btn_send_pay)
 
-        WechatPayStrategy.registerApi(this, wechatAppId)
+        WechatPayStrategy.registerApi(this, "wxa0d4a241e5d692df")
         btSendPay.isEnabled = WechatPayStrategy.isInstalled()
                 && WechatPayStrategy.isSupportPayApi()
     }
@@ -68,7 +67,7 @@ class WechatPayActivity: AppCompatActivity() {
                             return@doPost
                         }
                         jsonObject.optJSONObject("result")?.let { result ->
-                            Pockyt.wechatPay.requestPay(
+                            Pockyt.createWechatPay().requestPay(
                                 WechatPayReq(
                                 appId = result.optString("appid"),
                                 partnerId = result.optString("partnerid"),

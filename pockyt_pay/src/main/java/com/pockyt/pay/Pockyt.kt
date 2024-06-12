@@ -5,6 +5,7 @@ import com.pockyt.pay.base.BaseReq
 import com.pockyt.pay.base.BaseResp
 import com.pockyt.pay.base.IPaymentStrategy
 import com.pockyt.pay.braintree.*
+import com.pockyt.pay.cashapp.CashAppStrategy
 import com.pockyt.pay.req.*
 import com.pockyt.pay.resp.*
 import com.pockyt.pay.wechatpay.WechatPayStrategy
@@ -16,20 +17,34 @@ class Pockyt<T : BaseReq, E : BaseResp>(private var paymentStrategy: IPaymentStr
 
     companion object {
         @JvmStatic
-        val alipay: Pockyt<AlipayReq, AlipayResp> by lazy { Pockyt(AlipayStrategy()) }
+        fun createAlipay(): Pockyt<AlipayReq, AlipayResp> = createPockyt(AlipayStrategy())
+
         @JvmStatic
-        val wechatPay: Pockyt<WechatPayReq, WechatPayResp> by lazy { Pockyt(WechatPayStrategy()) }
+        fun createWechatPay(): Pockyt<WechatPayReq, WechatPayResp> = createPockyt(WechatPayStrategy())
+
         @JvmStatic
-        val dropInPay: Pockyt<DropInReq, DropInResp> by lazy { Pockyt(DropInStrategy()) }
+        fun createDropIn(): Pockyt<DropInReq, DropInResp> = createPockyt(DropInStrategy())
+
         @JvmStatic
-        val cardPay: Pockyt<CardReq, CardResp> by lazy { Pockyt(CardStrategy()) }
+        fun createCardPay(): Pockyt<CardReq, CardResp> = createPockyt(CardStrategy())
+
         @JvmStatic
-        val paypal: Pockyt<PayPalReq, PayPalResp> by lazy { Pockyt(PayPalStrategy()) }
+        fun createPaypal(): Pockyt<PayPalReq, PayPalResp> = createPockyt(PayPalStrategy())
+
         @JvmStatic
-        val venmoPay: Pockyt<VenmoReq, VenmoResp> by lazy { Pockyt(VenmoStrategy()) }
+        fun createVenmo(): Pockyt<VenmoReq, VenmoResp> = createPockyt(VenmoStrategy())
+
         @JvmStatic
-        val googlePay: Pockyt<GooglePayReq, GooglePayResp> by lazy { Pockyt(GooglePayStrategy()) }
+        fun createGooglePay(): Pockyt<GooglePayReq, GooglePayResp> = createPockyt(GooglePayStrategy())
+
         @JvmStatic
-        val threeDPay: Pockyt<ThreeDReq, CardResp> by lazy { Pockyt(ThreeDStrategy()) }
+        fun createThreeDSecure(): Pockyt<ThreeDReq, CardResp> = createPockyt(ThreeDStrategy())
+
+        @JvmStatic
+        fun createCashApp(): Pockyt<CashAppReq, CashAppResp> = createPockyt(CashAppStrategy())
+
+        private inline fun <reified T : BaseReq, reified E : BaseResp> createPockyt(strategy: IPaymentStrategy<T, E>): Pockyt<T, E> {
+            return Pockyt(strategy)
+        }
     }
 }

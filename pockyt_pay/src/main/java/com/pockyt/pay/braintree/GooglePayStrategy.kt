@@ -16,7 +16,7 @@ class GooglePayStrategy: IPaymentStrategy<GooglePayReq, GooglePayResp>, StartFor
 
     override fun requestPay(req: GooglePayReq, resp: (GooglePayResp) -> Unit) {
         if (payResp != null) {
-            resp.invoke(GooglePayResp(PockytCodes.ERROR, "Google Pay is already in progress."))
+            resp.invoke(GooglePayResp(PockytCodes.DUPLICATE, "Google Pay is already in progress."))
             return
         }
         payResp = resp

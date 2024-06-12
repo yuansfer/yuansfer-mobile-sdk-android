@@ -5,6 +5,7 @@ object PockytCodes {
     const val SUCCESS = "0"
     const val ERROR = "-1"
     const val CANCEL = "-2"
+    const val DUPLICATE = "-3"
     // Alipay codes
     const val ALIPAY_SUCCESS = "9000"
     const val ALIPAY_USER_CANCEL = "6001"

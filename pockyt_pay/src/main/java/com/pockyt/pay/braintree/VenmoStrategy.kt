@@ -15,7 +15,7 @@ class VenmoStrategy : IPaymentStrategy<VenmoReq, VenmoResp>, StartForResultManag
 
     override fun requestPay(req: VenmoReq, resp: (VenmoResp) -> Unit) {
         if (payResp != null) {
-            resp.invoke(VenmoResp(PockytCodes.ERROR, "Venmo payment is already in progress."))
+            resp.invoke(VenmoResp(PockytCodes.DUPLICATE, "Venmo payment is already in progress."))
             return
         }
         payResp = resp

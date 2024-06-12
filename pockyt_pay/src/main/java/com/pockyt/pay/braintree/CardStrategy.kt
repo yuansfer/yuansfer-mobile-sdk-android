@@ -16,7 +16,7 @@ class CardStrategy: IPaymentStrategy<CardReq, CardResp> {
 
     override fun requestPay(req: CardReq, resp: (CardResp) -> Unit) {
         if (payResp != null) {
-            resp.invoke(CardResp(PockytCodes.ERROR, "Card payment is already in progress."))
+            resp.invoke(CardResp(PockytCodes.DUPLICATE, "Card payment is already in progress."))
             return
         }
         payResp = resp

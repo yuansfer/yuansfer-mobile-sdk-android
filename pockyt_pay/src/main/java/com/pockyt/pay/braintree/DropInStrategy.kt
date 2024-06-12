@@ -17,7 +17,7 @@ class DropInStrategy: IPaymentStrategy<DropInReq, DropInResp>, StartForResultMan
     override fun requestPay(req: DropInReq, resp: (DropInResp) -> Unit) {
         if (payResp != null) {
             resp.invoke(DropInResp(
-                PockytCodes.ERROR
+                PockytCodes.DUPLICATE
                 ,"DropIn is already in progress"))
             return
         }

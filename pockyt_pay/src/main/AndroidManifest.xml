@@ -23,11 +23,12 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity android:name=".braintree.DropInPayActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleInstance"/>
 
         <activity android:name=".braintree.PayPalActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -39,7 +40,7 @@
 
         <activity android:name=".braintree.VenmoActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -51,7 +52,7 @@
 
         <activity android:name=".braintree.GooglePayActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -63,7 +64,7 @@
 
         <activity android:name=".braintree.ThreeDActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

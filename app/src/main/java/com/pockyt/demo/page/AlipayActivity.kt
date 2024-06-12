@@ -61,7 +61,7 @@ class AlipayActivity: AppCompatActivity() {
                             return@doPost
                         }
                         jsonObject.optJSONObject("result")?.getString("payInfo")?.let { payInfo ->
-                            Pockyt.alipay.requestPay(AlipayReq(AlipayPageActivity@this, payInfo)) {
+                            Pockyt.createAlipay().requestPay(AlipayReq(AlipayPageActivity@this, payInfo)) {
                                 vLog.log("Paid:${it.isSuccessful}, cancelled:${it.isCancelled}, $it")
                             }
                         }

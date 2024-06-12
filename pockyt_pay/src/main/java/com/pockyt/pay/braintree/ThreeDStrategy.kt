@@ -18,7 +18,7 @@ class ThreeDStrategy: IPaymentStrategy<ThreeDReq, CardResp>, StartForResultManag
 
     override fun requestPay(req: ThreeDReq, resp: (CardResp) -> Unit) {
         if (payResp != null) {
-            resp.invoke(CardResp(PockytCodes.ERROR, "ThreeD secure is already in progress."))
+            resp.invoke(CardResp(PockytCodes.DUPLICATE, "ThreeD secure is already in progress."))
             return
         }
         payResp = resp

@@ -15,7 +15,7 @@ class PayPalStrategy : IPaymentStrategy<PayPalReq, PayPalResp>, StartForResultMa
 
     override fun requestPay(req: PayPalReq, resp: (PayPalResp) -> Unit) {
         if (payResp != null) {
-            resp.invoke(PayPalResp(PockytCodes.ERROR, "PayPal payment is already in progress."))
+            resp.invoke(PayPalResp(PockytCodes.DUPLICATE, "PayPal payment is already in progress."))
             return
         }
         payResp = resp

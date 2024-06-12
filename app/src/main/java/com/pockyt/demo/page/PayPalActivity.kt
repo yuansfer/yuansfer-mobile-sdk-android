@@ -45,7 +45,7 @@ class PayPalActivity: AppCompatActivity() {
         val checkoutRequest = PayPalCheckoutRequest("0.01")
         checkoutRequest.currencyCode = "USD"
         val paypalRequest = PayPalReq(this, HttpUtils.CLIENT_TOKEN, checkoutRequest, false)
-        Pockyt.paypal.requestPay(paypalRequest) {
+        Pockyt.createPaypal().requestPay(paypalRequest) {
             loadDialog.dismiss()
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paypalNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
@@ -63,7 +63,7 @@ class PayPalActivity: AppCompatActivity() {
         val vaultRequest = PayPalVaultRequest()
         vaultRequest.billingAgreementDescription = "Your agreement description"
         val paypalRequest = PayPalReq(this, HttpUtils.CLIENT_TOKEN, vaultRequest, true)
-        Pockyt.paypal.requestPay(paypalRequest) {
+        Pockyt.createPaypal().requestPay(paypalRequest) {
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paypalNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.paypalNonce!!.string, it.deviceData)

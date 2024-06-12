@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
            R.id.btn_paypal -> startActivity(Intent(this, PayPalActivity::class.java))
            R.id.btn_venmo -> startActivity(Intent(this, VenmoActivity::class.java))
            R.id.btn_google -> startActivity(Intent(this, GooglePayActivity::class.java))
+           R.id.btn_cashapp -> startActivity(Intent(this, CashAppActivity::class.java))
        }
     }
 }

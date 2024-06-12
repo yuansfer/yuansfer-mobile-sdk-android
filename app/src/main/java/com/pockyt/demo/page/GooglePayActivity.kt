@@ -38,14 +38,14 @@ class GooglePayActivity: AppCompatActivity() {
     private fun sendPay() {
         val googlePayRequest = GooglePayRequest()
         googlePayRequest.transactionInfo = TransactionInfo.newBuilder()
-            .setTotalPrice("1.00")
+            .setTotalPrice("0.01")
             .setTotalPriceStatus(WalletConstants.TOTAL_PRICE_STATUS_FINAL)
             .setCurrencyCode("USD")
             .build()
         googlePayRequest.googleMerchantId = "merchant-id-from-google";
         googlePayRequest.isBillingAddressRequired = true
         val request = GooglePayReq(this, HttpUtils.CLIENT_TOKEN, googlePayRequest)
-        Pockyt.googlePay.requestPay(request) {
+        Pockyt.createGooglePay().requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.paymentNonce?.string}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.paymentNonce!!.string)

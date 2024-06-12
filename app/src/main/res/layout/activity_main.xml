@@ -50,4 +50,10 @@
         android:layout_height="wrap_content"
         android:text="Google Pay"
         android:onClick="onMyClick"/>
+    <Button
+        android:id="@+id/btn_cashapp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cash App"
+        android:onClick="onMyClick"/>
 </LinearLayout>

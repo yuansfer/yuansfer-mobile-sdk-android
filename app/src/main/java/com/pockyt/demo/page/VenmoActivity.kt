@@ -35,7 +35,7 @@ class VenmoActivity: AppCompatActivity() {
      */
     private fun sendPay() {
         val request = VenmoReq(this, HttpUtils.CLIENT_TOKEN, VenmoRequest(VenmoPaymentMethodUsage.MULTI_USE), true)
-        Pockyt.venmoPay.requestPay(request) {
+        Pockyt.createVenmo().requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, cancelled:${it.isCancelled}, desc:${it.respMsg}, nonce:${it.venmoNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.venmoNonce!!.string, it.deviceData)

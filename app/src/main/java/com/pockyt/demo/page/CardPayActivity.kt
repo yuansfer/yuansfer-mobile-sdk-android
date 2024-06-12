@@ -46,7 +46,7 @@ class CardPayActivity: AppCompatActivity() {
         card.expirationDate = etExpDate.text.toString()
         card.cvv = etCVV.text.toString()
         val request = CardReq(this, HttpUtils.CLIENT_TOKEN, card, true)
-        Pockyt.cardPay.requestPay(request) {
+        Pockyt.createCardPay().requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.cardNonce!!.string, it.deviceData)
@@ -65,7 +65,7 @@ class CardPayActivity: AppCompatActivity() {
         card.expirationDate = etExpDate.text.toString()
         card.cvv = etCVV.text.toString()
         val request = CardReq(this, HttpUtils.CLIENT_TOKEN, card, false)
-        Pockyt.cardPay.requestPay(request) {
+        Pockyt.createCardPay().requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 sendPayWith3D(it.cardNonce!!)
@@ -100,7 +100,7 @@ class CardPayActivity: AppCompatActivity() {
         threeDSecureRequest.nonce = cardNonce.string
 
         val request = ThreeDReq(this, HttpUtils.CLIENT_TOKEN, threeDSecureRequest, true)
-        Pockyt.threeDPay.requestPay(request) {
+        Pockyt.createThreeDSecure().requestPay(request) {
             vLog.log("Obtained nonce:${it.isSuccessful}, desc:${it.respMsg}, 3ds nonce:${it.cardNonce?.string}, deviceData:${it.deviceData}")
             if (it.isSuccessful) {
                 submitNonceToServer("Your transactionNo", it.cardNonce!!.string, it.deviceData)
