@@ -35,7 +35,7 @@ class WechatPayActivity: AppCompatActivity() {
         etAmount.setText("0.01")
         btSendPay = findViewById(R.id.btn_send_pay)
 
-        WechatPayStrategy.registerApi(this, "wxa0d4a241e5d692df")
+        WechatPayStrategy.registerApi(this, HttpUtils.APP_ID)
         btSendPay.isEnabled = WechatPayStrategy.isInstalled()
                 && WechatPayStrategy.isSupportPayApi()
     }

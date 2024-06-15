@@ -29,18 +29,18 @@ class CashAppStrategy : IPaymentStrategy<CashAppReq, CashAppResp>, CashAppPayLis
         payResp = resp
         payKitSdk = if (req.sandboxEnv) CashAppPayFactory.createSandbox(req.clientId) else CashAppPayFactory.create(req.clientId)
         payKitSdk.registerForStateUpdates(this)
-        processPayment(req.requestData, req.redirectUrl)
+        processPayment(req.request, req.redirectUrl)
     }
 
-    private fun processPayment(requestData: CashAppRequestData, redirectURI: String) {
+    private fun processPayment(requestData: CashAppRequest, redirectURI: String) {
         val payAction: CashAppPayPaymentAction = when (requestData) {
-            is CashAppRequestData.OneTimeAction -> {
+            is CashAppRequest.OneTimeRequest -> {
                 CashAppPayPaymentAction.OneTimeAction(
                     CashAppPayCurrency.USD,
                     requestData.amount?.let { BigDecimal.valueOf(it).multiply(BigDecimal.valueOf(100)) }?.toInt(),
                     requestData.scopeId)
             }
-            is CashAppRequestData.OnFileAction -> {
+            is CashAppRequest.OnFileRequest -> {
                 CashAppPayPaymentAction.OnFileAction(requestData.scopeId, requestData.accountReferenceId)
             }
         }

@@ -3,33 +3,33 @@ package com.pockyt.pay.cashapp
 import android.os.Parcel
 import android.os.Parcelable
 
-sealed class CashAppRequestData : Parcelable {
+sealed class CashAppRequest : Parcelable {
 
     abstract val scopeId: String?
 
-    data class OneTimeAction(
-        val amount: Double?,
-        override val scopeId: String?
-    ) : CashAppRequestData() {
+    data class OneTimeRequest(
+        override val scopeId: String?,
+        val amount: Double?
+    ) : CashAppRequest() {
 
-        companion object CREATOR : Parcelable.Creator<OneTimeAction> {
-            override fun createFromParcel(parcel: Parcel): OneTimeAction {
-                return OneTimeAction(parcel)
+        companion object CREATOR : Parcelable.Creator<OneTimeRequest> {
+            override fun createFromParcel(parcel: Parcel): OneTimeRequest {
+                return OneTimeRequest(parcel)
             }
 
-            override fun newArray(size: Int): Array<OneTimeAction?> {
+            override fun newArray(size: Int): Array<OneTimeRequest?> {
                 return arrayOfNulls(size)
             }
         }
 
         private constructor(parcel: Parcel) : this(
-            parcel.readDouble(),
-            parcel.readString()
+            parcel.readString(),
+            parcel.readDouble()
         )
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
-            parcel.writeDouble(amount ?: 0.0)
             parcel.writeString(scopeId)
+            parcel.writeDouble(amount ?: 0.0)
         }
 
         override fun describeContents(): Int {
@@ -37,17 +37,17 @@ sealed class CashAppRequestData : Parcelable {
         }
     }
 
-    data class OnFileAction(
+    data class OnFileRequest(
         override val scopeId: String?,
         val accountReferenceId: String? = null
-    ) : CashAppRequestData() {
+    ) : CashAppRequest() {
 
-        companion object CREATOR : Parcelable.Creator<OnFileAction> {
-            override fun createFromParcel(parcel: Parcel): OnFileAction {
-                return OnFileAction(parcel)
+        companion object CREATOR : Parcelable.Creator<OnFileRequest> {
+            override fun createFromParcel(parcel: Parcel): OnFileRequest {
+                return OnFileRequest(parcel)
             }
 
-            override fun newArray(size: Int): Array<OnFileAction?> {
+            override fun newArray(size: Int): Array<OnFileRequest?> {
                 return arrayOfNulls(size)
             }
         }

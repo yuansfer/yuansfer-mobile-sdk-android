@@ -8,7 +8,7 @@ import com.pockyt.demo.R
 import com.pockyt.demo.api.HttpUtils
 import com.pockyt.demo.util.ViewLog
 import com.pockyt.pay.Pockyt
-import com.pockyt.pay.cashapp.CashAppRequestData
+import com.pockyt.pay.cashapp.CashAppRequest
 import com.pockyt.pay.req.CashAppReq
 import org.json.JSONException
 import org.json.JSONObject
@@ -74,10 +74,10 @@ class CashAppActivity: AppCompatActivity() {
                 val transactionNo: String = resultObject.optString("transactionNo")
                 val merchantNo: String = resultObject.optString("merchantNo")
                 if ("cit" == resultObject.optString("creditType")) {
-                    requestCashAppPay(clientId, CashAppRequestData.OnFileAction(scopeId, merchantNo), transactionNo)
+                    requestCashAppPay(clientId, CashAppRequest.OnFileRequest(scopeId, merchantNo), transactionNo)
                 } else {
                     val amount = resultObject.optDouble("amount")
-                    requestCashAppPay(clientId, CashAppRequestData.OneTimeAction(amount, scopeId), transactionNo)
+                    requestCashAppPay(clientId, CashAppRequest.OneTimeRequest(scopeId, amount), transactionNo)
                 }
             } catch (e: JSONException) {
                 vLog.log("Failed to get prepay: ${e.message}")
@@ -86,8 +86,8 @@ class CashAppActivity: AppCompatActivity() {
         }
     }
 
-    private fun requestCashAppPay(clientId: String, requestData: CashAppRequestData, transactionNo: String) {
-        val request = CashAppReq(clientId, requestData, sandboxEnv = true)
+    private fun requestCashAppPay(clientId: String, request: CashAppRequest, transactionNo: String) {
+        val request = CashAppReq(clientId, request, sandboxEnv = true)
         Pockyt.createCashApp().requestPay(request) {
             if (it.isSuccessful) {
                 // Payment Approved

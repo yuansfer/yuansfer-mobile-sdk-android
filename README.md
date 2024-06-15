@@ -1,7 +1,7 @@
 ## Introduction
 
-![jitpack](https://img.shields.io/badge/jitpack-v2.0.6-blue)  
-This is a payment sdk that supports mainstream payment methods such as WeChat Pay, Alipay and Braintree etc.
+![jitpack](https://img.shields.io/badge/jitpack-v2.0.8-blue)  
+This is a payment sdk that supports mainstream payment methods such as WeChat Pay, Alipay, Cash App and Braintree etc.
 
 ## Getting Started
 
@@ -33,7 +33,7 @@ repositories {
 dependencies {
     ...
     // Required
-    implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:2.0.6' 
+    implementation 'com.github.yuansfer:yuansfer-mobile-sdk-android:2.0.8' 
     // Optional, Alipay dependency
     implementation 'com.alipay.sdk:alipaysdk-android:15.8.14@aar' 
     // Optional, Wechat Pay dependency
@@ -74,7 +74,7 @@ dependencies {
 
 * For WeChat Pay, first, you need to register the WeChat API.
 ```
-WechatPayStrategy.registerApi(context, wechatAppId)
+WechatPayStrategy.registerApi(context, appid)
 ```
 
 * After calling the Pockyt prepayment API(/micropay/v3/prepay or /online/v3/secure-pay), create a payment object and call the Pockyt.requestPay method.
@@ -150,6 +150,7 @@ Pockyt.createGooglePay().requestPay(request) {
 }
 
 // For CashApp
+val requestData = CashAppRequest.OneTimeRequest(scopeId, amount)
 val request = CashAppReq(clientId, requestData)
 Pockyt.createCashApp().requestPay(request) {
     if (it.isSuccessful) {
